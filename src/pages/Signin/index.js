@@ -13,14 +13,17 @@ import { StyleSheet,
 
 export default function Signin() {
 
-  const [offset, setOffset] = useState(new Animated.ValueXY({x:0, y:90}))
+  const [offset] = useState(new Animated.ValueXY({x:0, y:90}))
   const [opacity] = useState(new Animated.Value(0))
-  const { signed, signIn } = useAuth()
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const { signed, signIn, errorMessage } = useAuth()
 
   console.log(signed)
 
   const handleSignIn = async _ =>{
-    signIn()
+    //console.log(email, password)
+    signIn(email, password)
   }
 
   useEffect(()=>{
@@ -39,6 +42,12 @@ export default function Signin() {
       })
     ]).start()
   }, [])
+
+  console.log(!!errorMessage, {errorMessage}, typeof errorMessage)
+
+  if(errorMessage){
+    Keyboard.dismiss()
+  }
 
   return (
     <KeyboardAvoidingView style={styles.background}>
@@ -63,13 +72,16 @@ export default function Signin() {
           style={styles.input}
           placeholder="Email"
           autoCorrect={false}
-          onChangeText={()=>{}}
+          value={email}
+          onChangeText={val=>setEmail(val)}
         />
         <TextInput
           style={styles.input}
           placeholder="Senha"
           autoCorrect={false}
-          onChangeText={()=>{}}
+          secureTextEntry={true}
+          value={password}
+          onChangeText={val=>{setPassword(val); console.log(val)}}
         />
 
         <TouchableOpacity style={styles.btnSubmit} onPress={handleSignIn}>
@@ -78,7 +90,7 @@ export default function Signin() {
         <TouchableOpacity style={styles.btnForgetPassword}>
           <Text  style={styles.txtForgetPassword}>Esqueci minha senha</Text>
         </TouchableOpacity>
-        
+        {!!errorMessage && <Text style={styles.txtErrorMessage}>{errorMessage}</Text>}
       </Animated.View>
     </KeyboardAvoidingView>
   );
@@ -134,5 +146,15 @@ const styles = StyleSheet.create({
   txtForgetPassword:{
     color: '#fff',
     fontSize: 13,
+  },
+  txtErrorMessage:{
+    color: '#f77',
+    fontWeight: '500',
+    marginTop: 12,
+    fontSize: 13,
+    borderColor: 'white',
+    borderWidth: 1,
+    padding: 10,
+    backgroundColor: '#ccc'
   }
 });

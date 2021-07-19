@@ -10,20 +10,22 @@ const AuthContext = createContext(
         signed: false,
         user: {},
         loading: false,
-        signIn: ()=>{},
-        signOut: ()=>{}  
+        signIn: (email, password)=>{},
+        signOut: ()=>{},
+        errorMessage: false  
     }
 )
 
 export const AuthProvider = props =>{
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [errorMessage, setErrorMessage] = useState('')
 
     useEffect(()=>{
         const loadStoragegData = async () => {
             const storagedUser = await AsyncStorage.getItem('@QRSeg:user')
             const storagedToken = await AsyncStorage.getItem('@QRSeg:token')
-            await new Promise(resolve => setTimeout(resolve, 2000))///
+            //await new Promise(resolve => setTimeout(resolve, 2000))///
             if(storagedUser && storagedToken){
                 api.defaults.headers['Authorization'] = `Bearer ${storagedToken}`
                 setUser(JSON.parse(storagedUser))
@@ -34,15 +36,20 @@ export const AuthProvider = props =>{
         loadStoragegData()
     }, [])
 
-    const signInHandler = async _ => {
-        const response = await auth.signIn()
+    const signInHandler = async (email, password) => {
+        try{
+        const response = await auth.signIn(email, password)
         console.log(response)
         setUser(response.user)
 
         api.defaults.headers['Authorization'] = `Bearer ${response.token}`
-
+        setErrorMessage('')
         await AsyncStorage.setItem('@QRSeg:user', JSON.stringify(response.user))
         await AsyncStorage.setItem('@QRSeg:token', response.token)
+        }
+        catch(e){
+            setErrorMessage(e.message)
+        }
     }
 
     const signOutHandler = async _ => {
@@ -53,13 +60,11 @@ export const AuthProvider = props =>{
     }
     
     return (
-        <AuthContext.Provider value={{ signed: !!user, user, loading, signIn: signInHandler, signOut: signOutHandler }}>
+        <AuthContext.Provider value={{ signed: !!user, user, loading, signIn: signInHandler, signOut: signOutHandler, errorMessage: errorMessage }}>
             {props.children}
         </AuthContext.Provider>
     )
 }
-
-//export default AuthContext;
 
 export const useAuth = _ =>{
     const context = useContext(AuthContext)
