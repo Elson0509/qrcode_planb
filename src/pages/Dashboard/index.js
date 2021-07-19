@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import { StyleSheet,
     TextInput,
     View,
@@ -9,10 +9,10 @@ import { StyleSheet,
     Animated,
     Keyboard
     } from 'react-native';
-import AuthContext from '../../contexts/auth';
+import { useAuth } from '../../contexts/auth';
 
 const Dashboard = () => {
-    const {signOut} = useContext(AuthContext)
+    const {signOut, user} = useAuth()
 
     const handleSignOut = _ =>{
         signOut()
@@ -22,7 +22,9 @@ const Dashboard = () => {
         <View>
             <TouchableOpacity style={{backgroundColor:'#e456a1', padding: 12}} onPress={handleSignOut}>
                 <Text>Logout</Text>
+                
             </TouchableOpacity>
+            <Text>{user?.name}</Text>
         </View>
     );
 };

@@ -1,11 +1,19 @@
-import React, {createContext, useState, useEffect} from 'react';
+import React, {createContext, useState, useEffect, useContext} from 'react';
 //import AsyncStorage from '@react-native-community/async-storage'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as auth from '../services/auth'
-import {View, ActivityIndicator} from 'react-native'
+import api from '../services/api'
 
 //createContext only set up the format of the variable
-const AuthContext = createContext({ signed: false, user: {}, signIn: ()=>{}, signOut: ()=>{}  })
+const AuthContext = createContext(
+    {
+        signed: false,
+        user: {},
+        loading: false,
+        signIn: ()=>{},
+        signOut: ()=>{}  
+    }
+)
 
 export const AuthProvider = props =>{
     const [user, setUser] = useState(null)
@@ -14,9 +22,10 @@ export const AuthProvider = props =>{
     useEffect(()=>{
         const loadStoragegData = async () => {
             const storagedUser = await AsyncStorage.getItem('@QRSeg:user')
-            const storageToken = await AsyncStorage.getItem('@QRSeg:token')
-            await new Promise(resolve => setTimeout(resolve, 2000))
-            if(storagedUser && storageToken){
+            const storagedToken = await AsyncStorage.getItem('@QRSeg:token')
+            await new Promise(resolve => setTimeout(resolve, 2000))///
+            if(storagedUser && storagedToken){
+                api.defaults.headers['Authorization'] = `Bearer ${storagedToken}`
                 setUser(JSON.parse(storagedUser))
                 
             }
@@ -29,6 +38,9 @@ export const AuthProvider = props =>{
         const response = await auth.signIn()
         console.log(response)
         setUser(response.user)
+
+        api.defaults.headers['Authorization'] = `Bearer ${response.token}`
+
         await AsyncStorage.setItem('@QRSeg:user', JSON.stringify(response.user))
         await AsyncStorage.setItem('@QRSeg:token', response.token)
     }
@@ -39,20 +51,17 @@ export const AuthProvider = props =>{
         })
         
     }
-
-    if(loading){
-        return (
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-                <ActivityIndicator size="large" color="#666"/>
-            </View>
-        )
-    }
     
     return (
-        <AuthContext.Provider value={{ signed: !!user, user, signIn: signInHandler, signOut: signOutHandler }}>
+        <AuthContext.Provider value={{ signed: !!user, user, loading, signIn: signInHandler, signOut: signOutHandler }}>
             {props.children}
         </AuthContext.Provider>
     )
 }
 
-export default AuthContext;
+//export default AuthContext;
+
+export const useAuth = _ =>{
+    const context = useContext(AuthContext)
+    return context
+}

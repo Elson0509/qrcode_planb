@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useContext} from 'react';
-import AuthContext from '../../contexts/auth';
+import React, {useState, useEffect} from 'react';
+import { useAuth } from '../../contexts/auth';
 import { StyleSheet,
    TextInput,
    View,
@@ -15,7 +15,7 @@ export default function Signin() {
 
   const [offset, setOffset] = useState(new Animated.ValueXY({x:0, y:90}))
   const [opacity] = useState(new Animated.Value(0))
-  const { signed, signIn } = useContext(AuthContext)
+  const { signed, signIn } = useAuth()
 
   console.log(signed)
 
