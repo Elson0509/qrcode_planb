@@ -5,6 +5,7 @@ import { StyleSheet,
     } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack'
 import { useAuth } from '../contexts/auth'
+import MyQRCode from '../pages/MyQRCode';
 
 const AppStack = createStackNavigator()
 
@@ -25,7 +26,21 @@ const AppRoutes = _ => {
                     />
                 )
             }}
-        />
+            />
+            <AppStack.Screen 
+            name="MyQRCode" 
+            component={MyQRCode}
+            options={{
+                headerTitle: 'Meu QR Code',
+                headerRight: ()=>(
+                    <Button
+                        onPress={()=> signOut()}
+                        title='Logout'
+                        color='#ccc'
+                    />
+                )
+            }}
+            />
         </AppStack.Navigator>
     )
 }

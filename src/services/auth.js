@@ -21,7 +21,7 @@ const profiles = [
     {
         email:'b@a.com',
         password:'12345',
-        user_kind:0,
+        user_kind:1,
         "id":"89f3024b-0673-4787-9747-a53f5fd16415",
         name:"Salim Assab de Castro",
         "nascimento":"2000-10-10",

@@ -38,14 +38,14 @@ export const AuthProvider = props =>{
 
     const signInHandler = async (email, password) => {
         try{
-        const response = await auth.signIn(email, password)
-        console.log(response)
-        setUser(response.user)
+            const response = await auth.signIn(email, password)
+            console.log(response)
+            setUser(response.user)
 
-        api.defaults.headers['Authorization'] = `Bearer ${response.token}`
-        setErrorMessage('')
-        await AsyncStorage.setItem('@QRSeg:user', JSON.stringify(response.user))
-        await AsyncStorage.setItem('@QRSeg:token', response.token)
+            api.defaults.headers['Authorization'] = `Bearer ${response.token}`
+            setErrorMessage('')
+            await AsyncStorage.setItem('@QRSeg:user', JSON.stringify(response.user))
+            await AsyncStorage.setItem('@QRSeg:token', response.token)
         }
         catch(e){
             setErrorMessage(e.message)

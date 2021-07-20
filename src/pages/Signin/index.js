@@ -22,7 +22,7 @@ export default function Signin() {
   console.log(signed)
 
   const handleSignIn = async _ =>{
-    //console.log(email, password)
+    Keyboard.dismiss()
     signIn(email, password)
   }
 
@@ -42,12 +42,6 @@ export default function Signin() {
       })
     ]).start()
   }, [])
-
-  console.log(!!errorMessage, {errorMessage}, typeof errorMessage)
-
-  if(errorMessage){
-    Keyboard.dismiss()
-  }
 
   return (
     <KeyboardAvoidingView style={styles.background}>
@@ -73,7 +67,7 @@ export default function Signin() {
           placeholder="Email"
           autoCorrect={false}
           value={email}
-          onChangeText={val=>setEmail(val)}
+          onChangeText={val=>{setEmail(val)}}
         />
         <TextInput
           style={styles.input}
@@ -81,7 +75,7 @@ export default function Signin() {
           autoCorrect={false}
           secureTextEntry={true}
           value={password}
-          onChangeText={val=>{setPassword(val); console.log(val)}}
+          onChangeText={val=>{setPassword(val)}}
         />
 
         <TouchableOpacity style={styles.btnSubmit} onPress={handleSignIn}>
