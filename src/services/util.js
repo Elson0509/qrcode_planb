@@ -26,3 +26,22 @@ const firstName = name => {
     const first = name.substring(0, name.indexOf(' '))
     return first || name
 }
+
+const isLetter = c => {
+    return c.toLowerCase() != c.toUpperCase();
+}
+
+export const isBrazilLicensePlateNewModel = plate =>{
+    if(plate.length != 7)
+        return false
+    if(isLetter(plate[4]))
+        return true
+    return false
+}
+
+export const oldModelPlateFormat = plate =>{
+    if(plate.length < 3)
+        return plate
+    let format = plate.substring(0, 3) + '·' +plate.substring(3, plate.length)
+    return format
+}

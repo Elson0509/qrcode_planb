@@ -24,7 +24,7 @@ const Dashboard = (props) => {
     }
 
     const menuOptionsQRCode = { menuName: "Meu QR Code", icon: 'qrcode', key: 'QRCode', screen: 'MyQRCode' }
-    const menuOptionsScan = { menuName: "Escanear", icon: 'camera', key: 'Scan' }
+    const menuOptionsScan = { menuName: "Escanear", icon: 'camera', key: 'Scan', screen: 'Scan' }
     const menuOptionsAddHome = { menuName: "Moradores", icon: 'home', key: 'AddHome' }
     const menuOptionsAddVisitor = { menuName: "Visitantes", icon: 'user-plus', key: 'AddVisitor' }
     const menuOptionsAddService = { menuName: "Terceirizados", icon: 'people-carry', key: 'AddService' } //permissionário
