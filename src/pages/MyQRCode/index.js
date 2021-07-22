@@ -18,10 +18,10 @@ const MyQRCode = (props) => {
     console.log(user)
     
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {backgroundColor: props.route.params.backgroundColor}]}>
             <Text style={styles.greeting}>{utils.saudacaoHorario(user?.name)}</Text>
             <Text style={styles.obs}>Use o código abaixo para seu acesso:</Text>
-            <QRCode value={user?.id}/>
+            <QRCode value={user?.id} backgroundColor={props.route.params.backgroundColor}/>
         </View>
     )
 };
@@ -30,12 +30,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#00AAEE'
+        //backgroundColor: '#00AAEE'
     },
     greeting: {
         fontFamily: 'monospace',
         fontWeight: '700',
-        color: 'white',
+        color: 'black',
         letterSpacing: 1,
         fontSize: 20,
         marginTop: 10,
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     },
     obs:{
         marginBottom: 22,
-        color: 'white',
+        color: 'black',
     }
 })
 

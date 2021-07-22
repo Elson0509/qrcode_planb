@@ -9,6 +9,7 @@ const index = (props) => {
             value={props.value}
             size={300}
             logo={logo}
+            logoBackgroundColor={props.backgroundColor || '#FFFFFF'}
             backgroundColor={props.backgroundColor || '#FFFFFF'}
         />
     );

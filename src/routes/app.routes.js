@@ -10,6 +10,7 @@ import Scan from '../pages/Scan';
 import Residents from '../pages/Residents'
 import Visitors from '../pages/Visitors'
 import Thirds from '../pages/Thirds'
+import ResidentAdd from '../pages/ResidentAdd';
 
 const AppStack = createStackNavigator()
 
@@ -65,6 +66,14 @@ const AppRoutes = _ => {
                 component={Thirds}
                 options={{
                     headerTitle: 'Terceirizados',
+                    headerRight: ()=> logoutButton
+                }}
+            />
+            <AppStack.Screen 
+                name="ResidentAdd" 
+                component={ResidentAdd}
+                options={{
+                    headerTitle: 'Adicionando Morador',
                     headerRight: ()=> logoutButton
                 }}
             />

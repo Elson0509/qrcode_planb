@@ -20,11 +20,11 @@ import Icon from '../../components/Icon';
 const Dashboard = (props) => {
     const {user} = useAuth()
 
-    const menuOptionsQRCode = { menuName: "Meu QR Code", icon: 'qrcode', key: 'QRCode', screen: 'MyQRCode' }
-    const menuOptionsScan = { menuName: "Escanear", icon: 'camera', key: 'Scan', screen: 'Scan' }
-    const menuOptionsResidents = { menuName: "Moradores", icon: 'house-user', key: 'resident', screen: 'Residents' }
-    const menuOptionsVisitor = { menuName: "Visitantes", icon: 'user-friends', key: 'visitor', screen: 'Visitors'  }
-    const menuOptionsService = { menuName: "Terceirizados", icon: 'people-carry', key: 'service', screen: 'Thirds'  } //permissionário
+    const menuOptionsQRCode = { menuName: "Meu QR Code", icon: 'qrcode', key: 'QRCode', screen: 'MyQRCode', backgroundColor:'#dddddd' }
+    const menuOptionsScan = { menuName: "Escanear", icon: 'camera', key: 'Scan', screen: 'Scan', backgroundColor:'#fed8b1' }
+    const menuOptionsResidents = { menuName: "Moradores", icon: 'house-user', key: 'resident', screen: 'Residents', backgroundColor:'#99edc3' }
+    const menuOptionsVisitor = { menuName: "Visitantes", icon: 'user-friends', key: 'visitor', screen: 'Visitors', backgroundColor:'#9e8eea'  }
+    const menuOptionsService = { menuName: "Terceirizados", icon: 'people-carry', key: 'service', screen: 'Thirds', backgroundColor:'#ff7f7f'  } //permissionário
 
     const profiles = []
     profiles[1]=[]
@@ -45,7 +45,7 @@ const Dashboard = (props) => {
                 numColumns={2}
                 
                 renderItem={(obj)=>{
-                    return <TouchableOpacity style={styles.menuItem} onPress={()=> {props.navigation.navigate(obj.item.screen, {user: user})}}>
+                    return <TouchableOpacity style={[styles.menuItem, {backgroundColor: obj.item.backgroundColor }]} onPress={()=> {props.navigation.navigate(obj.item.screen, {user: user, backgroundColor: obj.item.backgroundColor})}}>
                                <Icon name={obj.item.icon} size={55}/>
                                <Text style={styles.menuItemText}>{obj.item.menuName}</Text>
                            </TouchableOpacity>

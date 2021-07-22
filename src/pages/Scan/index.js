@@ -47,7 +47,7 @@ const Scan = (props) => {
     }
     
     return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: props.route.params.backgroundColor}]}>
         <Modal
             visible={modalVisible}
             transparent={true}
@@ -58,6 +58,7 @@ const Scan = (props) => {
                 <Scanner onCodeScanned={onCodeScanned}/>
                 {/* <Button title="Cancelar" onPress={() => cancelHandler()}/> */}
                 <FooterButtons
+                    backgroundColor={props.route.params.backgroundColor}
                     title2="Cancelar"
                     action2={cancelHandler}
                 />
@@ -73,7 +74,7 @@ const Scan = (props) => {
 const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: 'red',
       alignItems: 'center',
       justifyContent: 'center',
     },

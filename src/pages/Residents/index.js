@@ -19,7 +19,7 @@ const Residents = (props) => {
     const {user} = useAuth()
 
     const menuOptions = [
-        { menuName: "Adicionar", icon: 'plus-square', key: 'plus', screen: '' },
+        { menuName: "Adicionar", icon: 'plus-square', key: 'plus', screen: 'ResidentAdd' },
         { menuName: "Apagar", icon: 'trash-alt', key: 'del', screen: '' },
         { menuName: "Editar", icon: 'edit', key: 'edit', screen: '' },
     ]

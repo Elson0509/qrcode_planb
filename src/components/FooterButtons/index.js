@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Modal, Button, Image, ScrollView, TouchableOpac
 
 const FooterButtons = (props) => {
     return (
-        <View style={styles.groupButtons}>
+        <View style={[styles.groupButtons, {backgroundColor: props.backgroundColor || '#fff'}]}>
             {!!props.title1 && <TouchableOpacity style={[styles.button, {backgroundColor: props.bgcolor1 || '#006DE3'}]} onPress={()=> props.action1()}>
                 <Text style={[styles.text]}>{props.title1}</Text>
             </TouchableOpacity>}
@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
         padding: 25,
         flexDirection: 'row',
         justifyContent: 'space-around',
-        backgroundColor: '#fff'
     },
     button:{
         padding: 25,
