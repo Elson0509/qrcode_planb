@@ -14,6 +14,7 @@ import { StyleSheet,
 import { useAuth } from '../../contexts/auth';
 import * as utils from '../../services/util'
 import Icon from '../../components/Icon';
+import * as Constants from '../../services/constants'
 
 const Residents = (props) => {
     const {user} = useAuth()
@@ -25,13 +26,15 @@ const Residents = (props) => {
     ]
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {backgroundColor: props.route.params.backgroundColor}]}>
             <Text style={styles.greeting}>{utils.saudacaoHorario(user?.name)}</Text>
             <FlatList
                 data={menuOptions}
                 numColumns={2}
                 renderItem={(obj)=>{
-                    return <TouchableOpacity style={styles.menuItem} onPress={()=> {props.navigation.navigate(obj.item.screen, {user: user})}}>
+                    return <TouchableOpacity 
+                                style={styles.menuItem} 
+                                onPress={()=> {props.navigation.navigate(obj.item.screen, {user: user})}}>
                                <Icon name={obj.item.icon} size={55}/>
                                <Text style={styles.menuItemText}>{obj.item.menuName}</Text>
                            </TouchableOpacity>
@@ -45,13 +48,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#00AAEE'
-        //justifyContent: 'center',
     },
     greeting: {
         fontFamily: 'monospace',
         fontWeight: '700',
-        color: 'white',
+        color: 'black',
         letterSpacing: 1,
         fontSize: 20,
         marginTop: 10,
@@ -63,8 +64,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
-        
-        //alignItems: 'center',
         justifyContent: 'space-between'
     },
     menuItem:{
@@ -76,7 +75,7 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderWidth: 1,
         padding: 20,
-        backgroundColor: 'white',
+        backgroundColor: Constants.backgroundlightColors["Residents"],
         alignItems: 'center',
     },
     menuItemText:{

@@ -11,6 +11,7 @@ import Residents from '../pages/Residents'
 import Visitors from '../pages/Visitors'
 import Thirds from '../pages/Thirds'
 import ResidentAdd from '../pages/ResidentAdd';
+import * as Constants from '../services/constants'
 
 const AppStack = createStackNavigator()
 
@@ -34,13 +35,15 @@ const AppRoutes = _ => {
                 component={MyQRCode}
                 options={{
                     headerTitle: 'Meu QR Code',
-                    headerRight: ()=> logoutButton
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["MyQRCode"]
+                    }
                 }}
             />
             <AppStack.Screen 
                 name="Scan" 
                 component={Scan}
-                
                 options={{
                     headerShown: false
                 }}
@@ -50,7 +53,10 @@ const AppRoutes = _ => {
                 component={Residents}
                 options={{
                     headerTitle: 'Moradores',
-                    headerRight: ()=> logoutButton
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Residents"]
+                    }
                 }}
             />
             <AppStack.Screen 
@@ -58,7 +64,10 @@ const AppRoutes = _ => {
                 component={Visitors}
                 options={{
                     headerTitle: 'Visitantes',
-                    headerRight: ()=> logoutButton
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Visitors"]
+                    }
                 }}
             />
             <AppStack.Screen 
@@ -66,7 +75,10 @@ const AppRoutes = _ => {
                 component={Thirds}
                 options={{
                     headerTitle: 'Terceirizados',
-                    headerRight: ()=> logoutButton
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Thirds"]
+                    }
                 }}
             />
             <AppStack.Screen 

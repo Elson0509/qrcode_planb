@@ -11,7 +11,7 @@ import { StyleSheet,
     Animated,
     Keyboard,
     } from 'react-native';
-
+import * as Constants from '../../services/constants'
 import { useAuth } from '../../contexts/auth';
 import MyQRCode from '../MyQRCode';
 import * as utils from '../../services/util'
@@ -20,11 +20,11 @@ import Icon from '../../components/Icon';
 const Dashboard = (props) => {
     const {user} = useAuth()
 
-    const menuOptionsQRCode = { menuName: "Meu QR Code", icon: 'qrcode', key: 'QRCode', screen: 'MyQRCode', backgroundColor:'#dddddd' }
-    const menuOptionsScan = { menuName: "Escanear", icon: 'camera', key: 'Scan', screen: 'Scan', backgroundColor:'#fed8b1' }
-    const menuOptionsResidents = { menuName: "Moradores", icon: 'house-user', key: 'resident', screen: 'Residents', backgroundColor:'#99edc3' }
-    const menuOptionsVisitor = { menuName: "Visitantes", icon: 'user-friends', key: 'visitor', screen: 'Visitors', backgroundColor:'#9e8eea'  }
-    const menuOptionsService = { menuName: "Terceirizados", icon: 'people-carry', key: 'service', screen: 'Thirds', backgroundColor:'#ff7f7f'  } //permissionário
+    const menuOptionsQRCode = { menuName: "Meu QR Code", icon: 'qrcode', key: 'QRCode', screen: 'MyQRCode', backgroundColor: Constants.backgroundColors['MyQRCode'] }
+    const menuOptionsScan = { menuName: "Escanear", icon: 'camera', key: 'Scan', screen: 'Scan', backgroundColor: Constants.backgroundColors['Scan'] }
+    const menuOptionsResidents = { menuName: "Moradores", icon: 'house-user', key: 'resident', screen: 'Residents', backgroundColor: Constants.backgroundColors['Residents'] }
+    const menuOptionsVisitor = { menuName: "Visitantes", icon: 'user-friends', key: 'visitor', screen: 'Visitors', backgroundColor: Constants.backgroundColors['Visitors'] }
+    const menuOptionsService = { menuName: "Terceirizados", icon: 'people-carry', key: 'service', screen: 'Thirds', backgroundColor: Constants.backgroundColors['Thirds'] } //permissionário
 
     const profiles = []
     profiles[1]=[]
@@ -59,8 +59,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#00AAEE'
-        //justifyContent: 'center',
+        backgroundColor: Constants.backgroundApp,
     },
     greeting: {
         fontFamily: 'monospace',
@@ -77,8 +76,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
-        
-        //alignItems: 'center',
         justifyContent: 'space-between'
     },
     menuItem:{

@@ -14,11 +14,11 @@ import { StyleSheet,
 import { useAuth } from '../../contexts/auth';
 import * as utils from '../../services/util'
 import Icon from '../../components/Icon';
+import * as Constants from '../../services/constants'
 
 const Thirds = (props) => {
     const {user} = useAuth()
-
-
+    console.log(Constants.backgroundColors["Thirds"])
     const menuOptions = [
         { menuName: "Adicionar", icon: 'plus-square', key: 'plus', screen: '' },
         { menuName: "Apagar", icon: 'trash-alt', key: 'del', screen: '' },
@@ -26,7 +26,7 @@ const Thirds = (props) => {
     ]
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, {backgroundColor: props.route.params.backgroundColor}]}>
             <Text style={styles.greeting}>{utils.saudacaoHorario(user?.name)}</Text>
             <FlatList
                 data={menuOptions}
@@ -46,8 +46,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: '#00AAEE'
-        //justifyContent: 'center',
     },
     greeting: {
         fontFamily: 'monospace',
@@ -64,8 +62,6 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'row',
         flexWrap: 'wrap',
-        
-        //alignItems: 'center',
         justifyContent: 'space-between'
     },
     menuItem:{
@@ -77,7 +73,7 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderWidth: 1,
         padding: 20,
-        backgroundColor: 'white',
+        backgroundColor: Constants.backgroundlightColors["Thirds"],
         alignItems: 'center',
     },
     menuItemText:{

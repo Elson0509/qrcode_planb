@@ -65,7 +65,14 @@ const Scan = (props) => {
 
             </View>
         </Modal>
-        <ModalUser modalVisible={modalUserVisible} rescan={rescan} user={props.route.params.user} navigation={props.navigation} uid={uid} type={type}/>
+        <ModalUser 
+            backgroundColor={props.route.params.backgroundColor}
+            modalVisible={modalUserVisible} 
+            rescan={rescan} 
+            user={props.route.params.user} 
+            navigation={props.navigation} 
+            uid={uid} 
+            type={type}/>
         {/* <Button title="Escanear" onPress={()=> setModalVisible(true)}/> */}
     </View>
     );

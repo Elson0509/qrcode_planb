@@ -154,6 +154,7 @@ const ModalUser = (props) => {
                 title2="Cancelar"
                 action1={props.rescan}
                 action2={cancelHandler}
+                backgroundColor={props.backgroundColor}
             />
           </ScrollView>
       </Modal>
