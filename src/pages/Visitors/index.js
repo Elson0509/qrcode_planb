@@ -5,7 +5,6 @@ import { StyleSheet,
     KeyboardAvoidingView,
     Image,
     TouchableOpacity,
-    ImageBackground,
     Text,
     FlatList,
     Animated,
@@ -13,37 +12,24 @@ import { StyleSheet,
     } from 'react-native';
 
 import { useAuth } from '../../contexts/auth';
-import MyQRCode from '../MyQRCode';
 import * as utils from '../../services/util'
 import Icon from '../../components/Icon';
 
-const Dashboard = (props) => {
+const Visitors = (props) => {
     const {user} = useAuth()
 
-    const menuOptionsQRCode = { menuName: "Meu QR Code", icon: 'qrcode', key: 'QRCode', screen: 'MyQRCode' }
-    const menuOptionsScan = { menuName: "Escanear", icon: 'camera', key: 'Scan', screen: 'Scan' }
-    const menuOptionsResidents = { menuName: "Moradores", icon: 'house-user', key: 'resident', screen: 'Residents' }
-    const menuOptionsVisitor = { menuName: "Visitantes", icon: 'user-friends', key: 'visitor', screen: 'Visitors'  }
-    const menuOptionsService = { menuName: "Terceirizados", icon: 'people-carry', key: 'service', screen: 'Thirds'  } //permissionário
-
-    const profiles = []
-    profiles[1]=[]
-    profiles[2]=[]
-    //Segurança
-    profiles[1].push(menuOptionsQRCode, menuOptionsScan)
-    profiles[2].push(menuOptionsQRCode, menuOptionsScan, menuOptionsResidents, menuOptionsVisitor, menuOptionsService)
-
-    if(user.user_kind==0){
-        return <MyQRCode user={user}/>
-    }
+    const menuOptions = [
+        { menuName: "Adicionar", icon: 'plus-square', key: 'plus', screen: '' },
+        { menuName: "Apagar", icon: 'trash-alt', key: 'del', screen: '' },
+        { menuName: "Editar", icon: 'edit', key: 'edit', screen: '' },
+    ]
 
     return (
         <View style={styles.container}>
             <Text style={styles.greeting}>{utils.saudacaoHorario(user?.name)}</Text>
             <FlatList
-                data={profiles[user.user_kind]}
+                data={menuOptions}
                 numColumns={2}
-                
                 renderItem={(obj)=>{
                     return <TouchableOpacity style={styles.menuItem} onPress={()=> {props.navigation.navigate(obj.item.screen, {user: user})}}>
                                <Icon name={obj.item.icon} size={55}/>
@@ -100,4 +86,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Dashboard;
+export default Visitors;

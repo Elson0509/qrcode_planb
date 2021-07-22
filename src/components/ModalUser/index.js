@@ -2,6 +2,8 @@ import React, {useState, Fragment} from 'react';
 import { StyleSheet, Text, View, Modal, Button, Image, ScrollView } from 'react-native';
 import dummyUsers from '../../../dummyData.json'
 import Placa from '../Placa';
+import Icon from '../Icon'
+import FooterButtons from '../FooterButtons';
 
 const ModalUser = (props) => {
   const users = dummyUsers.data
@@ -89,7 +91,9 @@ const ModalUser = (props) => {
         color: 'white',
         fontSize:25,
         marginTop:30,
-        padding: 10
+        padding: 10,
+        textAlign: 'center',
+        padding: 30,
     },
     textDenied: {
         color: 'white',
@@ -97,6 +101,11 @@ const ModalUser = (props) => {
         marginTop:10,
         padding: 10
     },
+    groupButtons:{
+        padding: 10,
+        flexDirection: 'row',
+        justifyContent: 'space-evenly',
+    }
   });
 
   return (
@@ -120,14 +129,12 @@ const ModalUser = (props) => {
                 <View style={[styles.viewDataUser, styles.borderBotton]}>
                     <Text style={[styles.textDataUser, styles.textName]}>{user.nome}</Text>
                     <Text style={[styles.textDataUser,]}>Condomínio {user.condominio}</Text>
-                    {/* <Text style={styles.textDataUser}>{user.endereco}</Text> */}
                     <Text style={[styles.textDataUser,]}>Bloco {user.bloco}  - Apt {user.apt}</Text>
                     <Text style={[styles.textDataUser,]}>Nascimento: {formatData} ({age} anos)</Text>
                 </View>
                 <View style={styles.viewDataUser}>
-                    <Text style={styles.textDataUser}>{user.veiculo_montador} {user.veiculo_modelo} {user.veiculo_cor}</Text>
+                    <Text style={[styles.textDataUser, {marginBottom: 15, fontSize: 22, fontWeight: '700'}]}>{user.veiculo_montador} {user.veiculo_modelo} {user.veiculo_cor}</Text>
                     <Placa placa={user.veiculo_placa}/>
-                    {/* <Text style={styles.textDataUser}>Placa: {user.veiculo_placa}</Text> */}
 
                     {!user.is_autorizado && <Fragment>
                     <Text style={styles.textDenied}>Acesso negado!</Text>
@@ -142,11 +149,12 @@ const ModalUser = (props) => {
                 </Fragment>}
                 </View>
             </View>
-            <View>
-                <Button title="Escanear" onPress={()=> props.rescan()}/>
-                <Button title="Cancelar" onPress={()=> cancelHandler()}/>
-            </View>
-            
+            <FooterButtons
+                title1="Escanear"
+                title2="Cancelar"
+                action1={props.rescan}
+                action2={cancelHandler}
+            />
           </ScrollView>
       </Modal>
       
@@ -158,10 +166,15 @@ const ModalUser = (props) => {
         onRequestClose={()=> props.setModalVisible(false)}
         >
             <View style={styles.modal}>
-                <Text style={styles.textError}>Não é um QR válido ou usuário não está cadastrado.</Text>
+                <Text style={styles.textError}>Desculpe, mas esse não é um QR válido ou o usuário não está cadastrado.</Text>
+                <Icon name='sad-tear' size={100} color='white'/>
             </View>
-            <Button title="Escanear" onPress={()=> props.rescan()}/>
-            <Button title="Cancelar" onPress={()=> cancelHandler()}/>
+            <FooterButtons
+                title1="Escanear"
+                title2="Cancelar"
+                action1={props.rescan}
+                action2={cancelHandler}
+            />
       </Modal>
   );
 };

@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import ModalUser from '../../components/ModalUser';
 import Scanner from '../../components/Scanner';
+import FooterButtons from '../../components/FooterButtons';
 
 import { StyleSheet,
     TextInput,
@@ -55,7 +56,12 @@ const Scan = (props) => {
             >
             <View style={styles.modal}>
                 <Scanner onCodeScanned={onCodeScanned}/>
-                <Button title="Cancelar" onPress={() => cancelHandler()}/>
+                {/* <Button title="Cancelar" onPress={() => cancelHandler()}/> */}
+                <FooterButtons
+                    title2="Cancelar"
+                    action2={cancelHandler}
+                />
+
             </View>
         </Modal>
         <ModalUser modalVisible={modalUserVisible} rescan={rescan} user={props.route.params.user} navigation={props.navigation} uid={uid} type={type}/>

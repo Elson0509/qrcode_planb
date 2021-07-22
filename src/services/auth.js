@@ -40,7 +40,7 @@ const profiles = [
     {
         email:'c@a.com',
         password:'12345',
-        user_kind:0,
+        user_kind:2,
         "id":"ae36be16-d46e-4d2b-b7f0-b5d65667a543",
         name:"Carla da Silva Beram",
         "nascimento":"2004-05-12",

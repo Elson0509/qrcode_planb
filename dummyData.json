@@ -44,7 +44,7 @@
             "veiculo_montador":"Ford",
             "veiculo_modelo":"Escape",
             "veiculo_cor":"Amarelo",
-            "veiculo_placa":"TIL0954",
+            "veiculo_placa":"TIL0R54",
             "data_cadastro":"2021-02-10",
             "is_autorizado":true
         },
@@ -76,7 +76,7 @@
             "veiculo_montador":"Peugeot",
             "veiculo_modelo":"3008",
             "veiculo_cor":"Cinza",
-            "veiculo_placa":"EPR2302",
+            "veiculo_placa":"EPR2P02",
             "data_cadastro":"2021-02-22",
             "is_autorizado":true
         },
