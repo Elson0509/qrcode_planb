@@ -65,6 +65,7 @@ export default function Signin() {
         <TextInput
           style={styles.input}
           placeholder="Email"
+          autoCapitalize={'none'}
           autoCorrect={false}
           value={email}
           onChangeText={val=>{setEmail(val)}}

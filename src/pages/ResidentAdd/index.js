@@ -9,12 +9,14 @@ import {
   import InputBox from '../../components/InputBox';
   import DateInputBox from '../../components/DateInputBox';
   import * as Constants from '../../services/constants'
+  import * as Utils from '../../services/util'
   import FooterButtons from '../../components/FooterButtons';
+  import ModalMessage from '../../components/ModalMessage';
 
 const ResidentAdd = props => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
-    const [address, setAddress] = useState('')
+    const [complement, setComplement] = useState('')
     const [day, setDay] = useState('')
     const [month, setMonth] = useState('')
     const [year, setYear] = useState('')
@@ -22,10 +24,38 @@ const ResidentAdd = props => {
     const [modelVehicle, setModelVehicle] = useState('')
     const [colorVehicle, setColorVehicle] = useState('')
     const [plateVehicle, setPlateVehicle] = useState('')
+    const [modal, setModal] = useState(false)
+    const [errorMessage, setErrorMessage] = useState('')
     
     const plateSizeValidator = value => {
       if(value.length <= 7){
         setPlateVehicle(value.toUpperCase())
+      }
+    }
+
+    const addHandler = _ => {
+      const errors = []
+      let birthDate
+      if(!name){
+        errors.push('Nome não pode estar vazio.')
+      }
+      if(!Utils.validateEmail(email)){
+        errors.push('Email não válido.')
+      }
+      if(!Utils.isValidDate(day, month, year)){
+        errors.push('Esta data não é válida.')
+      }
+      else{
+        birthDate = new Date(year, month-1, day)
+        if(birthDate>new Date())
+          errors.push('Esta data não é válida.')
+      }
+      if(errors.length){
+        setErrorMessage(errors.join('\n'))
+        setModal(true)
+      }
+      else{
+        console.log('Salvando informações...')
       }
     }
 
@@ -36,6 +66,7 @@ const ResidentAdd = props => {
               text="Nome*:" 
               value={name} 
               changed={value=>setName(value)}
+              autoCapitalize="words"
               backgroundColor={Constants.backgroundLightColors['Residents']}
               borderColor={Constants.backgroundDarkColors['Residents']}
               colorInput={Constants.backgroundDarkColors['Residents']}
@@ -43,6 +74,7 @@ const ResidentAdd = props => {
             <InputBox 
               text="Email*:" 
               value={email} 
+              autoCapitalize="none"
               changed={value=>setEmail(value)}
               keyboard='email-address'
               backgroundColor={Constants.backgroundLightColors['Residents']}
@@ -51,8 +83,8 @@ const ResidentAdd = props => {
             />
             <InputBox 
               text="Complemento:" 
-              value={address} 
-              changed={value=>setAddress(value)}
+              value={complement} 
+              changed={value=>setComplement(value)}
               placeholder='Bloco, Apt...'
               backgroundColor={Constants.backgroundLightColors['Residents']}
               borderColor={Constants.backgroundDarkColors['Residents']}
@@ -101,7 +133,6 @@ const ResidentAdd = props => {
               text="Placa do Veículo:" 
               value={plateVehicle} 
               changed={value=>plateSizeValidator(value)}
-              //placeholder='Preto, Branco, Prata...'
               backgroundColor={Constants.backgroundLightColors['Residents']}
               borderColor={Constants.backgroundDarkColors['Residents']}
               colorInput={Constants.backgroundDarkColors['Residents']}
@@ -111,9 +142,17 @@ const ResidentAdd = props => {
               title2="Cancelar"
               buttonPadding={15}
               backgroundColor={Constants.backgroundColors['Residents']}
+              action1={addHandler}
+              action2={props.navigation.goBack}
             />
 
           </ScrollView>
+          <ModalMessage
+            message={errorMessage}
+            title="Atenção"
+            modalVisible={modal}
+            setModalVisible={setModal}
+          />
         </SafeAreaView>
       );
 }

@@ -20,6 +20,7 @@ const InputBox = (props) => {
                   }
                 ]}
                 placeholder={props.placeholder || ''}
+                autoCapitalize={props.autoCapitalize || 'sentences'}
                 autoFocus={ props.autoFocus || false}
                 keyboardType={props.keyboard || "default"}
                 value={props.value.toString()}

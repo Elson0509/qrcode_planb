@@ -113,10 +113,10 @@ const ModalUser = (props) => {
         !!user &&
         
         <Modal
-        visible={props.modalVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={()=> props.setModalVisible(false)}
+            visible={props.modalVisible}
+            transparent={true}
+            animationType="fade"
+            onRequestClose={()=> props.setModalVisible(false)}
         >
           <ScrollView>
             <View style={styles.modal}>
