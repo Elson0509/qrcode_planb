@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderWidth: 1,
         padding: 20,
-        backgroundColor: Constants.backgroundlightColors["Residents"],
+        backgroundColor: Constants.backgroundLightColors["Residents"],
         alignItems: 'center',
     },
     menuItemText:{

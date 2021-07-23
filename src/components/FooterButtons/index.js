@@ -4,10 +4,10 @@ import { StyleSheet, Text, View, Modal, Button, Image, ScrollView, TouchableOpac
 const FooterButtons = (props) => {
     return (
         <View style={[styles.groupButtons, {backgroundColor: props.backgroundColor || '#fff'}]}>
-            {!!props.title1 && <TouchableOpacity style={[styles.button, {backgroundColor: props.bgcolor1 || '#006DE3'}]} onPress={()=> props.action1()}>
+            {!!props.title1 && <TouchableOpacity style={[styles.button, {backgroundColor: props.bgcolor1 || '#006DE3', padding: props.buttonPadding || 25}]} onPress={()=> props.action1()}>
                 <Text style={[styles.text]}>{props.title1}</Text>
             </TouchableOpacity>}
-            {!!props.title2 && <TouchableOpacity style={[styles.button, {backgroundColor: props.bgcolor2 || '#CF142B'}]} onPress={()=> props.action2()}>
+            {!!props.title2 && <TouchableOpacity style={[styles.button, {backgroundColor: props.bgcolor2 || '#CF142B', padding: props.buttonPadding || 25}]} onPress={()=> props.action2()}>
                 <Text style={[styles.text]}>{props.title2}</Text>
             </TouchableOpacity>}
         </View>
@@ -16,12 +16,11 @@ const FooterButtons = (props) => {
 
 const styles = StyleSheet.create({
     groupButtons:{
-        padding: 25,
+        padding: 20,
         flexDirection: 'row',
         justifyContent: 'space-around',
     },
     button:{
-        padding: 25,
         borderRadius: 28,
     },
     text:{

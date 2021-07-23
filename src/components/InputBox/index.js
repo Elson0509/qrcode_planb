@@ -9,11 +9,19 @@ import {
 const InputBox = (props) => {
     return (
         <View style={styles.box}>
-            <Text style={styles.labelStyle}>{props.text}</Text>
+            <Text style={[styles.labelStyle, {color: props.colorLabel || 'black'}]}>{props.text}</Text>
             <TextInput
-                style={styles.txtInput}
-                autoFocus={true}
-                keyboardType="numeric"
+                style={[
+                  styles.txtInput, 
+                  {
+                    backgroundColor: props.backgroundColor || 'white', 
+                    borderColor: props.borderColor || 'black',
+                    color: props.colorInput || 'black',
+                  }
+                ]}
+                placeholder={props.placeholder || ''}
+                autoFocus={ props.autoFocus || false}
+                keyboardType={props.keyboard || "default"}
                 value={props.value.toString()}
                 onChangeText={props.changed}
             />
@@ -23,22 +31,22 @@ const InputBox = (props) => {
 
 const styles = StyleSheet.create({
     box:{
-      marginBottom: 20
+      marginBottom: 7
     },
     txtInput:{
       width:'100%',
       borderWidth:3,
-      borderColor:'white',
       borderRadius:20,
-      color:'white',
       fontWeight:'bold',
       fontSize:14,
-      textAlign:'center',
-      backgroundColor:'#a77fba'
+      textAlign:'left',
+      paddingLeft: 10
     },
     labelStyle:{
-      fontSize:14,
+      fontSize:15,
+      fontWeight:'bold',
       marginBottom:5,
+      marginLeft:5,
       color:'white'
     }
 });

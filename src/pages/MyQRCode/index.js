@@ -13,15 +13,17 @@ import { StyleSheet,
     Keyboard,
     } from 'react-native';
 
+import * as Constants from '../../services/constants'
+
 const MyQRCode = (props) => {
     const user = props.user || props.route.params.user
     console.log(user)
     
     return (
-        <View style={[styles.container, {backgroundColor: props.route.params.backgroundColor}]}>
+        <View style={[styles.container, {backgroundColor: Constants.backgroundColors['MyQRCode']}]}>
             <Text style={styles.greeting}>{utils.saudacaoHorario(user?.name)}</Text>
             <Text style={styles.obs}>Use o código abaixo para seu acesso:</Text>
-            <QRCode value={user?.id} backgroundColor={props.route.params.backgroundColor}/>
+            <QRCode value={user?.id} backgroundColor={Constants.backgroundColors['MyQRCode']}/>
         </View>
     )
 };

@@ -45,3 +45,16 @@ export const oldModelPlateFormat = plate =>{
     let format = plate.substring(0, 3) + '·' +plate.substring(3, plate.length)
     return format
 }
+
+export const isValidDate = (day, month, year) =>
+{
+    // Check the ranges of month and year
+    if(year < 1000 || year > 3000 || month == 0 || month > 12)
+        return false;
+    const monthLength = [ 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
+    // Adjust for leap years
+    if(year % 400 == 0 || (year % 100 != 0 && year % 4 == 0))
+        monthLength[1] = 29;
+    // Check the range of the day
+    return day > 0 && day <= monthLength[month - 1];
+};

@@ -27,7 +27,10 @@ const AppRoutes = _ => {
                 name="Dashboard" 
                 component={Dashboard}
                 options={{
-                    headerRight: () => logoutButton
+                    headerRight: () => logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Dashboard"]
+                    }
                 }}
             />
             <AppStack.Screen 
@@ -85,8 +88,11 @@ const AppRoutes = _ => {
                 name="ResidentAdd" 
                 component={ResidentAdd}
                 options={{
-                    headerTitle: 'Adicionando Morador',
-                    headerRight: ()=> logoutButton
+                    headerTitle: 'Adicionar Morador',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Residents"]
+                    }
                 }}
             />
         </AppStack.Navigator>

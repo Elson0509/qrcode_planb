@@ -25,13 +25,14 @@ const Dashboard = (props) => {
     const menuOptionsResidents = { menuName: "Moradores", icon: 'house-user', key: 'resident', screen: 'Residents', backgroundColor: Constants.backgroundColors['Residents'] }
     const menuOptionsVisitor = { menuName: "Visitantes", icon: 'user-friends', key: 'visitor', screen: 'Visitors', backgroundColor: Constants.backgroundColors['Visitors'] }
     const menuOptionsService = { menuName: "Terceirizados", icon: 'people-carry', key: 'service', screen: 'Thirds', backgroundColor: Constants.backgroundColors['Thirds'] } //permissionário
+    const menuOptionsInfo = { menuName: "Informações", icon: 'info-circle', key: 'info', screen: 'Info', backgroundColor: Constants.backgroundColors['Info'] }
 
     const profiles = []
     profiles[1]=[]
     profiles[2]=[]
     //Segurança
     profiles[1].push(menuOptionsQRCode, menuOptionsScan)
-    profiles[2].push(menuOptionsQRCode, menuOptionsScan, menuOptionsResidents, menuOptionsVisitor, menuOptionsService)
+    profiles[2].push(menuOptionsQRCode, menuOptionsScan, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsInfo)
 
     if(user.user_kind==0){
         return <MyQRCode user={user}/>
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: Constants.backgroundApp,
+        backgroundColor: Constants.backgroundColors['Dashboard'],
     },
     greeting: {
         fontFamily: 'monospace',
