@@ -10,7 +10,12 @@ import Scan from '../pages/Scan';
 import Residents from '../pages/Residents'
 import Visitors from '../pages/Visitors'
 import Thirds from '../pages/Thirds'
+import Units from '../pages/Units'
+import UnitAdd from '../pages/UnitAdd'
+import UnitList from '../pages/UnitList'
+import UnitDel from '../pages/UnitDel'
 import ResidentAdd from '../pages/ResidentAdd';
+import ResidentList from '../pages/ResidentList';
 import * as Constants from '../services/constants'
 
 const AppStack = createStackNavigator()
@@ -85,10 +90,65 @@ const AppRoutes = _ => {
                 }}
             />
             <AppStack.Screen 
+                name="Units" 
+                component={Units}
+                options={{
+                    headerTitle: 'Unidades',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Units"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="UnitAdd" 
+                component={UnitAdd}
+                options={{
+                    headerTitle: 'Adicionar Unidades',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Units"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="UnitList" 
+                component={UnitList}
+                options={{
+                    headerTitle: 'Listar Unidades',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Units"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="UnitDel" 
+                component={UnitDel}
+                options={{
+                    headerTitle: 'Apagar Unidades',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Units"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
                 name="ResidentAdd" 
                 component={ResidentAdd}
                 options={{
                     headerTitle: 'Adicionar Morador',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Residents"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="ResidentList" 
+                component={ResidentList}
+                options={{
+                    headerTitle: 'Listar Moradores',
                     headerRight: ()=> logoutButton,
                     headerStyle:{
                         backgroundColor: Constants.backgroundDarkColors["Residents"]

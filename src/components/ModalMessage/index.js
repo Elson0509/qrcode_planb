@@ -13,12 +13,20 @@ const ModalMessage = (props) => {
                 <View style={styles.modalView}>
                     {props.title && <Text style={styles.modalTitle}>{props.title}</Text>}
                     <Text style={styles.modalText}>{props.message}</Text>
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
+                    <View style={[styles.buttonGroup]}>
+                      {!!props.btn1Text && <Pressable
+                        style={[styles.button, { backgroundColor: props.btn1BgColor || '#2323FF' }]}
+                        onPress={props.btn1Pressed}
+                      >
+                      <Text style={styles.textStyle}>{props.btn1Text}</Text>
+                      </Pressable>}
+                      <Pressable
+                        style={[styles.button, { backgroundColor: props.btn2BgColor || '#FF2323' }]}
                         onPress={() => props.setModalVisible(false)}
-                    >
-                        <Text style={styles.textStyle}>Entendi!</Text>
-                    </Pressable>
+                      >
+                      <Text style={styles.textStyle}>{props.btn2Text || 'Entendi!'}</Text>
+                      </Pressable>
+                    </View>
                 </View>
             </View>
         </Modal>
@@ -52,10 +60,14 @@ const styles = StyleSheet.create({
       shadowRadius: 4,
       elevation: 5
     },
+    buttonGroup:{
+      flexDirection: 'row'
+    },
     button: {
       borderRadius: 20,
-      padding: 10,
-      elevation: 2
+      padding: 12,
+      elevation: 2,
+      marginLeft: 10
     },
     buttonOpen: {
       backgroundColor: "#F194FF",

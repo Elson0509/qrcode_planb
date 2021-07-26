@@ -19,22 +19,16 @@ import * as Constants from '../../services/constants'
 const Residents = (props) => {
     const {user} = useAuth()
 
-    const menuOptions = [
-        { menuName: "Adicionar", icon: 'plus-square', key: 'plus', screen: 'ResidentAdd' },
-        { menuName: "Apagar", icon: 'trash-alt', key: 'del', screen: '' },
-        { menuName: "Editar", icon: 'edit', key: 'edit', screen: '' },
-    ]
-
     return (
         <View style={[styles.container, {backgroundColor: props.route.params.backgroundColor}]}>
             <Text style={styles.greeting}>{utils.saudacaoHorario(user?.name)}</Text>
             <FlatList
-                data={menuOptions}
+                data={Constants.menuOptions}
                 numColumns={2}
                 renderItem={(obj)=>{
                     return <TouchableOpacity 
                                 style={styles.menuItem} 
-                                onPress={()=> {props.navigation.navigate(obj.item.screen, {user: user})}}>
+                                onPress={()=> {props.navigation.navigate(`Resident${obj.item.screen}`, {user: user})}}>
                                <Icon name={obj.item.icon} size={55}/>
                                <Text style={styles.menuItemText}>{obj.item.menuName}</Text>
                            </TouchableOpacity>

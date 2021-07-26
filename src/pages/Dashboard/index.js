@@ -22,6 +22,7 @@ const Dashboard = (props) => {
 
     const menuOptionsQRCode = { menuName: "Meu QR Code", icon: 'qrcode', key: 'QRCode', screen: 'MyQRCode', backgroundColor: Constants.backgroundColors['MyQRCode'] }
     const menuOptionsScan = { menuName: "Escanear", icon: 'camera', key: 'Scan', screen: 'Scan', backgroundColor: Constants.backgroundColors['Scan'] }
+    const menuOptionsUnits = { menuName: "Unidades", icon: 'building', key: 'building', screen: 'Units', backgroundColor: Constants.backgroundColors['Units'] }
     const menuOptionsResidents = { menuName: "Moradores", icon: 'house-user', key: 'resident', screen: 'Residents', backgroundColor: Constants.backgroundColors['Residents'] }
     const menuOptionsVisitor = { menuName: "Visitantes", icon: 'user-friends', key: 'visitor', screen: 'Visitors', backgroundColor: Constants.backgroundColors['Visitors'] }
     const menuOptionsService = { menuName: "Terceirizados", icon: 'people-carry', key: 'service', screen: 'Thirds', backgroundColor: Constants.backgroundColors['Thirds'] } //permissionário
@@ -32,7 +33,7 @@ const Dashboard = (props) => {
     profiles[2]=[]
     //Segurança
     profiles[1].push(menuOptionsQRCode, menuOptionsScan)
-    profiles[2].push(menuOptionsQRCode, menuOptionsScan, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsInfo)
+    profiles[2].push(menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsInfo)
 
     if(user.user_kind==0){
         return <MyQRCode user={user}/>

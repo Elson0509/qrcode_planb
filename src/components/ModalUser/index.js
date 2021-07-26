@@ -1,55 +1,55 @@
-import React, {useState, Fragment} from 'react';
+import React, {useState, useEffect, Fragment} from 'react';
 import { StyleSheet, Text, View, Modal, Button, Image, ScrollView } from 'react-native';
 import dummyUsers from '../../../dummyData.json'
+import dummyResidents from '../../../dummyDataResidents.json'
 import Placa from '../Placa';
 import Icon from '../Icon'
 import FooterButtons from '../FooterButtons';
+import Spinner from '../Spinner';
+import * as Constants from '../../services/constants'
 
 const ModalUser = (props) => {
-  const users = dummyUsers.data
-  const user = users.find(el=>{
-      return el.id===props.uid
-  })
-  let imgPath
-  
-  //console.log(props.user)
-  const securityGuardData = props.user
 
-  let nascimento
-  let formatData
-  let age
+  const [user, setUser] = useState({})
+  const [loading, setLoading] = useState(true)
+  const [imgPath, setImgPath] = useState('')
 
-  if(user){
-    switch(user.id){
-        case '066da296-7438-47c0-99a9-760bca2cd29d':
-            imgPath=require(` ../../../assets/pics/066da296-7438-47c0-99a9-760bca2cd29d.jpg`)
-            break
-        case '89f3024b-0673-4787-9747-a53f5fd16415':
-            imgPath=require(`../../../assets/pics/89f3024b-0673-4787-9747-a53f5fd16415.jpg`)
-            break
-        case 'ae36be16-d46e-4d2b-b7f0-b5d65667a543':
-            imgPath=require(`../../../assets/pics/ae36be16-d46e-4d2b-b7f0-b5d65667a543.jpg`)
-            break
-        case 'fd68a93d-dee0-48b3-9bda-bd1e86170d17':
-            imgPath=require(`../../../assets/pics/fd68a93d-dee0-48b3-9bda-bd1e86170d17.jpg`)
-            break
-        case '88c5b4da-fec5-46b9-8a63-d3e4dde0abb8':
-            imgPath=require(`../../../assets/pics/88c5b4da-fec5-46b9-8a63-d3e4dde0abb8.jpg`)
-            break
-        case 'ddbf0952-5423-4184-a58d-6c49ae424fbd':
-            imgPath=require(`../../../assets/pics/ddbf0952-5423-4184-a58d-6c49ae424fbd.jpg`)
-            break
-        default:
-            imgPath=null
+  useEffect(()=>{
+    const residents = dummyResidents.data
+    const userFinded = residents.find(el=>{
+        return el.id===props.uid
+    })
+    if(userFinded){
+        switch(userFinded.id){
+            case '066da296-7438-47c0-99a9-760bca2cd29d':
+                setImgPath(require(` ../../../assets/pics/066da296-7438-47c0-99a9-760bca2cd29d.jpg`))
+                break
+            case '89f3024b-0673-4787-9747-a53f5fd16415':
+                setImgPath(require(`../../../assets/pics/89f3024b-0673-4787-9747-a53f5fd16415.jpg`))
+                break
+            case 'ae36be16-d46e-4d2b-b7f0-b5d65667a543':
+                setImgPath(require(`../../../assets/pics/ae36be16-d46e-4d2b-b7f0-b5d65667a543.jpg`))
+                break
+            case 'fd68a93d-dee0-48b3-9bda-bd1e86170d17':
+                setImgPath(require(`../../../assets/pics/fd68a93d-dee0-48b3-9bda-bd1e86170d17.jpg`))
+                break
+            case '88c5b4da-fec5-46b9-8a63-d3e4dde0abb8':
+                setImgPath(require(`../../../assets/pics/88c5b4da-fec5-46b9-8a63-d3e4dde0abb8.jpg`))
+                break
+            case 'ddbf0952-5423-4184-a58d-6c49ae424fbd':
+                setImgPath(require(`../../../assets/pics/ddbf0952-5423-4184-a58d-6c49ae424fbd.jpg`))
+                break
+            default:
+                setImgPath(null)
+        }
     }
-    nascimento = new Date(user.nascimento)
-    formatData = `${nascimento.getDate()+1}/${nascimento.getMonth()+1}/${nascimento.getFullYear()}`
-    age = Math.abs(new Date(Date.now() - nascimento.getTime()).getUTCFullYear() - 1970)
-  }
+
+    setUser(userFinded)
+    setLoading(false)
+    
+  },[props.uid])
 
   const cancelHandler = () =>{
-    console.log('cancelando....')
-    console.log(props)
     props.navigation.navigate('Dashboard')
   }
 
@@ -58,8 +58,7 @@ const ModalUser = (props) => {
       flex: 1,
       alignItems: "center",
       justifyContent: "flex-start",
-      backgroundColor: user?.is_autorizado && user?.condominio_id == securityGuardData.condominio_id ? '#00B924' : '#FF726F',
-      
+      backgroundColor: user?.is_autorizado ? '#00B924' : '#FF726F',
     },
     img:{
         width: 400,
@@ -108,10 +107,59 @@ const ModalUser = (props) => {
     }
   });
 
+  if(loading)
+    return <Spinner/>
+
+  console.log(user)
+
+  if(props.type!=256 || !user){
+      return (
+        <Modal
+            visible={props.modalVisible}
+            transparent={true}
+            animationType="fade"
+            onRequestClose={()=> props.setModalVisible(false)}
+        >
+            <View style={styles.modal}>
+                <Text style={styles.textError}>Desculpe, mas esse não é um QR válido ou o usuário não está cadastrado.</Text>
+                <Icon name='sad-tear' size={100} color='white'/>
+            </View>
+            <FooterButtons
+                title1="Escanear"
+                title2="Cancelar"
+                action1={props.rescan}
+                action2={cancelHandler}
+                backgroundColor={Constants.is_not_autorized_backgroundColor}
+            />
+      </Modal>
+      )
+  }
+
+  if(!user.is_autorizado){
+      return (
+        <Modal
+            visible={props.modalVisible}
+            transparent={true}
+            animationType="fade"
+            onRequestClose={()=> props.setModalVisible(false)}
+        >
+            <View style={styles.modal}>
+                <Text style={styles.textError}>Usuário não autorizado.</Text>
+                <Icon name='ban' size={100} color='white'/>
+            </View>
+            
+            <FooterButtons
+                title1="Escanear"
+                title2="Cancelar"
+                action1={props.rescan}
+                action2={cancelHandler}
+                backgroundColor={Constants.is_not_autorized_backgroundColor}
+            />
+        </Modal>
+      )
+  }
+
   return (
-        props.type===256 && 
-        !!user &&
-        
         <Modal
             visible={props.modalVisible}
             transparent={true}
@@ -127,26 +175,24 @@ const ModalUser = (props) => {
                     //source={{uri: 'https://i2.wp.com/imgonline.com.br/site/wp-content/uploads/2019/07/destino-joao-pessoa2.jpg'}}
                 />
                 <View style={[styles.viewDataUser, styles.borderBotton]}>
-                    <Text style={[styles.textDataUser, styles.textName]}>{user.nome}</Text>
-                    <Text style={[styles.textDataUser,]}>Condomínio {user.condominio}</Text>
-                    <Text style={[styles.textDataUser,]}>Bloco {user.bloco}  - Apt {user.apt}</Text>
-                    <Text style={[styles.textDataUser,]}>Nascimento: {formatData} ({age} anos)</Text>
+                    <Text style={[styles.textDataUser, styles.textName]}>{user.name}</Text>
+                    <Text style={[styles.textDataUser,]}>Condomínio {user.condo}</Text>
+                    <Text style={[styles.textDataUser,]}>{user.address_comp}</Text>
                 </View>
                 <View style={styles.viewDataUser}>
-                    <Text style={[styles.textDataUser, {marginBottom: 15, fontSize: 22, fontWeight: '700'}]}>{user.veiculo_montador} {user.veiculo_modelo} {user.veiculo_cor}</Text>
-                    <Placa placa={user.veiculo_placa}/>
-
-                    {!user.is_autorizado && <Fragment>
-                    <Text style={styles.textDenied}>Acesso negado!</Text>
-                    <Text style={styles.textDenied}>Motivo: Autorização negada pelo condomínio</Text>
-                </Fragment>}
-                {user.condominio_id != '3f4c8d9e-7a8b-4ff6-bac2-884d1c95f8bd' && <Fragment>
-                    <Text style={styles.textDenied}>Acesso negado!</Text>
-                    <Text style={styles.textDenied}>Motivo: Veículo não cadastrado no condomínio Flor do Sul</Text>
-                </Fragment>}
-                {user.condominio_id == '3f4c8d9e-7a8b-4ff6-bac2-884d1c95f8bd' && user.is_autorizado && <Fragment>
-                    <Text style={styles.textDenied}>Acesso autorizado!</Text>
-                </Fragment>}
+                    {user.vehicles.length == 0 &&
+                        <Text style={[styles.textDataUser, {fontSize: 24, fontWeight: '700'}]}>Não há veículos cadastrados.</Text>
+                    ||
+                        <Text style={[styles.textDataUser, {fontSize: 24, fontWeight: '700'}]}>Veículos:</Text>
+                    }
+                    {user.vehicles.map((el, ind) => {
+                        return (
+                            <Fragment key={ind}>
+                                <Text style={[styles.textDataUser, {marginBottom: 5, marginTop: 18, fontSize: 20, fontWeight: '700'}]}>{el.vehicle_maker} {el.vehicle_model} {el.vehicle_color}</Text>
+                                <Placa placa={el.vehicle_plate}/>
+                            </Fragment>
+                        )})
+                    }
                 </View>
             </View>
             <FooterButtons
@@ -154,28 +200,9 @@ const ModalUser = (props) => {
                 title2="Cancelar"
                 action1={props.rescan}
                 action2={cancelHandler}
-                backgroundColor={props.backgroundColor}
+                backgroundColor={Constants.is_autorized_backgroundColor}
             />
           </ScrollView>
-      </Modal>
-      
-      ||
-      <Modal
-        visible={props.modalVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={()=> props.setModalVisible(false)}
-        >
-            <View style={styles.modal}>
-                <Text style={styles.textError}>Desculpe, mas esse não é um QR válido ou o usuário não está cadastrado.</Text>
-                <Icon name='sad-tear' size={100} color='white'/>
-            </View>
-            <FooterButtons
-                title1="Escanear"
-                title2="Cancelar"
-                action1={props.rescan}
-                action2={cancelHandler}
-            />
       </Modal>
   );
 };

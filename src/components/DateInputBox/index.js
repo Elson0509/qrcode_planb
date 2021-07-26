@@ -5,6 +5,7 @@ import {
   Text,
   TextInput,
 } from 'react-native';
+import * as Constants from '../../services/constants'
 
 const DateInputBox = (props) => {
 
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
     },
     txtInput:{
       width:'31%',
-      borderWidth:3,
+      borderWidth:Constants.borderTextInputWidth,
       borderRadius:20,
       fontWeight:'bold',
       fontSize:14,

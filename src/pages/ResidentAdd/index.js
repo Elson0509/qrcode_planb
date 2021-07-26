@@ -1,4 +1,4 @@
-import React, {useState, Fragment, useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
     SafeAreaView,
     StyleSheet,
@@ -7,25 +7,37 @@ import {
     Text,
   } from 'react-native';
   import InputBox from '../../components/InputBox';
-  import DateInputBox from '../../components/DateInputBox';
   import * as Constants from '../../services/constants'
   import * as Utils from '../../services/util'
   import FooterButtons from '../../components/FooterButtons';
   import ModalMessage from '../../components/ModalMessage';
+  import comp from '../../../dummyDataComp.json'
+  import AddResidentsGroup from '../../components/AddResidentsGroup';
+  import AddCarsGroup from '../../components/AddCarsGroup';
+  import {Picker} from '@react-native-picker/picker'
 
 const ResidentAdd = props => {
     const [name, setName] = useState('')
     const [email, setEmail] = useState('')
     const [complement, setComplement] = useState('')
-    const [day, setDay] = useState('')
-    const [month, setMonth] = useState('')
-    const [year, setYear] = useState('')
     const [makerVehicle, setMakerVehicle] = useState('')
     const [modelVehicle, setModelVehicle] = useState('')
     const [colorVehicle, setColorVehicle] = useState('')
     const [plateVehicle, setPlateVehicle] = useState('')
     const [modal, setModal] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
+    const [listCompAddress, setListCompAddress] = useState([])
+    const [residents, setResidents] = useState([])
+    const [vehicles, setVehicles] = useState([])
+    const [compAddress, setCompAddress] = useState('')
+
+    useEffect(()=>{
+      let comps = comp.data
+      comps.sort((a, b) => {
+        return a.toLowerCase(). localeCompare(b. toLowerCase());
+      })
+      setListCompAddress(comps)
+    },[])
     
     const plateSizeValidator = value => {
       if(value.length <= 7){
@@ -35,20 +47,11 @@ const ResidentAdd = props => {
 
     const addHandler = _ => {
       const errors = []
-      let birthDate
       if(!name){
         errors.push('Nome não pode estar vazio.')
       }
       if(!Utils.validateEmail(email)){
         errors.push('Email não válido.')
-      }
-      if(!Utils.isValidDate(day, month, year)){
-        errors.push('Esta data não é válida.')
-      }
-      else{
-        birthDate = new Date(year, month-1, day)
-        if(birthDate>new Date())
-          errors.push('Esta data não é válida.')
       }
       if(errors.length){
         setErrorMessage(errors.join('\n'))
@@ -56,12 +59,45 @@ const ResidentAdd = props => {
       }
       else{
         console.log('Salvando informações...')
+        const newUser = {
+          name,
+          email, 
+          complement,
+          makerVehicle,
+          modelVehicle,
+          colorVehicle,
+          plateVehicle,
+        }
+        console.log(newUser)
       }
     }
 
     return (
-        <SafeAreaView>
-          <ScrollView style={styles.body}>
+        <SafeAreaView style={styles.body}>
+          <ScrollView >
+            <Text style={[{color: 'black', fontWeight: 'bold'}]}>Complemento (Bloco, Apt...)</Text>
+            <Picker
+              style={styles.picker}
+              selectedValue={compAddress}
+              onValueChange={(itemValue, itemIndex) => {
+                setCompAddress(itemValue)
+              }}
+            >
+              <Picker.Item label="Adicionar" value="add"/>
+              {listCompAddress.map((el, ind) =><Picker.Item key={ind} label={el} value={el}/>)}
+            </Picker>
+
+            <InputBox 
+              text="Complemento:" 
+              value={complement} 
+              changed={value=>setComplement(value)}
+              placeholder='Bloco, Apt...'
+              backgroundColor={Constants.backgroundLightColors['Residents']}
+              borderColor={Constants.backgroundDarkColors['Residents']}
+              colorInput={Constants.backgroundDarkColors['Residents']}
+            />
+            <AddResidentsGroup data={residents} setData={setResidents}/>
+            <AddCarsGroup data={vehicles} setData={setVehicles}/>
             <InputBox 
               text="Nome*:" 
               value={name} 
@@ -81,27 +117,7 @@ const ResidentAdd = props => {
               borderColor={Constants.backgroundDarkColors['Residents']}
               colorInput={Constants.backgroundDarkColors['Residents']}
             />
-            <InputBox 
-              text="Complemento:" 
-              value={complement} 
-              changed={value=>setComplement(value)}
-              placeholder='Bloco, Apt...'
-              backgroundColor={Constants.backgroundLightColors['Residents']}
-              borderColor={Constants.backgroundDarkColors['Residents']}
-              colorInput={Constants.backgroundDarkColors['Residents']}
-            />
-            <DateInputBox 
-              text="Data de Nascimento:" 
-              value1={day} 
-              value2={month} 
-              value3={year} 
-              changed1={value=>setDay(value)}
-              changed2={value=>setMonth(value)}
-              changed3={value=>setYear(value)}
-              backgroundColor={Constants.backgroundLightColors['Residents']}
-              borderColor={Constants.backgroundDarkColors['Residents']}
-              colorInput={Constants.backgroundDarkColors['Residents']}
-            />
+            
             <InputBox 
               text="Marca do Veículo:" 
               value={makerVehicle} 
@@ -145,7 +161,6 @@ const ResidentAdd = props => {
               action1={addHandler}
               action2={props.navigation.goBack}
             />
-
           </ScrollView>
           <ModalMessage
             message={errorMessage}
@@ -162,6 +177,13 @@ const styles = StyleSheet.create({
       padding:10,
       backgroundColor: Constants.backgroundColors['Residents'],
       minHeight:'100%'
+    },
+    picker:{
+      //backgroundColor:Constants.backgroundLightColors['Residents'],
+      //borderColor:Constants.backgroundDarkColors['Residents'],
+      borderColor:'black',
+      borderWidth: 2,
+      color:Constants.backgroundDarkColors['Residents'],
     },
     fontTitle:{
       textAlign:'center',

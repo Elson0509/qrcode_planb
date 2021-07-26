@@ -1,15 +1,9 @@
 import React from 'react';
 import * as utils from '../../services/util'
 import { StyleSheet,
-    TextInput,
     View,
-    KeyboardAvoidingView,
     Image,
-    TouchableOpacity,
     Text,
-    FlatList,
-    Animated,
-    Keyboard,
 } from 'react-native';
 
 const Placa = (props) => {

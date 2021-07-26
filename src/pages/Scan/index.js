@@ -24,8 +24,6 @@ const Scan = (props) => {
     const [uid, setUid] = useState(0)
     const [type, setType] = useState(0)
 
-    //console.log(props.route.params.user)
-
     const onCodeScanned = ({ type, data }) => {
         console.log({type})
         console.log({data})
@@ -56,7 +54,6 @@ const Scan = (props) => {
             >
             <View style={styles.modal}>
                 <Scanner onCodeScanned={onCodeScanned}/>
-                {/* <Button title="Cancelar" onPress={() => cancelHandler()}/> */}
                 <FooterButtons
                     backgroundColor={props.route.params.backgroundColor}
                     title2="Cancelar"
@@ -69,11 +66,9 @@ const Scan = (props) => {
             backgroundColor={props.route.params.backgroundColor}
             modalVisible={modalUserVisible} 
             rescan={rescan} 
-            user={props.route.params.user} 
             navigation={props.navigation} 
             uid={uid} 
             type={type}/>
-        {/* <Button title="Escanear" onPress={()=> setModalVisible(true)}/> */}
     </View>
     );
 };
@@ -87,9 +82,6 @@ const styles = StyleSheet.create({
     },
     modal: {
       flex: 1,
-      //alignItems: "center",
-      //justifyContent: "space-around",
-      //backgroundColor: 'lightgrey',
     },
 });
 

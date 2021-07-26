@@ -19,15 +19,12 @@ export default function Signin() {
   const [password, setPassword] = useState('')
   const { signed, signIn, errorMessage } = useAuth()
 
-  console.log(signed)
-
   const handleSignIn = async _ =>{
     Keyboard.dismiss()
     signIn(email, password)
   }
 
   useEffect(()=>{
-
     Animated.parallel([
       Animated.spring(offset.y, {
         useNativeDriver: true,

@@ -16,7 +16,7 @@ import * as utils from '../../services/util'
 import Icon from '../../components/Icon';
 import * as Constants from '../../services/constants'
 
-const Visitors = (props) => {
+const Units = (props) => {
     const {user} = useAuth()
 
     return (
@@ -26,7 +26,7 @@ const Visitors = (props) => {
                 data={Constants.menuOptions}
                 numColumns={2}
                 renderItem={(obj)=>{
-                    return <TouchableOpacity style={styles.menuItem} onPress={()=> {props.navigation.navigate(`Visitor${obj.item.screen}`, {user: user})}}>
+                    return <TouchableOpacity style={styles.menuItem} onPress={()=> {props.navigation.navigate(`Unit${obj.item.screen}`, {user: user})}}>
                                <Icon name={obj.item.icon} size={55}/>
                                <Text style={styles.menuItemText}>{obj.item.menuName}</Text>
                            </TouchableOpacity>
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderWidth: 1,
         padding: 20,
-        backgroundColor: Constants.backgroundLightColors["Visitors"],
+        backgroundColor: Constants.backgroundLightColors["Units"],
         alignItems: 'center',
     },
     menuItemText:{
@@ -77,4 +77,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Visitors;
+export default Units;

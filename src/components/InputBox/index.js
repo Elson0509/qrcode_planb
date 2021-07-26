@@ -5,10 +5,11 @@ import {
   Text,
   TextInput,
 } from 'react-native';
+import * as Constants from '../../services/constants'
 
 const InputBox = (props) => {
     return (
-        <View style={styles.box}>
+        <View style={[styles.box, {width: props.width || '100%'}]}>
             <Text style={[styles.labelStyle, {color: props.colorLabel || 'black'}]}>{props.text}</Text>
             <TextInput
                 style={[
@@ -32,11 +33,11 @@ const InputBox = (props) => {
 
 const styles = StyleSheet.create({
     box:{
-      marginBottom: 7
+      marginBottom: 7,
     },
     txtInput:{
       width:'100%',
-      borderWidth:3,
+      borderWidth:Constants.borderTextInputWidth,
       borderRadius:20,
       fontWeight:'bold',
       fontSize:14,
