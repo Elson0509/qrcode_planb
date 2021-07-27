@@ -13,7 +13,7 @@ import { StyleSheet,
 } from 'react-native';
 
 const AddCarsGroup = (props) => {
-    const users = [
+    const cars = [
         {
             maker:'Toyota',
             model:'Cruze',
@@ -35,20 +35,19 @@ const AddCarsGroup = (props) => {
                 <Icon name='car' size={40}/>
                 <Text>Adicionar veículo</Text>
             </TouchableOpacity>
-            <FlatList
-                data={users}
-                renderItem={(obj)=>{
-                    return <View key={obj.item.plate} style={[styles.listItem]}>
-                                <View>
-                                    <Text style={styles.menuItemText}>{obj.item.maker} {obj.item.model} {obj.item.color}</Text>
-                                    <Text style={styles.menuItemText}>Placa: {obj.item.plate}</Text>
-                                </View>
-                                <TouchableOpacity>
-                                    <Icon name='window-close' size={30}/>
-                                </TouchableOpacity>
-                            </View>
-                }}
-            />
+            {
+                cars.map((el, ind)=> (
+                    <View key={ind} style={[styles.listItem]}>
+                        <View>
+                            <Text style={styles.menuItemText}>{el.maker} {el.model} {el.color}</Text>
+                            <Text style={styles.menuItemText}>Placa: {el.plate}</Text>
+                        </View>
+                        <TouchableOpacity>
+                            <Icon name='window-close' size={30}/>
+                        </TouchableOpacity>
+                    </View>
+                ))
+            }
         </View>
         
     );

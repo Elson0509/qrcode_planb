@@ -13,7 +13,6 @@ import Thirds from '../pages/Thirds'
 import Units from '../pages/Units'
 import UnitAdd from '../pages/UnitAdd'
 import UnitList from '../pages/UnitList'
-import UnitDel from '../pages/UnitDel'
 import ResidentAdd from '../pages/ResidentAdd';
 import ResidentList from '../pages/ResidentList';
 import * as Constants from '../services/constants'
@@ -116,17 +115,6 @@ const AppRoutes = _ => {
                 component={UnitList}
                 options={{
                     headerTitle: 'Listar Unidades',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Units"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="UnitDel" 
-                component={UnitDel}
-                options={{
-                    headerTitle: 'Apagar Unidades',
                     headerRight: ()=> logoutButton,
                     headerStyle:{
                         backgroundColor: Constants.backgroundDarkColors["Units"]

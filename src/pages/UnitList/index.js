@@ -11,7 +11,6 @@ import {
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
 import Icon from '../../components/Icon';
-import FooterButtons from '../../components/FooterButtons';
 import ModalMessage from '../../components/ModalMessage';
 import ModalEditUnit from '../../components/ModalEditUnit';
 import comp from '../../../dummyDataComp.json'
@@ -24,6 +23,7 @@ const UnitList = props => {
     const [unitSelected, setUnitSelected] = useState(null)
     const [idEdit, setIdEdit] = useState('')
     const [blocoEdit, setBlocoEdit] = useState('')
+    const [blocoIdEdit, setBlocoIdEdit] = useState('')
     const [aptEdit, setAptEdit] = useState('')
 
     useEffect(()=>{
@@ -33,7 +33,7 @@ const UnitList = props => {
     const delUnitModal = unit => {
       console.log(unit)
       setUnitSelected(unit)
-      setMessage(`Excluir Bloco ${unit.bloco} Apt ${unit.apt}?`)
+      setMessage(`Excluir ${unit.bloco.name ? 'Bloco ' + unit.bloco.name : ''} Apt ${unit.apt}?`)
       setModal(true)
     }
 
@@ -52,7 +52,8 @@ const UnitList = props => {
       console.log(unit)
       setUnitSelected(unit)
       setIdEdit(unit.id)
-      setBlocoEdit(unit.bloco)
+      setBlocoEdit(unit.bloco.name)
+      setBlocoIdEdit(unit.bloco.id)
       setAptEdit(unit.apt)
       setModalEdit(true)
     }
@@ -61,11 +62,17 @@ const UnitList = props => {
       setModalEdit(false)
       const editedUser = {
         apt: aptEdit,
-        bloco: blocoEdit,
+        bloco:{
+          name:  blocoEdit,
+          id: blocoIdEdit
+        },
         id: idEdit,
       }
       const tempUnits = [...units]
       tempUnits.forEach((el, ind)=> {
+        if(el.bloco.id == blocoIdEdit){
+          el.bloco.name = blocoEdit
+        }
         if(el.id===unitSelected.id){
           tempUnits[ind]=editedUser
         }
@@ -78,24 +85,24 @@ const UnitList = props => {
           <FlatList
             data={units}
             renderItem={(obj)=>{
-                return <View 
-                            key={obj.item.id}
-                            style={styles.menuItem} 
-                        >
-                            <Text style={styles.listText}>{obj.item.bloco ? `Bloco ${obj.item.bloco}` : ''} Apt {obj.item.apt}</Text>
-                            <View style={styles.actionButtons} >
-                              <TouchableOpacity style={styles.actionButton}
-                                onPress={()=> editUnitModal(obj.item)}
-                              >
-                                <Icon name="edit" size={30} color='#385165'/>
-                              </TouchableOpacity>
-                              <TouchableOpacity
-                                onPress={()=> delUnitModal(obj.item)}
-                              >
-                                <Icon name="window-close" size={30} color='red'/>
-                              </TouchableOpacity>
-                            </View>
+              return <View 
+                        key={obj.item.id}
+                        style={styles.menuItem} 
+                      >
+                        <Text style={styles.listText}>{obj.item.bloco.name ? `Bloco ${obj.item.bloco.name}` : ''} Apt {obj.item.apt}</Text>
+                        <View style={styles.actionButtons} >
+                          <TouchableOpacity style={styles.actionButton}
+                            onPress={()=> editUnitModal(obj.item)}
+                          >
+                            <Icon name="edit" size={30} color='#385165'/>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            onPress={()=> delUnitModal(obj.item)}
+                          >
+                            <Icon name="window-close" size={30} color='red'/>
+                          </TouchableOpacity>
                         </View>
+                      </View>
             }}
           />
           <ModalMessage
@@ -138,7 +145,7 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       backgroundColor: Constants.backgroundLightColors['Units'],
       borderRadius: 20,
-      marginBottom: 10,
+      marginBottom: 3,
     },
     actionButtons:{
       flexDirection: 'row',
@@ -151,6 +158,6 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       fontSize: 16
     }
-  });
+});
 
 export default UnitList

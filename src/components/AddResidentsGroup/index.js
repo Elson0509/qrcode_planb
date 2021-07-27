@@ -32,20 +32,19 @@ const AddResidentsGroup = (props) => {
                 <Icon name='user' size={40}/>
                 <Text>Adicionar morador</Text>
             </TouchableOpacity>
-            <FlatList
-                data={users}
-                renderItem={(obj)=>{
-                    return <View key={obj.item.name} style={[styles.listItem]}>
-                                <View>
-                                    <Text style={styles.menuItemText}>Nome: {obj.item.name}</Text>
-                                    <Text style={styles.menuItemText}>Email: {obj.item.email}</Text>
-                                </View>
-                                <TouchableOpacity>
-                                    <Icon name='window-close' size={30}/>
-                                </TouchableOpacity>
-                            </View>
-                }}
-            />
+            {
+                users.map(((el, ind)=> (
+                    <View key={ind} style={[styles.listItem]}>
+                        <View>
+                            <Text style={styles.menuItemText}>Nome: {el.name}</Text>
+                            <Text style={styles.menuItemText}>Email: {el.email}</Text>
+                        </View>
+                        <TouchableOpacity>
+                            <Icon name='window-close' size={30}/>
+                        </TouchableOpacity>
+                    </View>
+                )))
+            }
         </View>
         
     );
