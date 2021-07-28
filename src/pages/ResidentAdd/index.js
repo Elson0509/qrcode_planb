@@ -13,6 +13,7 @@ import AddCarsGroup from '../../components/AddCarsGroup';
 import SelectBlocoGroup from '../../components/SelectBlocoGroup';
 import ModalSelectBloco from '../../components/ModalSelectBloco';
 import ModalSelectUnit from '../../components/ModalSelectUnit';
+import ModalAddResident from '../../components/ModalAddResident';
 import dummyBlocos from '../../../dummyDataBlocos.json'
 
 const ResidentAdd = props => {
@@ -21,6 +22,7 @@ const ResidentAdd = props => {
     const [blocos, setBlocos] = useState([])
     const [modalSelectBloco, setModalSelectBloco] = useState(false)
     const [modalSelectUnit, setModalSelectUnit] = useState(false)
+    const [modalAddResident, setModalAddResident] = useState(false)
     const [selectedBloco, setSelectedBloco] = useState(null)
     const [selectedUnit, setSelectedUnit] = useState(null)
     const [errorMessage, setErrorMessage] = useState('')
@@ -66,7 +68,11 @@ const ResidentAdd = props => {
             selectedUnit={selectedUnit}
             clearUnit={clearUnit}
           />
-          <AddResidentsGroup data={residents} setData={setResidents}/>
+          <AddResidentsGroup 
+            data={residents} 
+            setData={setResidents}
+            setModalAddResident={setModalAddResident}
+          />
           <AddCarsGroup data={vehicles} setData={setVehicles}/>
           
         </ScrollView>
@@ -83,11 +89,15 @@ const ResidentAdd = props => {
           setModalVisible={setModalSelectBloco}
         />
         <ModalSelectUnit
-          selectBlocoHandler={selectBlocoHandler}
           bloco={selectedBloco}
           modalVisible={modalSelectUnit}
           setModalVisible={setModalSelectUnit}
           selectUnitHandler={selectUnitHandler}
+        />
+        <ModalAddResident
+          modalVisible={modalAddResident}
+          setModalVisible={setModalAddResident}
+          navigation={props.navigation}
         />
       </SafeAreaView>
     );

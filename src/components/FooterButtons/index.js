@@ -26,6 +26,7 @@ const styles = StyleSheet.create({
     },
     button:{
         borderRadius: 28,
+        margin: 10,
     },
     text:{
         color: 'white',

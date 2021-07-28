@@ -28,7 +28,7 @@ const AddResidentsGroup = (props) => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.button}>
+            <TouchableOpacity style={styles.button} onPress={()=> {props.setModalAddResident(true)}}>
                 <Icon name='user' size={40}/>
                 <Text>Adicionar morador</Text>
             </TouchableOpacity>

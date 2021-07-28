@@ -7,6 +7,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import { useAuth } from '../contexts/auth'
 import MyQRCode from '../pages/MyQRCode';
 import Scan from '../pages/Scan';
+import CameraPic from '../pages/CameraPic'
 import Residents from '../pages/Residents'
 import Visitors from '../pages/Visitors'
 import Thirds from '../pages/Thirds'
@@ -51,6 +52,13 @@ const AppRoutes = _ => {
             <AppStack.Screen 
                 name="Scan" 
                 component={Scan}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <AppStack.Screen 
+                name="CameraPic" 
+                component={CameraPic}
                 options={{
                     headerShown: false
                 }}
