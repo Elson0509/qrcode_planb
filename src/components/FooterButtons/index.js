@@ -7,12 +7,12 @@ const FooterButtons = (props) => {
             {!!props.title1 && 
             <TouchableOpacity style={[styles.button, {backgroundColor: props.bgcolor1 || '#006DE3', padding: props.buttonPadding || 25}]} 
                 onPress={()=> props.action1()}>
-                <Text style={[styles.text]}>{props.title1}</Text>
+                <Text style={[styles.text, {fontSize: props.fontSize || 20}]}>{props.title1}</Text>
             </TouchableOpacity>}
             {!!props.title2 && 
             <TouchableOpacity style={[styles.button, {backgroundColor: props.bgcolor2 || '#CF142B', padding: props.buttonPadding || 25}]} 
                 onPress={()=> props.action2()}>
-                <Text style={[styles.text]}>{props.title2}</Text>
+                <Text style={[styles.text, {fontSize: props.fontSize || 20}]}>{props.title2}</Text>
             </TouchableOpacity>}
         </View>
     );
@@ -30,7 +30,6 @@ const styles = StyleSheet.create({
     },
     text:{
         color: 'white',
-        fontSize: 20
     }
 });
 

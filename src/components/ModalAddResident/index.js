@@ -3,11 +3,10 @@ import { StyleSheet, Text, View, Modal, FlatList, TouchableOpacity, Image, Scrol
 import FooterButtons from '../FooterButtons'
 import InputBox from '../InputBox'
 import Icon from '../Icon';
+import ModalPhoto from '../ModalPhoto';
 
 
 const ModalAddResident = (props) => {
-  const [name, setName] = useState('')
-  const [identidade, setIdentidade] = useState('')
   const [addPhotoIsClicked, setAddPhotoIsClicked] = useState(false)
 
   const cancelModalHandler = _ =>{
@@ -27,16 +26,22 @@ const ModalAddResident = (props) => {
             <View style={styles.modalView}>
                 <Text style={styles.modalTitle}>Dados do morador:</Text>
                 <InputBox
-                  text="Nome:"
-                  value={name}
+                  text="Nome*:"
+                  value={props.userBeingAdded.name}
                   width={270}
-                  changed={val=>setName(val)}
+                  changed={val=>props.setUserBeingAdded({...props.userBeingAdded, name: val})}
                 />
                 <InputBox
                   text="Identidade:"
-                  value={identidade}
+                  value={props.userBeingAdded.identification}
                   width={270}
-                  changed={val=>setIdentidade(val)}
+                  changed={val=>props.setUserBeingAdded({...props.userBeingAdded, identification: val})}
+                />
+                <InputBox
+                  text="Email*:"
+                  value={props.userBeingAdded.email}
+                  width={270}
+                  changed={val=>props.setUserBeingAdded({...props.userBeingAdded, email: val})}
                 />
                 {!addPhotoIsClicked && 
                   <TouchableOpacity
@@ -49,14 +54,15 @@ const ModalAddResident = (props) => {
                   <View style={styles.buttonAddPhotoGroup}>
                     <TouchableOpacity
                       style={[styles.buttonAddphotoIsClicked]}
-                      onPress={()=>{props.navigation.navigate('CameraPic')}}
+                      //onPress={()=>{props.navigation.navigate('CameraPic', {teste: 'teste'})}}
+                      onPress={()=>{props.photoClickHandler()}}
                     >
                       <Icon name="camera" size={18}/>
                       <Text>Câmera</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                       style={[styles.buttonAddphotoIsClicked, {marginLeft: 40}]}
-                      
+                      onPress={()=>{}}
                     >
                       <Icon name="paperclip" size={18}/>
                       <Text>Arquivo</Text>
@@ -114,6 +120,6 @@ const styles = StyleSheet.create({
     buttonAddPhotoGroup:{
       flexDirection: 'row'
     }
-  });
+});
 
 export default ModalAddResident;

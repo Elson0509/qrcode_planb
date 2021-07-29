@@ -23,11 +23,17 @@ const ResidentAdd = props => {
     const [modalSelectBloco, setModalSelectBloco] = useState(false)
     const [modalSelectUnit, setModalSelectUnit] = useState(false)
     const [modalAddResident, setModalAddResident] = useState(false)
-    const [selectedBloco, setSelectedBloco] = useState(null)
-    const [selectedUnit, setSelectedUnit] = useState(null)
+    const [selectedBloco, setSelectedBloco] = useState(props.route?.params?.selectedBloco || null)
+    const [selectedUnit, setSelectedUnit] = useState(props.route?.params?.selectedUnit || null)
     const [errorMessage, setErrorMessage] = useState('')
     const [residents, setResidents] = useState([])
     const [vehicles, setVehicles] = useState([])
+    const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {name: '', identification: '', email: '', pic: ''})
+
+    console.log('ResidentAdd route params', props.route.params)
+    //console.log('ResidentAdd props', props)
+
+    
 
     useEffect(()=>{
       const data = dummyBlocos.data
@@ -35,11 +41,22 @@ const ResidentAdd = props => {
       setBlocos(data)
       setLoading(false)
     },[])
+
+    useEffect(()=>{
+      if(props.route?.params?.userBeingAdded?.pic){
+        console.log(props.route.params.userBeingAdded.pic)
+        console.log('carregando dados do morador...')
+      }
+    },[])
     
     const plateSizeValidator = value => {
       if(value.length <= 7){
         setPlateVehicle(value.toUpperCase())
       }
+    }
+
+    const photoClickHandler = _ => {
+      props.navigation.navigate('CameraPic', {userBeingAdded, selectedBloco, selectedUnit})
     }
 
     const selectBlocoHandler = bloco => {
@@ -69,9 +86,12 @@ const ResidentAdd = props => {
             clearUnit={clearUnit}
           />
           <AddResidentsGroup 
-            data={residents} 
+            residents={residents} 
+            userBeingAdded={userBeingAdded}
+            setUserBeingAdded={setUserBeingAdded}
             setData={setResidents}
             setModalAddResident={setModalAddResident}
+            photoClickHandler={photoClickHandler}
           />
           <AddCarsGroup data={vehicles} setData={setVehicles}/>
           
@@ -97,7 +117,9 @@ const ResidentAdd = props => {
         <ModalAddResident
           modalVisible={modalAddResident}
           setModalVisible={setModalAddResident}
-          navigation={props.navigation}
+          userBeingAdded={userBeingAdded}
+          setUserBeingAdded={setUserBeingAdded}
+          photoClickHandler={photoClickHandler}
         />
       </SafeAreaView>
     );
@@ -108,14 +130,6 @@ const styles = StyleSheet.create({
       padding:10,
       backgroundColor: Constants.backgroundColors['Residents'],
       minHeight:'100%'
-    },
-    picker:{
-      //backgroundColor:Constants.backgroundLightColors['Residents'],
-      //borderColor:Constants.backgroundDarkColors['Residents'],
-      backgroundColor:'white',
-      borderColor:'black',
-      borderWidth: 1,
-      color:'black',
     },
     fontTitle:{
       textAlign:'center',

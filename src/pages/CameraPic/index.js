@@ -1,11 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { StyleSheet, SafeAreaView, Text, View, Modal, FlatList, TouchableOpacity, Image, ScrollView, TouchableHighlight, Pressable } from 'react-native';
 import {Camera} from 'expo-camera'
 import Icon from '../../components/Icon';
 
-const CameraPic = () => {
+const CameraPic = (props) => {
     const [type, setType] = useState(Camera.Constants.Type.back)
     const [hasPermission, setHasPermission] = useState(null)
+    const camRef = useRef(null)
+    const [capturedPhoto, setCapturedPhoto] = useState(null)
+
+    console.log('CameraPic route params', props.route.params)
+    //console.log('CameraPic props', props)
 
     useEffect(()=>{
         (async () => {
@@ -21,13 +26,28 @@ const CameraPic = () => {
         return <Text>Você precisa autorizar o uso de câmera para este aplicativo.</Text>
     }
 
+    const takePicture = async _ => {
+        if(camRef){
+            const data = await camRef.current.takePictureAsync();
+            setCapturedPhoto(data.uri)
+            //const [userBeingAdded, selectedBloco, selectedUnit] = props.route.params
+            const userBeingAdded = props.route.params.userBeingAdded
+            userBeingAdded.pic = data.uri
+            props.navigation.navigate('ResidentAdd', {userBeingAdded, selectedBloco: props.route.params.selectedBloco, selectedUnit: props.route.params.selectedUnit})
+            //console.log(data)
+        }
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <Camera
-                style={{flex:1}}
+                style={{flex:6}}
                 type={type}
+                ref={camRef}
             >
-                <View style={{flex: 1, backgroundColor: 'transparent', flexDirection: 'row'}}>
+                
+            </Camera>
+            <View style={{flex: 1, backgroundColor: 'black', flexDirection: 'row'}}>
                     <TouchableOpacity 
                         style={{
                             position: 'absolute',
@@ -50,12 +70,11 @@ const CameraPic = () => {
                             borderColor: 'white',
                             padding: 10
                         }}
-                        onPress={()=> {setType(type==Camera.Constants.Type.back ? Camera.Constants.Type.front : Camera.Constants.Type.back)}}
+                        onPress={()=> {takePicture()}}
                     >
                         <Icon name="camera" color="white" size={40}/>
                     </TouchableOpacity>
                 </View>
-            </Camera>
         </SafeAreaView>
     );
 };
