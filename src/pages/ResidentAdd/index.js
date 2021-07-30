@@ -6,14 +6,15 @@ import {
     View,
     Text,
   } from 'react-native';
+import * as ImagePicker from 'expo-image-picker'
 import * as Constants from '../../services/constants'
+import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage';
 import AddResidentsGroup from '../../components/AddResidentsGroup';
 import AddCarsGroup from '../../components/AddCarsGroup';
 import SelectBlocoGroup from '../../components/SelectBlocoGroup';
 import ModalSelectBloco from '../../components/ModalSelectBloco';
 import ModalSelectUnit from '../../components/ModalSelectUnit';
-import ModalAddResident from '../../components/ModalAddResident';
 import dummyBlocos from '../../../dummyDataBlocos.json'
 
 const ResidentAdd = props => {
@@ -22,37 +23,60 @@ const ResidentAdd = props => {
     const [blocos, setBlocos] = useState([])
     const [modalSelectBloco, setModalSelectBloco] = useState(false)
     const [modalSelectUnit, setModalSelectUnit] = useState(false)
-    const [modalAddResident, setModalAddResident] = useState(false)
     const [selectedBloco, setSelectedBloco] = useState(props.route?.params?.selectedBloco || null)
     const [selectedUnit, setSelectedUnit] = useState(props.route?.params?.selectedUnit || null)
     const [errorMessage, setErrorMessage] = useState('')
+    const [errorAddResidentMessage, setErrorAddResidentMessage] = useState('')
     const [residents, setResidents] = useState([])
     const [vehicles, setVehicles] = useState([])
     const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {name: '', identification: '', email: '', pic: ''})
 
-    console.log('ResidentAdd route params', props.route.params)
-    //console.log('ResidentAdd props', props)
-
-    
-
     useEffect(()=>{
       const data = dummyBlocos.data
-      //console.log(data)
       setBlocos(data)
       setLoading(false)
     },[])
 
-    useEffect(()=>{
-      if(props.route?.params?.userBeingAdded?.pic){
-        console.log(props.route.params.userBeingAdded.pic)
-        console.log('carregando dados do morador...')
+    useEffect(() => {
+      (async () => {
+        if (Platform.OS !== 'web') {
+          const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+          if (status !== 'granted') {
+            alert('Sorry, we need camera roll permissions to make this work!');
+          }
+        }
+      })();
+    }, []);
+
+    const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [3, 4],
+        quality: 1,
+      });
+      if (!result.cancelled) {
+        setUserBeingAdded(prev=> {return {...prev, pic:result.uri}})
       }
-    },[])
-    
-    const plateSizeValidator = value => {
-      if(value.length <= 7){
-        setPlateVehicle(value.toUpperCase())
+    };
+
+    const addResidentHandler = _ =>{
+      if(!userBeingAdded.name){
+        setErrorAddResidentMessage('Nome não pode estar vazio.')
+        return false
       }
+      if(!userBeingAdded.email){
+        setErrorAddResidentMessage('Email não pode estar vazio.')
+        return false
+      }
+      if(!Utils.validateEmail(userBeingAdded.email)){
+        setErrorAddResidentMessage('Email não é válido.')
+        return false
+      }
+      setResidents(prev=> [...prev, userBeingAdded])
+      setErrorAddResidentMessage('')
+      setUserBeingAdded({name: '', identification: '', email: '', pic: ''})
+      return true
     }
 
     const photoClickHandler = _ => {
@@ -90,8 +114,10 @@ const ResidentAdd = props => {
             userBeingAdded={userBeingAdded}
             setUserBeingAdded={setUserBeingAdded}
             setData={setResidents}
-            setModalAddResident={setModalAddResident}
             photoClickHandler={photoClickHandler}
+            pickImage={pickImage}
+            errorAddResidentMessage={errorAddResidentMessage}
+            addResidentHandler={addResidentHandler}
           />
           <AddCarsGroup data={vehicles} setData={setVehicles}/>
           
@@ -113,13 +139,6 @@ const ResidentAdd = props => {
           modalVisible={modalSelectUnit}
           setModalVisible={setModalSelectUnit}
           selectUnitHandler={selectUnitHandler}
-        />
-        <ModalAddResident
-          modalVisible={modalAddResident}
-          setModalVisible={setModalAddResident}
-          userBeingAdded={userBeingAdded}
-          setUserBeingAdded={setUserBeingAdded}
-          photoClickHandler={photoClickHandler}
         />
       </SafeAreaView>
     );

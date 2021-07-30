@@ -17,6 +17,13 @@ import { StyleSheet,
 
 const AddResidentsGroup = (props) => {
     const [addingUser, setAddingUser] = useState(false)
+
+    const addHandler = _ => {
+        if(props.addResidentHandler()){
+            setAddingUser(false)
+        }
+    }
+
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.button} onPress={()=> {setAddingUser(true)}}>
@@ -26,10 +33,24 @@ const AddResidentsGroup = (props) => {
             {
                 props.residents.map(((el, ind)=> (
                     <View key={ind} style={[styles.listItem]}>
-                        <View>
-                            <Text style={styles.menuItemText}>Nome: {el.name}</Text>
-                            <Text style={styles.menuItemText}>Email: {el.email}</Text>
+                        <View style={{flexDirection: 'row'}}>
+                            { !!el.pic && 
+                                <Image
+                                    style={{width: 39, height: 52, marginRight: 5}}
+                                    source={{uri: el.pic}}
+                                /> 
+                                ||
+                                <View style={{marginRight: 5}}>
+                                    <Icon name='portrait' size={52}/>
+                                </View>
+                            }
+                            <View style={{marginLeft: 5}}>
+                                <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Nome:</Text> {el.name}</Text>
+                                <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Email:</Text> {el.email}</Text>
+                                {!!el.identification && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Id:</Text> {el.identification}</Text>}
+                            </View>
                         </View>
+                        
                         <TouchableOpacity>
                             <Icon name='window-close' size={30}/>
                         </TouchableOpacity>
@@ -40,29 +61,32 @@ const AddResidentsGroup = (props) => {
                 addingUser &&
                 <View>
                     <InputBox
-                    text="Nome*:"
-                    value={props.userBeingAdded.name}
-                    width={295}
-                    changed={val=>props.setUserBeingAdded({...props.userBeingAdded, name: val})}
+                        text="Nome*:"
+                        value={props.userBeingAdded.name}
+                        width={295}
+                        changed={val=>props.setUserBeingAdded({...props.userBeingAdded, name: val})}
+                        autoCapitalize='words'
                     />
                     <InputBox
-                    text="Identidade:"
-                    value={props.userBeingAdded.identification}
-                    width={295}
-                    changed={val=>props.setUserBeingAdded({...props.userBeingAdded, identification: val})}
+                        text="Identidade:"
+                        value={props.userBeingAdded.identification}
+                        width={295}
+                        changed={val=>props.setUserBeingAdded({...props.userBeingAdded, identification: val})}
+                        autoCapitalize='characters'
                     />
                     <InputBox
-                    text="Email*:"
-                    value={props.userBeingAdded.email}
-                    width={295}
-                    changed={val=>props.setUserBeingAdded({...props.userBeingAdded, email: val})}
+                        text="Email*:"
+                        value={props.userBeingAdded.email}
+                        width={295}
+                        changed={val=>props.setUserBeingAdded({...props.userBeingAdded, email: val})}
+                        keyboard={'email-address'}
+                        autoCapitalize='none'
                     />
                     <Text style={styles.title}>Foto:</Text>
                     {!props.userBeingAdded.pic &&
                     <View style={styles.buttonAddPhotoGroup}>
                         <TouchableOpacity
                             style={[styles.buttonAddphotoIsClicked]}
-                            //onPress={()=>{props.navigation.navigate('CameraPic', {teste: 'teste'})}}
                             onPress={()=>{props.photoClickHandler()}}
                         >
                             <Icon name="camera" size={18}/>
@@ -70,7 +94,7 @@ const AddResidentsGroup = (props) => {
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={[styles.buttonAddphotoIsClicked, {marginLeft: 40}]}
-                            onPress={()=>{}}
+                            onPress={()=>{props.pickImage()}}
                         >
                             <Icon name="paperclip" size={18}/>
                             <Text>Arquivo</Text>
@@ -84,8 +108,10 @@ const AddResidentsGroup = (props) => {
                         />
                     </View>
                     }
+                    {!!props.errorAddResidentMessage && <Text style={styles.errorMessage}>{props.errorAddResidentMessage}</Text>}
                     <View style={styles.buttonAddPhotoGroup}>
                         <FooterButtons
+                            action1={addHandler}
                             title1="Adicionar"
                             title2="Cancelar"
                             buttonPadding={10}
@@ -93,6 +119,7 @@ const AddResidentsGroup = (props) => {
                             fontSize={18}
                         />
                     </View>
+                    
                 </View>
             }
         </View>
@@ -117,6 +144,12 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         marginBottom: 10,
     },
+    menuItemText: {
+
+    },
+    menuItemTextPrefix:{
+        fontWeight: 'bold',
+    },
     listItem:{
         padding: 3,
         borderBottomWidth: 1,
@@ -140,6 +173,16 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center',
         fontSize: 18
+    },
+    errorMessage:{
+        color: 'red',
+        marginTop: 10,
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: 16,
+        borderWidth: 1,
+        borderColor: 'red',
+        padding: 5,
     }
 })
 
