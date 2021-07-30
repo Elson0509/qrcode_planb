@@ -27,8 +27,10 @@ const ResidentAdd = props => {
     const [selectedUnit, setSelectedUnit] = useState(props.route?.params?.selectedUnit || null)
     const [errorMessage, setErrorMessage] = useState('')
     const [errorAddResidentMessage, setErrorAddResidentMessage] = useState('')
+    const [errorAddVehicleMessage, setErrorAddVehicleMessage] = useState('')
     const [residents, setResidents] = useState([])
-    const [vehicles, setVehicles] = useState([])
+    const [vehicles, setVehicles] = useState(props.route?.params?.vehicles || [])
+    const [vehicleBeingAdded, setVehicleBeingAdded] = useState({maker:'', model:'', color:'', plate:''})
     const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {name: '', identification: '', email: '', pic: ''})
 
     useEffect(()=>{
@@ -47,6 +49,18 @@ const ResidentAdd = props => {
         }
       })();
     }, []);
+
+    const removeResident = index => {
+      const residentsCopy = [...residents]
+      residentsCopy.splice(index, 1)
+      setResidents(residentsCopy)
+    }
+
+    const removeVehicle = index => {
+      const vehiclesCopy = [...vehicles]
+      vehiclesCopy.splice(index, 1)
+      setVehicles(vehiclesCopy)
+    }
 
     const pickImage = async () => {
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -79,8 +93,43 @@ const ResidentAdd = props => {
       return true
     }
 
+    const cancelAddResidentHandler = _ => {
+      setUserBeingAdded({name: '', identification: '', email: '', pic: ''})
+    }
+
+    const addVehicleHandler = _ =>{
+      if(!vehicleBeingAdded.maker){
+        setErrorAddVehicleMessage('Fabricante não pode estar vazio.')
+        return false
+      }
+      if(!vehicleBeingAdded.model){
+        setErrorAddVehicleMessage('Modelo não pode estar vazio.')
+        return false
+      }
+      if(!vehicleBeingAdded.color){
+        setErrorAddVehicleMessage('Cor não pode estar vazia.')
+        return false
+      }
+      if(!vehicleBeingAdded.plate){
+        setErrorAddVehicleMessage('Placa não pode estar vazia.')
+        return false
+      }
+      if(!Utils.validatePlateFormat(vehicleBeingAdded.plate)){
+        setErrorAddVehicleMessage('Formato de placa inválido.')
+        return false
+      }
+      setVehicles(prev=> [...prev, vehicleBeingAdded])
+      setErrorAddVehicleMessage('')
+      setVehicleBeingAdded({maker:'', model:'', color:'', plate:''})
+      return true
+    }
+
+    const cancelVehicleHandler = _ => {
+      setVehicleBeingAdded({maker:'', model:'', color:'', plate:''})
+    }
+
     const photoClickHandler = _ => {
-      props.navigation.navigate('CameraPic', {userBeingAdded, selectedBloco, selectedUnit})
+      props.navigation.navigate('CameraPic', {userBeingAdded, selectedBloco, selectedUnit, vehicles})
     }
 
     const selectBlocoHandler = bloco => {
@@ -101,8 +150,7 @@ const ResidentAdd = props => {
 
     return(
       <SafeAreaView style={styles.body}>
-        <ScrollView>
-          <Text style={[{color: 'black', fontWeight: 'bold'}]}>Complemento (Bloco, Apt...)</Text>
+        <ScrollView style={{flex: 1, padding:10,}}>
           <SelectBlocoGroup 
             pressed={()=>setModalSelectBloco(true)}
             selectedBloco={selectedBloco}
@@ -113,14 +161,22 @@ const ResidentAdd = props => {
             residents={residents} 
             userBeingAdded={userBeingAdded}
             setUserBeingAdded={setUserBeingAdded}
-            setData={setResidents}
             photoClickHandler={photoClickHandler}
             pickImage={pickImage}
             errorAddResidentMessage={errorAddResidentMessage}
             addResidentHandler={addResidentHandler}
+            cancelAddResidentHandler={cancelAddResidentHandler}
+            removeResident={removeResident}
           />
-          <AddCarsGroup data={vehicles} setData={setVehicles}/>
-          
+          <AddCarsGroup 
+            data={vehicles} 
+            vehicleBeingAdded={vehicleBeingAdded}
+            setVehicleBeingAdded={setVehicleBeingAdded}
+            errorAddVehicleMessage={errorAddVehicleMessage}
+            addVehicleHandler={addVehicleHandler}
+            cancelVehicleHandler={cancelVehicleHandler}
+            removeVehicle={removeVehicle}
+          />
         </ScrollView>
         <ModalMessage
           message={errorMessage}
@@ -146,9 +202,8 @@ const ResidentAdd = props => {
 
 const styles = StyleSheet.create({
     body:{
-      padding:10,
       backgroundColor: Constants.backgroundColors['Residents'],
-      minHeight:'100%'
+      flex: 1
     },
     fontTitle:{
       textAlign:'center',

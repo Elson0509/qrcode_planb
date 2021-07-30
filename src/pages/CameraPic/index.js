@@ -30,11 +30,16 @@ const CameraPic = (props) => {
         if(camRef){
             const data = await camRef.current.takePictureAsync();
             setCapturedPhoto(data.uri)
-            //const [userBeingAdded, selectedBloco, selectedUnit] = props.route.params
             const userBeingAdded = props.route.params.userBeingAdded
             userBeingAdded.pic = data.uri
-            props.navigation.navigate('ResidentAdd', {userBeingAdded, selectedBloco: props.route.params.selectedBloco, selectedUnit: props.route.params.selectedUnit})
-            //console.log(data)
+            props.navigation.navigate('ResidentAdd', 
+                {
+                    userBeingAdded, 
+                    selectedBloco: props.route.params.selectedBloco, 
+                    selectedUnit: props.route.params.selectedUnit, 
+                    vehicles: props.route.params.vehicles
+                }
+            )
         }
     }
 

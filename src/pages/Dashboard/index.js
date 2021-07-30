@@ -45,7 +45,6 @@ const Dashboard = (props) => {
             <FlatList
                 data={profiles[user.user_kind]}
                 numColumns={2}
-                
                 renderItem={(obj)=>{
                     return <TouchableOpacity style={[styles.menuItem, {backgroundColor: obj.item.backgroundColor }]} onPress={()=> {props.navigation.navigate(obj.item.screen, {user: user, backgroundColor: obj.item.backgroundColor})}}>
                                <Icon name={obj.item.icon} size={55}/>
@@ -95,7 +94,7 @@ const styles = StyleSheet.create({
     menuItemText:{
         marginTop: 15,
         fontWeight: '700',
-        fontSize: 18
+        fontSize: 14
     }
 })
 

@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import Icon from '../Icon';
 import InputBox from '../InputBox';
 import FooterButtons from '../FooterButtons';
+import * as Constants from '../../services/constants'
 import { StyleSheet,
     TextInput,
     View,
@@ -24,11 +25,16 @@ const AddResidentsGroup = (props) => {
         }
     }
 
+    const cancelHandler = _ => {
+        props.cancelAddResidentHandler();
+        setAddingUser(false)
+    }
+
     return (
         <View style={styles.container}>
             <TouchableOpacity style={styles.button} onPress={()=> {setAddingUser(true)}}>
                 <Icon name='user' size={40}/>
-                <Text>Adicionar morador</Text>
+                <Text>Adicionar Morador</Text>
             </TouchableOpacity>
             {
                 props.residents.map(((el, ind)=> (
@@ -44,14 +50,14 @@ const AddResidentsGroup = (props) => {
                                     <Icon name='portrait' size={52}/>
                                 </View>
                             }
-                            <View style={{marginLeft: 5}}>
+                            <View style={{marginLeft: 5, marginRight: 5, maxWidth: 210}}>
                                 <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Nome:</Text> {el.name}</Text>
                                 <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Email:</Text> {el.email}</Text>
                                 {!!el.identification && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Id:</Text> {el.identification}</Text>}
                             </View>
                         </View>
                         
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={()=>props.removeResident(ind)}>
                             <Icon name='window-close' size={30}/>
                         </TouchableOpacity>
                     </View>
@@ -66,6 +72,9 @@ const AddResidentsGroup = (props) => {
                         width={295}
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, name: val})}
                         autoCapitalize='words'
+                        backgroundColor={Constants.backgroundLightColors['Residents']}
+                        borderColor={Constants.backgroundDarkColors['Residents']}
+                        colorInput={Constants.backgroundDarkColors['Residents']}
                     />
                     <InputBox
                         text="Identidade:"
@@ -73,6 +82,9 @@ const AddResidentsGroup = (props) => {
                         width={295}
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, identification: val})}
                         autoCapitalize='characters'
+                        backgroundColor={Constants.backgroundLightColors['Residents']}
+                        borderColor={Constants.backgroundDarkColors['Residents']}
+                        colorInput={Constants.backgroundDarkColors['Residents']}
                     />
                     <InputBox
                         text="Email*:"
@@ -81,6 +93,9 @@ const AddResidentsGroup = (props) => {
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, email: val})}
                         keyboard={'email-address'}
                         autoCapitalize='none'
+                        backgroundColor={Constants.backgroundLightColors['Residents']}
+                        borderColor={Constants.backgroundDarkColors['Residents']}
+                        colorInput={Constants.backgroundDarkColors['Residents']}
                     />
                     <Text style={styles.title}>Foto:</Text>
                     {!props.userBeingAdded.pic &&
@@ -112,6 +127,7 @@ const AddResidentsGroup = (props) => {
                     <View style={styles.buttonAddPhotoGroup}>
                         <FooterButtons
                             action1={addHandler}
+                            action2={cancelHandler}
                             title1="Adicionar"
                             title2="Cancelar"
                             buttonPadding={10}

@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
     modalTitle:{
       marginBottom: 10,
       textAlign: "center",
-      fontSize: 23,
+      fontSize: 18,
     },
     modalView: {
       margin: 20,
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
       backgroundColor: '#efe',
     },  
     menuItemText:{
-      fontSize: 25,
+      fontSize: 15,
       textAlign: 'center',
       fontWeight: 'bold',
     },  

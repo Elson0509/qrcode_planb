@@ -31,6 +31,10 @@ const isLetter = c => {
     return c.toLowerCase() != c.toUpperCase();
 }
 
+const isNumber = c => {
+    return c >= '0' && c <= '9'
+}
+
 export const isBrazilLicensePlateNewModel = plate =>{
     if(plate.length != 7)
         return false
@@ -64,8 +68,18 @@ export const validateEmail = email => {
     return re.test(String(email).toLowerCase());
 }
 
-export const plateSizeValidator = value => {
-    if(value.length <= 7){
-      setPlateVehicle(value.toUpperCase())
-    }
+export const plateSizeValidator = plate => {
+    return plate.length != 7 ? false : true
+}
+
+export const validatePlateFormat = plate => {
+    if (!plateSizeValidator(plate))
+        return false
+    return isLetter(plate[0]) &&
+           isLetter(plate[1]) &&
+           isLetter(plate[2]) &&
+           isNumber(plate[3]) &&
+           (isLetter(plate[4]) || isNumber(plate[4])) &&
+           isNumber(plate[5]) &&
+           isNumber(plate[6])
 }

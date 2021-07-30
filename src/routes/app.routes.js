@@ -111,10 +111,11 @@ const AppRoutes = _ => {
                 name="UnitAdd" 
                 component={UnitAdd}
                 options={{
-                    headerTitle: 'Adicionar Unidades',
+                    headerTitle: 'Adicionar',
                     headerRight: ()=> logoutButton,
                     headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Units"]
+                        backgroundColor: Constants.backgroundDarkColors["Units"],
+                        
                     }
                 }}
             />
@@ -122,7 +123,7 @@ const AppRoutes = _ => {
                 name="UnitList" 
                 component={UnitList}
                 options={{
-                    headerTitle: 'Listar Unidades',
+                    headerTitle: 'Listar',
                     headerRight: ()=> logoutButton,
                     headerStyle:{
                         backgroundColor: Constants.backgroundDarkColors["Units"]
@@ -133,7 +134,7 @@ const AppRoutes = _ => {
                 name="ResidentAdd" 
                 component={ResidentAdd}
                 options={{
-                    headerTitle: 'Adicionar Morador',
+                    headerTitle: 'Adicionar',
                     headerRight: ()=> logoutButton,
                     headerStyle:{
                         backgroundColor: Constants.backgroundDarkColors["Residents"]
@@ -144,7 +145,7 @@ const AppRoutes = _ => {
                 name="ResidentList" 
                 component={ResidentList}
                 options={{
-                    headerTitle: 'Listar Moradores',
+                    headerTitle: 'Listar',
                     headerRight: ()=> logoutButton,
                     headerStyle:{
                         backgroundColor: Constants.backgroundDarkColors["Residents"]

@@ -25,6 +25,7 @@ const InputBox = (props) => {
                 autoFocus={ props.autoFocus || false}
                 keyboardType={props.keyboard || "default"}
                 value={props.value.toString()}
+                autoCorrect={props.autoCorrect || true}
                 onChangeText={props.changed}
             />
         </View>
@@ -40,12 +41,12 @@ const styles = StyleSheet.create({
       borderWidth:Constants.borderTextInputWidth,
       borderRadius:20,
       fontWeight:'bold',
-      fontSize:14,
+      fontSize:12,
       textAlign:'left',
       paddingLeft: 10
     },
     labelStyle:{
-      fontSize:15,
+      fontSize:11,
       fontWeight:'bold',
       marginBottom:5,
       marginLeft:5,
