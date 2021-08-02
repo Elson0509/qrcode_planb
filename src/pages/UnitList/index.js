@@ -9,7 +9,7 @@ import {
     Text,
   } from 'react-native';
 import * as Constants from '../../services/constants'
-import * as Utils from '../../services/util'
+import ActionButtons from '../../components/ActionButtons';
 import Icon from '../../components/Icon';
 import ModalMessage from '../../components/ModalMessage';
 import ModalEditUnit from '../../components/ModalEditUnit';
@@ -85,23 +85,15 @@ const UnitList = props => {
           <FlatList
             data={units}
             renderItem={(obj)=>{
-              return <View 
+              return  <View 
                         key={obj.item.id}
                         style={styles.menuItem} 
                       >
                         <Text style={styles.listText}>{obj.item.bloco.name ? `Bloco ${obj.item.bloco.name}` : ''} Apt {obj.item.apt}</Text>
-                        <View style={styles.actionButtons} >
-                          <TouchableOpacity style={styles.actionButton}
-                            onPress={()=> editUnitModal(obj.item)}
-                          >
-                            <Icon name="edit" size={30} color='#385165'/>
-                          </TouchableOpacity>
-                          <TouchableOpacity
-                            onPress={()=> delUnitModal(obj.item)}
-                          >
-                            <Icon name="window-close" size={30} color='red'/>
-                          </TouchableOpacity>
-                        </View>
+                        <ActionButtons
+                          action1={()=> editUnitModal(obj.item)}
+                          action2={()=> delUnitModal(obj.item)}
+                        />
                       </View>
             }}
           />
@@ -147,12 +139,12 @@ const styles = StyleSheet.create({
       borderRadius: 20,
       marginBottom: 3,
     },
-    actionButtons:{
-      flexDirection: 'row',
-    },
-    actionButton:{
-      marginRight: 10
-    },
+    // actionButtons:{
+    //   flexDirection: 'row',
+    // },
+    // actionButton:{
+    //   marginRight: 10
+    // },
     listText:{
       color: 'black',
       fontWeight: 'bold',

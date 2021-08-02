@@ -20,7 +20,7 @@ const SelectBlocoGroup = (props) => {
         <View style={styles.container}>
             <TouchableOpacity style={styles.button} onPress={props.pressed}>
                 <Icon name='building' size={40}/>
-                <Text>Selecionar Bloco</Text>
+                <Text>Selecionar Unidade</Text>
             </TouchableOpacity>
             {!!props.selectedUnit && 
                 <View style={[styles.listItem]}>

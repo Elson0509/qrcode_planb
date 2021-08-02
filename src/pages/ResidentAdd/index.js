@@ -15,6 +15,7 @@ import AddCarsGroup from '../../components/AddCarsGroup';
 import SelectBlocoGroup from '../../components/SelectBlocoGroup';
 import ModalSelectBloco from '../../components/ModalSelectBloco';
 import ModalSelectUnit from '../../components/ModalSelectUnit';
+import FooterButtons from '../../components/FooterButtons';
 import dummyBlocos from '../../../dummyDataBlocos.json'
 
 const ResidentAdd = props => {
@@ -33,6 +34,7 @@ const ResidentAdd = props => {
     const [vehicleBeingAdded, setVehicleBeingAdded] = useState({maker:'', model:'', color:'', plate:''})
     const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {name: '', identification: '', email: '', pic: ''})
 
+    //fetching blocos
     useEffect(()=>{
       const data = dummyBlocos.data
       setBlocos(data)
@@ -44,11 +46,22 @@ const ResidentAdd = props => {
         if (Platform.OS !== 'web') {
           const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
           if (status !== 'granted') {
-            alert('Sorry, we need camera roll permissions to make this work!');
+            alert('Desculpe, mas precisamos de permissão da câmera. Verifique as configurações.');
           }
         }
       })();
     }, []);
+
+    //updating info according to unit
+    useEffect(()=>{
+      if(selectedUnit){
+        //upadting info
+      }
+      else{
+        setResidents([])
+        setVehicles([])
+      }
+    }, [selectedUnit])
 
     const removeResident = index => {
       const residentsCopy = [...residents]
@@ -148,6 +161,17 @@ const ResidentAdd = props => {
       setSelectedUnit(null)
     }
 
+    const cancelHandler = _ =>{
+      clearUnit()
+      setResidents([])
+      setVehicles([])
+    }
+
+    //saving...
+    const confirmHandler = _ =>{
+
+    }
+
     return(
       <SafeAreaView style={styles.body}>
         <ScrollView style={{flex: 1, padding:10,}}>
@@ -157,26 +181,42 @@ const ResidentAdd = props => {
             selectedUnit={selectedUnit}
             clearUnit={clearUnit}
           />
-          <AddResidentsGroup 
-            residents={residents} 
-            userBeingAdded={userBeingAdded}
-            setUserBeingAdded={setUserBeingAdded}
-            photoClickHandler={photoClickHandler}
-            pickImage={pickImage}
-            errorAddResidentMessage={errorAddResidentMessage}
-            addResidentHandler={addResidentHandler}
-            cancelAddResidentHandler={cancelAddResidentHandler}
-            removeResident={removeResident}
-          />
-          <AddCarsGroup 
-            data={vehicles} 
-            vehicleBeingAdded={vehicleBeingAdded}
-            setVehicleBeingAdded={setVehicleBeingAdded}
-            errorAddVehicleMessage={errorAddVehicleMessage}
-            addVehicleHandler={addVehicleHandler}
-            cancelVehicleHandler={cancelVehicleHandler}
-            removeVehicle={removeVehicle}
-          />
+          {!!selectedUnit &&
+            <View>
+              <AddResidentsGroup 
+                residents={residents} 
+                userBeingAdded={userBeingAdded}
+                setUserBeingAdded={setUserBeingAdded}
+                photoClickHandler={photoClickHandler}
+                pickImage={pickImage}
+                errorAddResidentMessage={errorAddResidentMessage}
+                addResidentHandler={addResidentHandler}
+                cancelAddResidentHandler={cancelAddResidentHandler}
+                removeResident={removeResident}
+              />
+              <AddCarsGroup 
+                data={vehicles} 
+                vehicleBeingAdded={vehicleBeingAdded}
+                setVehicleBeingAdded={setVehicleBeingAdded}
+                errorAddVehicleMessage={errorAddVehicleMessage}
+                addVehicleHandler={addVehicleHandler}
+                cancelVehicleHandler={cancelVehicleHandler}
+                removeVehicle={removeVehicle}
+              />
+              {
+                !!selectedUnit && residents.length > 0 &&
+                  <FooterButtons
+                    backgroundColor={Constants.backgroundColors['Residents']}
+                    title1="Confirmar"
+                    title2="Cancelar"
+                    buttonPadding={15}
+                    fontSize={17}
+                    action1={confirmHandler}
+                    action2={cancelHandler}
+                  />
+              }
+            </View>
+          }
         </ScrollView>
         <ModalMessage
           message={errorMessage}

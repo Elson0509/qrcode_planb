@@ -20,10 +20,10 @@ export default function Scanner(props) {
   };
 
   if (hasPermission === null) {
-    return <Text>Requesting for camera permission</Text>;
+    return <Text>Solicitando permissão para acessar câmera.</Text>;
   }
   if (hasPermission === false) {
-    return <Text>No access to camera</Text>;
+    return <Text>Sem permissão de acesso à câmera</Text>;
   }
 
   return (

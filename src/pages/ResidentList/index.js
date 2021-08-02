@@ -8,37 +8,98 @@ import {
     View,
     Text,
   } from 'react-native';
-import dummyUsers from '../../../dummyData.json'
+import ActionButtons from '../../components/ActionButtons';
+import dummyListUsers from '../../../dummyListUsers.json'
 import * as Constants from '../../services/constants'
-import * as Utils from '../../services/util'
-import FooterButtons from '../../components/FooterButtons';
+import ModalMessage from '../../components/ModalMessage';
 
 const ResidentList = props => {
     const [users, setUsers] = useState({})
+    const [modal, setModal] = useState(false)
+    const [message, setMessage] = useState('')
+    const [unitSelected, setUnitSelected] = useState(null)
 
     useEffect(()=>{
-      console.log(dummyUsers.data)
-      setUsers(dummyUsers.data)
+      //console.log(dummyListUsers.data)
+      setUsers(dummyListUsers.data)
     }, [])
+
+    const delUnitModal = unit => {
+      console.log(unit)
+      setUnitSelected(unit)
+      setMessage(`Excluir Bloco ${unit.bloco} unidade ${unit.unidade}?`)
+      setModal(true)
+    }
+
+    const deleteUnitConfirmed = _ =>{
+      setModal(false)
+      const tempUsers = [...users]
+      tempUsers.forEach((el, ind)=> {
+        if(el.id===unitSelected.id){
+          tempUsers.splice(ind, 1)
+        }
+      })
+      setUsers(tempUsers)
+    }
 
     return (
         <SafeAreaView style={styles.body}>
             <FlatList
               data={users}
+              style={{marginBottom: 80, paddingRight:10}}
               renderItem={(obj)=>{
-                  return <TouchableOpacity 
-                              style={styles.menuItem} 
-                              onPress={()=> {console.log('ok')}}>
-                              <Text style={styles.listText}>{obj.item.nome}</Text>
-                              <Text style={styles.listText}>Bloco {obj.item.bloco} Apt {obj.item.apt}</Text>
-                          </TouchableOpacity>
+                  return (
+                    <View 
+                      style={styles.menuItem} 
+                    >
+                      <Text style={styles.listText}>Bloco {obj.item.bloco} Unidade {obj.item.unidade}</Text>
+                      <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
+                        <View>
+                        {
+                          <View>
+                            <Text style={styles.subTitle}>Moradores:</Text>
+                            {
+                              obj.item.residentes.map((res, ind)=>{
+                                return (
+                                  <Text key={ind}>{res}</Text>
+                                )
+                              })
+                            }
+                          </View>
+                        }
+                        {
+                          <View>
+                            {obj.item.veiculos?.length > 0 && <Text style={styles.subTitle}>Veículos:</Text>}
+                            {(!obj.item.veiculos || obj.item.veiculos.length === 0) && <Text>Sem veículos cadastrados</Text>}
+                            {
+                              obj.item.veiculos?.map((car, ind)=>{
+                                return (
+                                  <Text key={ind}>{`${car.veiculo_montador} ${car.veiculo_modelo} ${car.veiculo_cor} - ${car.veiculo_placa}`}</Text>
+                                )
+                              })
+                            }
+                          </View>
+                        }
+                        </View>
+                          <View>
+                          <ActionButtons
+                            flexDirection='column'
+                            action2={()=> delUnitModal(obj.item)}
+                          />
+                        </View>
+                      </View>
+                    </View>
+                  )
               }}
             />
-            <FooterButtons
-              title2="Voltar"
-              buttonPadding={15}
-              backgroundColor={Constants.backgroundColors['Residents']}
-              action2={props.navigation.goBack}
+            <ModalMessage
+              message={message}
+              title="Confirme"
+              btn1Pressed={deleteUnitConfirmed}
+              btn2Text='Cancelar'
+              btn1Text='Apagar'
+              modalVisible={modal}
+              setModalVisible={setModal}
             />
         </SafeAreaView>
       );
@@ -60,7 +121,14 @@ const styles = StyleSheet.create({
     listText:{
       color: 'black',
       fontWeight: 'bold',
-      fontSize: 16
+      fontSize: 16,
+      textAlign:'center'
+    },
+    subTitle:{
+      fontWeight:'bold',
+      fontSize: 15,
+      textDecorationLine: 'underline',
+      marginTop: 5,
     }
   });
 
