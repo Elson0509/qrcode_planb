@@ -19,6 +19,8 @@ const ResidentList = props => {
     const [message, setMessage] = useState('')
     const [unitSelected, setUnitSelected] = useState(null)
 
+    console.log(props)
+
     useEffect(()=>{
       //console.log(dummyListUsers.data)
       setUsers(dummyListUsers.data)
@@ -42,6 +44,10 @@ const ResidentList = props => {
       setUsers(tempUsers)
     }
 
+    const editHandler = unitId => {
+      props.navigation.navigate('ResidentEdit', {id: unitId})
+    }
+
     return (
         <SafeAreaView style={styles.body}>
             <FlatList
@@ -54,36 +60,33 @@ const ResidentList = props => {
                     >
                       <Text style={styles.listText}>Bloco {obj.item.bloco} Unidade {obj.item.unidade}</Text>
                       <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-                        <View>
-                        {
+                        <View style={{maxWidth: 250}}>
                           <View>
                             <Text style={styles.subTitle}>Moradores:</Text>
                             {
                               obj.item.residentes.map((res, ind)=>{
                                 return (
-                                  <Text key={ind}>{res}</Text>
+                                  <Text key={ind}>{ind+1}-{res}</Text>
                                 )
                               })
                             }
                           </View>
-                        }
-                        {
                           <View>
                             {obj.item.veiculos?.length > 0 && <Text style={styles.subTitle}>Veículos:</Text>}
-                            {(!obj.item.veiculos || obj.item.veiculos.length === 0) && <Text>Sem veículos cadastrados</Text>}
+                            {(!obj.item.veiculos || obj.item.veiculos.length === 0) && <Text style={{marginTop: 10, textDecorationLine: 'underline'}}>Sem veículos cadastrados</Text>}
                             {
                               obj.item.veiculos?.map((car, ind)=>{
                                 return (
-                                  <Text key={ind}>{`${car.veiculo_montador} ${car.veiculo_modelo} ${car.veiculo_cor} - ${car.veiculo_placa}`}</Text>
+                                  <Text key={ind}>-{`${car.veiculo_montador} ${car.veiculo_modelo} ${car.veiculo_cor} - ${car.veiculo_placa}`}</Text>
                                 )
                               })
                             }
                           </View>
-                        }
                         </View>
-                          <View>
+                        <View>
                           <ActionButtons
                             flexDirection='column'
+                            action1={()=> editHandler(obj.item)}
                             action2={()=> delUnitModal(obj.item)}
                           />
                         </View>

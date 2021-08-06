@@ -18,6 +18,8 @@ import { StyleSheet,
 const AddCarsGroup = (props) => {
     const [addingVehicle, setAddingVehicle] = useState(false)
 
+    console.log(props)
+
     const addHandler = _ => {
         if(props.addVehicleHandler()){
             setAddingVehicle(false)

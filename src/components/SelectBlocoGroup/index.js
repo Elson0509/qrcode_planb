@@ -14,7 +14,6 @@ import { StyleSheet,
 } from 'react-native';
 
 const SelectBlocoGroup = (props) => {
-    const unit = {}
 
     return (
         <View style={styles.container}>

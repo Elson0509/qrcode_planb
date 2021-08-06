@@ -16,6 +16,7 @@ import UnitAdd from '../pages/UnitAdd'
 import UnitList from '../pages/UnitList'
 import ResidentAdd from '../pages/ResidentAdd';
 import ResidentList from '../pages/ResidentList';
+import ResidentEdit from '../pages/ResidentEdit';
 import * as Constants from '../services/constants'
 
 const AppStack = createStackNavigator()
@@ -135,6 +136,17 @@ const AppRoutes = _ => {
                 component={ResidentAdd}
                 options={{
                     headerTitle: 'Adicionar',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Residents"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="ResidentEdit" 
+                component={ResidentEdit}
+                options={{
+                    headerTitle: 'Editar',
                     headerRight: ()=> logoutButton,
                     headerStyle:{
                         backgroundColor: Constants.backgroundDarkColors["Residents"]
