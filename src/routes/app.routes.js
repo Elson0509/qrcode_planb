@@ -10,13 +10,14 @@ import Scan from '../pages/Scan';
 import CameraPic from '../pages/CameraPic'
 import Residents from '../pages/Residents'
 import Visitors from '../pages/Visitors'
+import VisitorAdd from '../pages/VisitorAdd';
 import Thirds from '../pages/Thirds'
 import Units from '../pages/Units'
 import UnitAdd from '../pages/UnitAdd'
 import UnitList from '../pages/UnitList'
-import ResidentAdd from '../pages/ResidentAdd';
-import ResidentList from '../pages/ResidentList';
-import ResidentEdit from '../pages/ResidentEdit';
+import ResidentAdd from '../pages/ResidentAdd'
+import ResidentList from '../pages/ResidentList'
+import ResidentEdit from '../pages/ResidentEdit'
 import * as Constants from '../services/constants'
 
 const AppStack = createStackNavigator()
@@ -80,6 +81,17 @@ const AppRoutes = _ => {
                 component={Visitors}
                 options={{
                     headerTitle: 'Visitantes',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Visitors"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="VisitorAdd" 
+                component={VisitorAdd}
+                options={{
+                    headerTitle: 'Adicionar',
                     headerRight: ()=> logoutButton,
                     headerStyle:{
                         backgroundColor: Constants.backgroundDarkColors["Visitors"]

@@ -34,12 +34,12 @@ const UnitAdd = props => {
         setModal(true)
       }
       else{
-        console.log('Salvando informações...')
+        //'Salvando informações...'
         const newUnit = {
           block,
           apt
         }
-        console.log(newUnit)
+        
       }
     }
 

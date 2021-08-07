@@ -17,18 +17,18 @@ const SelectBlocoGroup = (props) => {
 
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={styles.button} onPress={props.pressed}>
+            {!props.noEdit && <TouchableOpacity style={styles.button} onPress={props.pressed}>
                 <Icon name='building' size={40}/>
                 <Text>Selecionar Unidade</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>}
             {!!props.selectedUnit && 
                 <View style={[styles.listItem]}>
                     <View>
                     {!!props.selectedUnit && <Text>Bloco {props.selectedBloco.bloco} Apartamento {props.selectedUnit.number}</Text>}
                     </View>
-                    <TouchableOpacity onPress={props.clearUnit}>
+                    {!props.noEdit && <TouchableOpacity onPress={props.clearUnit}>
                         <Icon name='window-close' size={30}/>
-                    </TouchableOpacity>
+                    </TouchableOpacity>}
                 </View>
             }
         </View>

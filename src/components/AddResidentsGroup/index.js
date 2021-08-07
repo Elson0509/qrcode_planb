@@ -19,6 +19,8 @@ import { StyleSheet,
 const AddResidentsGroup = (props) => {
     const [addingUser, setAddingUser] = useState(false)
 
+    console.log(props)
+
     const addHandler = _ => {
         if(props.addResidentHandler()){
             setAddingUser(false)

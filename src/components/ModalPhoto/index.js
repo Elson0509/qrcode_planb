@@ -8,8 +8,6 @@ const ModalPhoto = (props) => {
     const [hasPermission, setHasPermission] = useState(null)
     const camRef = useRef(null)
 
-    console.log('abriu')
-
     useEffect(()=>{
         (async () => {
             const {status} = await Camera.requestCameraPermissionsAsync()

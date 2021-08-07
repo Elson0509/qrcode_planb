@@ -25,8 +25,6 @@ const Scan = (props) => {
     const [type, setType] = useState(0)
 
     const onCodeScanned = ({ type, data }) => {
-        //console.log({type})
-        //console.log({data})
         setUid(data)
         setType(type)
         setModalVisible(false)
@@ -40,7 +38,6 @@ const Scan = (props) => {
 
     const cancelHandler = () =>{
         setModalVisible(false)
-        console.log('cancelar')
         props.navigation.navigate('Dashboard')
     }
     

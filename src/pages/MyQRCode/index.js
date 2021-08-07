@@ -17,7 +17,6 @@ import * as Constants from '../../services/constants'
 
 const MyQRCode = (props) => {
     const user = props.user || props.route.params.user
-    console.log(user)
     
     return (
         <View style={[styles.container, {backgroundColor: Constants.backgroundColors['MyQRCode']}]}>

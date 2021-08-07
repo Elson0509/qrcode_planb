@@ -19,15 +19,12 @@ const ResidentList = props => {
     const [message, setMessage] = useState('')
     const [unitSelected, setUnitSelected] = useState(null)
 
-    console.log(props)
 
     useEffect(()=>{
-      //console.log(dummyListUsers.data)
       setUsers(dummyListUsers.data)
     }, [])
 
     const delUnitModal = unit => {
-      console.log(unit)
       setUnitSelected(unit)
       setMessage(`Excluir Bloco ${unit.bloco} unidade ${unit.unidade}?`)
       setModal(true)

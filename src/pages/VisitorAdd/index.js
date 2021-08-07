@@ -17,9 +17,8 @@ import ModalSelectBloco from '../../components/ModalSelectBloco';
 import ModalSelectUnit from '../../components/ModalSelectUnit';
 import FooterButtons from '../../components/FooterButtons';
 import dummyBlocos from '../../../dummyDataBlocos.json'
-import dummyEditUsers from '../../../dummyEditUsers.json'
 
-const ResidentEdit = props => {
+const VisitorAdd = props => {
     const [modal, setModal] = useState(false)
     const [loading, setLoading] = useState(true)
     const [blocos, setBlocos] = useState([])
@@ -35,23 +34,6 @@ const ResidentEdit = props => {
     const [vehicleBeingAdded, setVehicleBeingAdded] = useState({maker:'', model:'', color:'', plate:''})
     const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {name: '', identification: '', email: '', pic: ''})
 
-    //fetching data from the unit
-    useEffect(()=>{
-      const data = dummyEditUsers.data
-      //console.log('dummyEditUsers', data)
-      const unit = {}
-      unit.number = props.route.params.id.unidade
-      const bloco = {}
-      bloco.bloco = props.route.params.id.bloco
-      setSelectedUnit(unit)
-      setSelectedBloco(bloco)
-      console.log('data.residents',data.residents)
-      setResidents(data.residents)
-      setVehicles(data.veiculos)
-      setLoading(false)
-    },[])
-
-    
     //fetching blocos
     useEffect(()=>{
       const data = dummyBlocos.data
@@ -71,15 +53,15 @@ const ResidentEdit = props => {
     }, []);
 
     //updating info according to unit
-    // useEffect(()=>{
-    //   if(selectedUnit){
-    //     //updating info
-    //   }
-    //   else{
-    //     setResidents([])
-    //     setVehicles([])
-    //   }
-    // }, [selectedUnit])
+    useEffect(()=>{
+      if(selectedUnit){
+        //upadting info
+      }
+      else{
+        setResidents([])
+        setVehicles([])
+      }
+    }, [selectedUnit])
 
     const removeResident = index => {
       const residentsCopy = [...residents]
@@ -187,17 +169,13 @@ const ResidentEdit = props => {
 
     //saving...
     const confirmHandler = _ =>{
-      
+
     }
 
     return(
       <SafeAreaView style={styles.body}>
         <ScrollView style={{flex: 1, padding:10,}}>
-          <View>
-            
-          </View>
           <SelectBlocoGroup 
-            noEdit
             pressed={()=>setModalSelectBloco(true)}
             selectedBloco={selectedBloco}
             selectedUnit={selectedUnit}
@@ -234,7 +212,7 @@ const ResidentEdit = props => {
                     buttonPadding={15}
                     fontSize={17}
                     action1={confirmHandler}
-                    action2={()=>props.navigation.goBack()}
+                    action2={cancelHandler}
                   />
               }
             </View>
@@ -303,4 +281,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default ResidentEdit
+export default VisitorAdd

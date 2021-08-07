@@ -110,8 +110,6 @@ const ModalUser = (props) => {
   if(loading)
     return <Spinner/>
 
-  console.log(user)
-
   if(props.type!=256 || !user){
       return (
         <Modal

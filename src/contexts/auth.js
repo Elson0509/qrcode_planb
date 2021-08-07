@@ -39,7 +39,7 @@ export const AuthProvider = props =>{
     const signInHandler = async (email, password) => {
         try{
             const response = await auth.signIn(email, password)
-            console.log(response)
+
             setUser(response.user)
 
             api.defaults.headers['Authorization'] = `Bearer ${response.token}`

@@ -9,9 +9,6 @@ const CameraPic = (props) => {
     const camRef = useRef(null)
     const [capturedPhoto, setCapturedPhoto] = useState(null)
 
-    console.log('CameraPic route params', props.route.params)
-    //console.log('CameraPic props', props)
-
     useEffect(()=>{
         (async () => {
             const {status} = await Camera.requestCameraPermissionsAsync()

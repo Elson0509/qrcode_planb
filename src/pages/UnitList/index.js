@@ -31,7 +31,6 @@ const UnitList = props => {
     }, [])
 
     const delUnitModal = unit => {
-      console.log(unit)
       setUnitSelected(unit)
       setMessage(`Excluir ${unit.bloco.name ? 'Bloco ' + unit.bloco.name : ''} Apt ${unit.apt}?`)
       setModal(true)
@@ -49,7 +48,7 @@ const UnitList = props => {
     }
 
     const editUnitModal = unit => {
-      console.log(unit)
+      
       setUnitSelected(unit)
       setIdEdit(unit.id)
       setBlocoEdit(unit.bloco.name)
