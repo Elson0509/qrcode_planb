@@ -10,7 +10,7 @@ import * as ImagePicker from 'expo-image-picker'
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage';
-import AddResidentsGroup from '../../components/AddResidentsGroup';
+import AddVisitorsGroup from '../../components/AddVisitorsGroup';
 import AddCarsGroup from '../../components/AddCarsGroup';
 import SelectBlocoGroup from '../../components/SelectBlocoGroup';
 import ModalSelectBloco from '../../components/ModalSelectBloco';
@@ -32,7 +32,7 @@ const VisitorAdd = props => {
     const [residents, setResidents] = useState([])
     const [vehicles, setVehicles] = useState(props.route?.params?.vehicles || [])
     const [vehicleBeingAdded, setVehicleBeingAdded] = useState({maker:'', model:'', color:'', plate:''})
-    const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {name: '', identification: '', email: '', pic: ''})
+    const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {name: '', identification: '', email: '', pic: '', dayInit: '', monthInit: '', yearInit: '', dayEnd: '', monthEnd: '', yearEnd: '', })
 
     //fetching blocos
     useEffect(()=>{
@@ -142,7 +142,7 @@ const VisitorAdd = props => {
     }
 
     const photoClickHandler = _ => {
-      props.navigation.navigate('CameraPic', {userBeingAdded, selectedBloco, selectedUnit, vehicles})
+      props.navigation.navigate('CameraPic', {userBeingAdded, selectedBloco, selectedUnit, vehicles, screen:'VisitorAdd'})
     }
 
     const selectBlocoHandler = bloco => {
@@ -172,10 +172,16 @@ const VisitorAdd = props => {
 
     }
 
+    const backgroundColorBoxes = '#9370DB'
+    const backgroundColorButtonBoxes = '#A5AEC7'
+
+
     return(
       <SafeAreaView style={styles.body}>
         <ScrollView style={{flex: 1, padding:10,}}>
           <SelectBlocoGroup 
+            backgroundColor={backgroundColorBoxes}
+            backgroundColorButtons={backgroundColorButtonBoxes}
             pressed={()=>setModalSelectBloco(true)}
             selectedBloco={selectedBloco}
             selectedUnit={selectedUnit}
@@ -183,7 +189,9 @@ const VisitorAdd = props => {
           />
           {!!selectedUnit &&
             <View>
-              <AddResidentsGroup 
+              <AddVisitorsGroup 
+                backgroundColor={backgroundColorBoxes}
+                backgroundColorButtons={backgroundColorButtonBoxes}
                 residents={residents} 
                 userBeingAdded={userBeingAdded}
                 setUserBeingAdded={setUserBeingAdded}
@@ -195,6 +203,8 @@ const VisitorAdd = props => {
                 removeResident={removeResident}
               />
               <AddCarsGroup 
+                backgroundColor={backgroundColorBoxes}
+                backgroundColorButtons={backgroundColorButtonBoxes}
                 data={vehicles} 
                 vehicleBeingAdded={vehicleBeingAdded}
                 setVehicleBeingAdded={setVehicleBeingAdded}
@@ -202,6 +212,9 @@ const VisitorAdd = props => {
                 addVehicleHandler={addVehicleHandler}
                 cancelVehicleHandler={cancelVehicleHandler}
                 removeVehicle={removeVehicle}
+                backgroundLightColor={Constants.backgroundLightColors['Visitors']}
+                backgroundDarkColor={Constants.backgroundDarkColors['Visitors']}
+                
               />
               {
                 !!selectedUnit && residents.length > 0 &&
@@ -242,7 +255,7 @@ const VisitorAdd = props => {
 
 const styles = StyleSheet.create({
     body:{
-      backgroundColor: Constants.backgroundColors['Residents'],
+      backgroundColor: Constants.backgroundColors['Visitors'],
       flex: 1
     },
     fontTitle:{

@@ -3,6 +3,7 @@ import Icon from '../Icon';
 import InputBox from '../InputBox';
 import FooterButtons from '../FooterButtons';
 import * as Constants from '../../services/constants'
+import DateInputBox from '../DateInputBox'
 import { StyleSheet,
     TextInput,
     View,
@@ -16,7 +17,7 @@ import { StyleSheet,
     Button,
 } from 'react-native';
 
-const AddResidentsGroup = (props) => {
+const AddVisitorsGroup = (props) => {
     const [addingUser, setAddingUser] = useState(false)
 
     console.log(props)
@@ -36,7 +37,7 @@ const AddResidentsGroup = (props) => {
         <View style={[styles.container, {backgroundColor: props.backgroundColor || '#44FFAF'}]}>
             <TouchableOpacity style={[styles.button, {backgroundColor: props.backgroundColorButtons || '#00FF7F'}]} onPress={()=> {setAddingUser(true)}}>
                 <Icon name='user' size={40}/>
-                <Text>Adicionar Morador</Text>
+                <Text>Adicionar Visitante</Text>
             </TouchableOpacity>
             {
                 props.residents.map(((el, ind)=> (
@@ -74,9 +75,9 @@ const AddResidentsGroup = (props) => {
                         width={295}
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, name: val})}
                         autoCapitalize='words'
-                        backgroundColor={Constants.backgroundLightColors['Residents']}
-                        borderColor={Constants.backgroundDarkColors['Residents']}
-                        colorInput={Constants.backgroundDarkColors['Residents']}
+                        backgroundColor={Constants.backgroundLightColors['Visitors']}
+                        borderColor={Constants.backgroundDarkColors['Visitors']}
+                        colorInput={Constants.backgroundDarkColors['Visitors']}
                     />
                     <InputBox
                         text="Identidade:"
@@ -84,9 +85,9 @@ const AddResidentsGroup = (props) => {
                         width={295}
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, identification: val})}
                         autoCapitalize='characters'
-                        backgroundColor={Constants.backgroundLightColors['Residents']}
-                        borderColor={Constants.backgroundDarkColors['Residents']}
-                        colorInput={Constants.backgroundDarkColors['Residents']}
+                        backgroundColor={Constants.backgroundLightColors['Visitors']}
+                        borderColor={Constants.backgroundDarkColors['Visitors']}
+                        colorInput={Constants.backgroundDarkColors['Visitors']}
                     />
                     <InputBox
                         text="Email*:"
@@ -95,26 +96,50 @@ const AddResidentsGroup = (props) => {
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, email: val})}
                         keyboard={'email-address'}
                         autoCapitalize='none'
-                        backgroundColor={Constants.backgroundLightColors['Residents']}
-                        borderColor={Constants.backgroundDarkColors['Residents']}
-                        colorInput={Constants.backgroundDarkColors['Residents']}
+                        backgroundColor={Constants.backgroundLightColors['Visitors']}
+                        borderColor={Constants.backgroundDarkColors['Visitors']}
+                        colorInput={Constants.backgroundDarkColors['Visitors']}
+                    />
+                    <DateInputBox
+                        changed1={(value)=>props.setUserBeingAdded({...props.userBeingAdded, dayInit: value})}
+                        changed2={(value)=>props.setUserBeingAdded({...props.userBeingAdded, monthInit: value})}
+                        changed3={(value)=>props.setUserBeingAdded({...props.userBeingAdded, yearInit: value})}
+                        text='Data inicial:'
+                        backgroundColor={Constants.backgroundLightColors['Visitors']}
+                        borderColor={Constants.backgroundDarkColors['Visitors']}
+                        colorInput={Constants.backgroundDarkColors['Visitors']}
+                        value1={props.userBeingAdded.dayInit}
+                        value2={props.userBeingAdded.monthInit}
+                        value3={props.userBeingAdded.yearInit}
+                    />
+                    <DateInputBox
+                        changed1={(value)=>props.setUserBeingAdded({...props.userBeingAdded, dayEnd: value})}
+                        changed2={(value)=>props.setUserBeingAdded({...props.userBeingAdded, monthEnd: value})}
+                        changed3={(value)=>props.setUserBeingAdded({...props.userBeingAdded, yearEnd: value})}
+                        text='Data final:'
+                        backgroundColor={Constants.backgroundLightColors['Visitors']}
+                        borderColor={Constants.backgroundDarkColors['Visitors']}
+                        colorInput={Constants.backgroundDarkColors['Visitors']}
+                        value1={props.userBeingAdded.dayEnd}
+                        value2={props.userBeingAdded.monthEnd}
+                        value3={props.userBeingAdded.yearEnd}
                     />
                     <Text style={styles.title}>Foto:</Text>
                     {!props.userBeingAdded.pic &&
-                    <View style={styles.buttonAddPhotoGroup}>
+                    <View style={[styles.buttonAddPhotoGroup]}>
                         <TouchableOpacity
-                            style={[styles.buttonAddphotoIsClicked]}
+                            style={[styles.buttonAddphotoIsClicked, {backgroundColor: props.backgroundColor, borderColor: 'white', borderWidth: 1}]}
                             onPress={()=>{props.photoClickHandler()}}
                         >
-                            <Icon name="camera" size={18}/>
-                            <Text>Câmera</Text>
+                            <Icon name="camera" size={18} color='white'/>
+                            <Text style={{color: 'white'}}>Câmera</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={[styles.buttonAddphotoIsClicked, {marginLeft: 40}]}
+                            style={[styles.buttonAddphotoIsClicked, {marginLeft: 40, backgroundColor: props.backgroundColor, borderColor: 'white', borderWidth: 1}]}
                             onPress={()=>{props.pickImage()}}
                         >
-                            <Icon name="paperclip" size={18}/>
-                            <Text>Arquivo</Text>
+                            <Icon name="paperclip" size={18} color='white'/>
+                            <Text style={{color: 'white'}}>Arquivo</Text>
                         </TouchableOpacity>
                     </View>
                     ||
@@ -133,7 +158,7 @@ const AddResidentsGroup = (props) => {
                             title1="Adicionar"
                             title2="Cancelar"
                             buttonPadding={10}
-                            backgroundColor='#44FFAF'
+                            backgroundColor={props.backgroundColor}
                             fontSize={18}
                         />
                     </View>
@@ -202,4 +227,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default AddResidentsGroup;
+export default AddVisitorsGroup;

@@ -37,8 +37,8 @@ const AddCarsGroup = (props) => {
     }
 
     return (
-        <View style={styles.container}>
-            <TouchableOpacity style={styles.button} onPress={()=> {setAddingVehicle(true)}}>
+        <View style={[styles.container, {backgroundColor: props.backgroundColor || '#44FFAF'}]}>
+            <TouchableOpacity style={[styles.button, {backgroundColor: props.backgroundColorButtons || '#00FF7F'}]} onPress={()=> {setAddingVehicle(true)}}>
                 <Icon name='car' size={40}/>
                 <Text>Adicionar Veículo</Text>
             </TouchableOpacity>
@@ -64,9 +64,9 @@ const AddCarsGroup = (props) => {
                         width={295}
                         changed={val=>props.setVehicleBeingAdded({...props.vehicleBeingAdded, maker: val})}
                         autoCapitalize='words'
-                        backgroundColor={Constants.backgroundLightColors['Residents']}
-                        borderColor={Constants.backgroundDarkColors['Residents']}
-                        colorInput={Constants.backgroundDarkColors['Residents']}
+                        backgroundColor={props.backgroundLightColor || Constants.backgroundLightColors['Residents']}
+                        borderColor={props.backgroundDarkColor || Constants.backgroundDarkColors['Residents']}
+                        colorInput={props.backgroundDarkColor || Constants.backgroundDarkColors['Residents']}
                     />
                     <InputBox
                         text="Modelo*:"
@@ -74,9 +74,9 @@ const AddCarsGroup = (props) => {
                         width={295}
                         changed={val=>props.setVehicleBeingAdded({...props.vehicleBeingAdded, model: val})}
                         autoCapitalize='words'
-                        backgroundColor={Constants.backgroundLightColors['Residents']}
-                        borderColor={Constants.backgroundDarkColors['Residents']}
-                        colorInput={Constants.backgroundDarkColors['Residents']}
+                        backgroundColor={props.backgroundLightColor || Constants.backgroundLightColors['Residents']}
+                        borderColor={props.backgroundDarkColor || Constants.backgroundDarkColors['Residents']}
+                        colorInput={props.backgroundDarkColor || Constants.backgroundDarkColors['Residents']}
                     />
                     <InputBox
                         text="Cor*:"
@@ -84,9 +84,9 @@ const AddCarsGroup = (props) => {
                         width={295}
                         changed={val=>props.setVehicleBeingAdded({...props.vehicleBeingAdded, color: val})}
                         autoCapitalize='words'
-                        backgroundColor={Constants.backgroundLightColors['Residents']}
-                        borderColor={Constants.backgroundDarkColors['Residents']}
-                        colorInput={Constants.backgroundDarkColors['Residents']}
+                        backgroundColor={props.backgroundLightColor || Constants.backgroundLightColors['Residents']}
+                        borderColor={props.backgroundDarkColor || Constants.backgroundDarkColors['Residents']}
+                        colorInput={props.backgroundDarkColor || Constants.backgroundDarkColors['Residents']}
                     />
                     <InputBox
                         text="Placa*:"
@@ -95,9 +95,9 @@ const AddCarsGroup = (props) => {
                         changed={changePlate}
                         autoCapitalize='characters'
                         autoCorrect={false}
-                        backgroundColor={Constants.backgroundLightColors['Residents']}
-                        borderColor={Constants.backgroundDarkColors['Residents']}
-                        colorInput={Constants.backgroundDarkColors['Residents']}
+                        backgroundColor={props.backgroundLightColor || Constants.backgroundLightColors['Residents']}
+                        borderColor={props.backgroundDarkColor || Constants.backgroundDarkColors['Residents']}
+                        colorInput={props.backgroundDarkColor || Constants.backgroundDarkColors['Residents']}
                     />
                     {!!props.errorAddVehicleMessage && <Text style={styles.errorMessage}>{props.errorAddVehicleMessage}</Text>}
                     <View style={styles.buttonAddPhotoGroup}>
@@ -107,7 +107,7 @@ const AddCarsGroup = (props) => {
                             title1="Adicionar"
                             title2="Cancelar"
                             buttonPadding={10}
-                            backgroundColor='#44FFAF'
+                            backgroundColor={props.backgroundColor || '#44FFAF'}
                             fontSize={18}
                         />
                     </View>
@@ -120,7 +120,6 @@ const AddCarsGroup = (props) => {
 
 const styles = StyleSheet.create({
     container:{
-        backgroundColor: '#44FFAF',
         padding: 20,
         marginTop: 5,
         borderRadius: 15,
@@ -129,7 +128,6 @@ const styles = StyleSheet.create({
         marginBottom: 20,
     },
     button:{
-        backgroundColor: '#00FF7F',
         alignItems: 'center',
         padding: 3,
         borderRadius: 15,

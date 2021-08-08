@@ -29,7 +29,7 @@ const CameraPic = (props) => {
             setCapturedPhoto(data.uri)
             const userBeingAdded = props.route.params.userBeingAdded
             userBeingAdded.pic = data.uri
-            props.navigation.navigate('ResidentAdd', 
+            props.navigation.navigate(props.route.params.screen || 'ResidentAdd', 
                 {
                     userBeingAdded, 
                     selectedBloco: props.route.params.selectedBloco, 

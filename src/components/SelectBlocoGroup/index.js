@@ -16,8 +16,8 @@ import { StyleSheet,
 const SelectBlocoGroup = (props) => {
 
     return (
-        <View style={styles.container}>
-            {!props.noEdit && <TouchableOpacity style={styles.button} onPress={props.pressed}>
+        <View style={[styles.container, {backgroundColor: props.backgroundColor || '#44FFAF'}]}>
+            {!props.noEdit && <TouchableOpacity style={[styles.button, {backgroundColor: props.backgroundColorButtons || '#00FF7F'}]} onPress={props.pressed}>
                 <Icon name='building' size={40}/>
                 <Text>Selecionar Unidade</Text>
             </TouchableOpacity>}
@@ -38,7 +38,7 @@ const SelectBlocoGroup = (props) => {
 
 const styles = StyleSheet.create({
     container:{
-        backgroundColor: '#44FFAF',
+        //backgroundColor: '#44FFAF',
         padding: 20,
         marginTop: 5,
         borderRadius: 15,
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         borderStyle: 'dotted'
     },
     button:{
-        backgroundColor: '#00FF7F',
+        //backgroundColor: '#00FF7F',
         alignItems: 'center',
         padding: 3,
         borderRadius: 15,

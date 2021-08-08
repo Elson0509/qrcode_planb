@@ -48,8 +48,8 @@ const DateInputBox = (props) => {
     const year = Number.parseInt(value)
     if(Number.isNaN(year)){
       props.changed3(2000)
-    } else if (year > new Date().getFullYear()) {
-      props.changed3(new Date().getFullYear())
+    } else if (year > new Date().getFullYear() + 4) {
+      props.changed3(new Date().getFullYear() + 4)
     }
   }
 
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
       marginRight: 11
     },
     labelStyle:{
-      fontSize:15,
+      fontSize:11,
       fontWeight:'bold',
       marginBottom:5,
       marginLeft:5,
