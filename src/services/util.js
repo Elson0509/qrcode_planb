@@ -52,6 +52,8 @@ export const oldModelPlateFormat = plate =>{
 
 export const isValidDate = (day, month, year) =>
 {
+    if(!day || !month || !year)
+        return false
     // Check the ranges of month and year
     if(year < 1000 || year > 3000 || month == 0 || month > 12)
         return false;
@@ -66,6 +68,21 @@ export const isValidDate = (day, month, year) =>
 export const validateEmail = email => {
     const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(String(email).toLowerCase());
+}
+
+export const printDate = date => {
+    if(!date)
+        return null
+    let dd = date.getDate();
+    let mm = date.getMonth() + 1;
+    let yyyy = date.getFullYear();
+    if (dd < 10) {
+        dd = '0' + dd;
+    }
+    if (mm < 10) {
+        mm = '0' + mm;
+    }
+    return dd + '/' + mm + '/' + yyyy;
 }
 
 export const plateSizeValidator = plate => {

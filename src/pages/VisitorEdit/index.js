@@ -18,10 +18,9 @@ import ModalSelectBloco from '../../components/ModalSelectBloco';
 import ModalSelectUnit from '../../components/ModalSelectUnit';
 import FooterButtons from '../../components/FooterButtons';
 import dummyBlocos from '../../../dummyDataBlocos.json'
+import dummyEditUsers from '../../../dummyEditUsers.json'
 
-const VisitorAdd = props => {
-    const currentDate = new Date()
-
+const VisitorEdit = props => {
     const [modal, setModal] = useState(false)
     const [loading, setLoading] = useState(true)
     const [blocos, setBlocos] = useState([])
@@ -36,12 +35,29 @@ const VisitorAdd = props => {
     const [residents, setResidents] = useState([])
     const [vehicles, setVehicles] = useState(props.route?.params?.vehicles || [])
     const [vehicleBeingAdded, setVehicleBeingAdded] = useState({maker:'', model:'', color:'', plate:''})
-    const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {name: '', identification: '', pic: ''})
-    const [dateInit, setDateInit] = useState({day: currentDate.getDate(), month: currentDate.getMonth()+1, year: currentDate.getFullYear()})
+    const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {name: '', identification: '', email: '', pic: ''})
+    const [dateInit, setDateInit] = useState({day: new Date().getDate(), month: new Date().getMonth()+1, year: new Date().getFullYear()})
     const [dateEnd, setDateEnd] = useState({day: '', month: '', year: ''})
     const [selectedDateInit, setSelectedDateInit] = useState(props.route?.params?.setSelectedDateInit || null)
     const [selectedDateEnd, setSelectedDateEnd] = useState(props.route?.params?.setSelectedDateEnd || null)
 
+    //fetching data from the unit
+    useEffect(()=>{
+      const data = dummyEditUsers.data
+      //console.log('dummyEditUsers', data)
+      const unit = {}
+      unit.number = props.route.params.id.unidade
+      const bloco = {}
+      bloco.bloco = props.route.params.id.bloco
+      setSelectedUnit(unit)
+      setSelectedBloco(bloco)
+      console.log('data.residents',data.residents)
+      setResidents(data.residents)
+      setVehicles(data.veiculos)
+      setLoading(false)
+    },[])
+
+    
     //fetching blocos
     useEffect(()=>{
       const data = dummyBlocos.data
@@ -59,17 +75,6 @@ const VisitorAdd = props => {
         }
       })();
     }, []);
-
-    //updating info according to unit
-    useEffect(()=>{
-      if(selectedUnit){
-        //upadting info
-      }
-      else{
-        setResidents([])
-        setVehicles([])
-      }
-    }, [selectedUnit])
 
     const removeResident = index => {
       const residentsCopy = [...residents]
@@ -100,6 +105,14 @@ const VisitorAdd = props => {
         setErrorAddResidentMessage('Nome não pode estar vazio.')
         return false
       }
+      // if(!userBeingAdded.email){
+      //   setErrorAddResidentMessage('Email não pode estar vazio.')
+      //   return false
+      // }
+      // if(!Utils.validateEmail(userBeingAdded.email)){
+      //   setErrorAddResidentMessage('Email não é válido.')
+      //   return false
+      // }
       setResidents(prev=> [...prev, userBeingAdded])
       setErrorAddResidentMessage('')
       setUserBeingAdded({name: '', identification: '', pic: ''})
@@ -142,7 +155,7 @@ const VisitorAdd = props => {
     }
 
     const photoClickHandler = _ => {
-      props.navigation.navigate('CameraPic', {userBeingAdded, selectedBloco, selectedUnit, vehicles, selectedDateInit, selectedDateEnd, screen:'VisitorAdd'})
+      props.navigation.navigate('CameraPic', {userBeingAdded, selectedBloco, selectedUnit, vehicles, selectedDateInit, selectedDateEnd, screen:'VisitorEdit'})
     }
 
     const selectBlocoHandler = bloco => {
@@ -154,6 +167,22 @@ const VisitorAdd = props => {
     const selectUnitHandler = unit => {
       setSelectedUnit(unit)
       setModalSelectUnit(false)
+    }
+
+    const clearUnit = _ =>{
+      setSelectedBloco(null)
+      setSelectedUnit(null)
+    }
+
+    const cancelHandler = _ =>{
+      clearUnit()
+      setResidents([])
+      setVehicles([])
+    }
+
+    //saving...
+    const confirmHandler = _ =>{
+      
     }
 
     const selectDatesHandler = _ => {
@@ -183,41 +212,27 @@ const VisitorAdd = props => {
       setDateEnd({day: '', month: '', year: ''})
     }
 
-    const clearUnit = _ =>{
-      setSelectedBloco(null)
-      setSelectedUnit(null)
-    }
-
-    const cancelHandler = _ =>{
-      clearUnit()
-      setResidents([])
-      setVehicles([])
-    }
-
-    //saving...
-    const confirmHandler = _ =>{
-      
-    }
-
     const backgroundColorBoxes = '#8381EC'
     const backgroundColorButtonBoxes = '#B6BFD8'
 
     return(
       <SafeAreaView style={styles.body}>
         <ScrollView style={{flex: 1, padding:10,}}>
+          <View>
+            
+          </View>
           <SelectBlocoGroup 
-            backgroundColor={backgroundColorBoxes}
-            backgroundColorButtons={backgroundColorButtonBoxes}
+            noEdit
             pressed={()=>setModalSelectBloco(true)}
             selectedBloco={selectedBloco}
             selectedUnit={selectedUnit}
             clearUnit={clearUnit}
+            backgroundColor={backgroundColorBoxes}
+            backgroundColorButtons={backgroundColorButtonBoxes}
           />
           {!!selectedUnit &&
             <View>
               <AddVisitorsGroup 
-                backgroundColor={backgroundColorBoxes}
-                backgroundColorButtons={backgroundColorButtonBoxes}
                 residents={residents} 
                 userBeingAdded={userBeingAdded}
                 setUserBeingAdded={setUserBeingAdded}
@@ -227,6 +242,8 @@ const VisitorAdd = props => {
                 addResidentHandler={addResidentHandler}
                 cancelAddResidentHandler={cancelAddResidentHandler}
                 removeResident={removeResident}
+                backgroundColor={backgroundColorBoxes}
+                backgroundColorButtons={backgroundColorButtonBoxes}
               />
               <SelectDatesVisitorsGroup
                 backgroundColor={backgroundColorBoxes}
@@ -242,8 +259,6 @@ const VisitorAdd = props => {
                 cancelDatesHandler={cancelDatesHandler}
               />
               <AddCarsGroup 
-                backgroundColor={backgroundColorBoxes}
-                backgroundColorButtons={backgroundColorButtonBoxes}
                 data={vehicles} 
                 vehicleBeingAdded={vehicleBeingAdded}
                 setVehicleBeingAdded={setVehicleBeingAdded}
@@ -253,7 +268,8 @@ const VisitorAdd = props => {
                 removeVehicle={removeVehicle}
                 backgroundLightColor={Constants.backgroundLightColors['Visitors']}
                 backgroundDarkColor={Constants.backgroundDarkColors['Visitors']}
-                
+                backgroundColor={backgroundColorBoxes}
+                backgroundColorButtons={backgroundColorButtonBoxes}
               />
               {
                 !!selectedUnit && residents.length > 0 &&
@@ -261,11 +277,10 @@ const VisitorAdd = props => {
                     backgroundColor={Constants.backgroundColors['Visitors']}
                     title1="Confirmar"
                     title2="Cancelar"
-                    errorMessage={errorDatesMessage}
                     buttonPadding={15}
                     fontSize={17}
                     action1={confirmHandler}
-                    action2={cancelHandler}
+                    action2={()=>props.navigation.goBack()}
                   />
               }
             </View>
@@ -282,14 +297,12 @@ const VisitorAdd = props => {
           blocos={blocos}
           modalVisible={modalSelectBloco}
           setModalVisible={setModalSelectBloco}
-          backgroundItem={'#EDE5FF'}
         />
         <ModalSelectUnit
           bloco={selectedBloco}
           modalVisible={modalSelectUnit}
           setModalVisible={setModalSelectUnit}
           selectUnitHandler={selectUnitHandler}
-          backgroundItem={'#EDE5FF'}
         />
       </SafeAreaView>
     );
@@ -336,4 +349,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default VisitorAdd
+export default VisitorEdit

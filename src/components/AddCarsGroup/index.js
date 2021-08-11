@@ -142,13 +142,14 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     errorMessage:{
-        color: 'red',
+        color: '#F77',
+        backgroundColor: 'white',
         marginTop: 10,
         textAlign: 'center',
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 12,
         borderWidth: 1,
-        borderColor: 'red',
+        borderColor: '#F77',
         padding: 5,
     }
 })

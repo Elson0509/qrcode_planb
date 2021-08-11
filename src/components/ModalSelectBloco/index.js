@@ -18,7 +18,7 @@ const ModalSelectBloco = (props) => {
                       return <TouchableOpacity 
                                 key={obj.item.id} 
                                 onPress={()=> {props.selectBlocoHandler(obj.item)}}
-                                style={styles.item}
+                                style={[styles.item, {backgroundColor: props.backgroundItem || '#efe'}]}
                               >
                                   <Text style={styles.menuItemText}>{obj.item.bloco}</Text>
                               </TouchableOpacity>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
       padding: 12,
       marginBottom: 8,
       borderRadius: 10,
-      backgroundColor: '#efe',
+      
     },  
     menuItemText:{
       fontSize: 15,

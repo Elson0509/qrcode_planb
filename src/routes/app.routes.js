@@ -11,6 +11,8 @@ import CameraPic from '../pages/CameraPic'
 import Residents from '../pages/Residents'
 import Visitors from '../pages/Visitors'
 import VisitorAdd from '../pages/VisitorAdd';
+import VisitorList from '../pages/VisitorList';
+import VisitorEdit from '../pages/VisitorEdit';
 import Thirds from '../pages/Thirds'
 import Units from '../pages/Units'
 import UnitAdd from '../pages/UnitAdd'
@@ -92,6 +94,28 @@ const AppRoutes = _ => {
                 component={VisitorAdd}
                 options={{
                     headerTitle: 'Adicionar',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Visitors"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="VisitorList" 
+                component={VisitorList}
+                options={{
+                    headerTitle: 'Listar',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Visitors"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="VisitorEdit" 
+                component={VisitorEdit}
+                options={{
+                    headerTitle: 'Editar',
                     headerRight: ()=> logoutButton,
                     headerStyle:{
                         backgroundColor: Constants.backgroundDarkColors["Visitors"]

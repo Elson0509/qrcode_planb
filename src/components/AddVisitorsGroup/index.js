@@ -20,8 +20,6 @@ import { StyleSheet,
 const AddVisitorsGroup = (props) => {
     const [addingUser, setAddingUser] = useState(false)
 
-    console.log(props)
-
     const addHandler = _ => {
         if(props.addResidentHandler()){
             setAddingUser(false)
@@ -55,7 +53,7 @@ const AddVisitorsGroup = (props) => {
                             }
                             <View style={{marginLeft: 5, marginRight: 5, maxWidth: 210}}>
                                 <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Nome:</Text> {el.name}</Text>
-                                <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Email:</Text> {el.email}</Text>
+                                {!!el.email && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Email:</Text> {el.email}</Text>}
                                 {!!el.identification && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Id:</Text> {el.identification}</Text>}
                             </View>
                         </View>
@@ -89,8 +87,8 @@ const AddVisitorsGroup = (props) => {
                         borderColor={Constants.backgroundDarkColors['Visitors']}
                         colorInput={Constants.backgroundDarkColors['Visitors']}
                     />
-                    <InputBox
-                        text="Email*:"
+                    {/* <InputBox
+                        text="Email:"
                         value={props.userBeingAdded.email}
                         width={295}
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, email: val})}
@@ -99,31 +97,7 @@ const AddVisitorsGroup = (props) => {
                         backgroundColor={Constants.backgroundLightColors['Visitors']}
                         borderColor={Constants.backgroundDarkColors['Visitors']}
                         colorInput={Constants.backgroundDarkColors['Visitors']}
-                    />
-                    <DateInputBox
-                        changed1={(value)=>props.setUserBeingAdded({...props.userBeingAdded, dayInit: value})}
-                        changed2={(value)=>props.setUserBeingAdded({...props.userBeingAdded, monthInit: value})}
-                        changed3={(value)=>props.setUserBeingAdded({...props.userBeingAdded, yearInit: value})}
-                        text='Data inicial:'
-                        backgroundColor={Constants.backgroundLightColors['Visitors']}
-                        borderColor={Constants.backgroundDarkColors['Visitors']}
-                        colorInput={Constants.backgroundDarkColors['Visitors']}
-                        value1={props.userBeingAdded.dayInit}
-                        value2={props.userBeingAdded.monthInit}
-                        value3={props.userBeingAdded.yearInit}
-                    />
-                    <DateInputBox
-                        changed1={(value)=>props.setUserBeingAdded({...props.userBeingAdded, dayEnd: value})}
-                        changed2={(value)=>props.setUserBeingAdded({...props.userBeingAdded, monthEnd: value})}
-                        changed3={(value)=>props.setUserBeingAdded({...props.userBeingAdded, yearEnd: value})}
-                        text='Data final:'
-                        backgroundColor={Constants.backgroundLightColors['Visitors']}
-                        borderColor={Constants.backgroundDarkColors['Visitors']}
-                        colorInput={Constants.backgroundDarkColors['Visitors']}
-                        value1={props.userBeingAdded.dayEnd}
-                        value2={props.userBeingAdded.monthEnd}
-                        value3={props.userBeingAdded.yearEnd}
-                    />
+                    /> */}
                     <Text style={styles.title}>Foto:</Text>
                     {!props.userBeingAdded.pic &&
                     <View style={[styles.buttonAddPhotoGroup]}>
@@ -216,13 +190,14 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
     errorMessage:{
-        color: 'red',
+        color: '#F77',
+        backgroundColor: 'white',
         marginTop: 10,
         textAlign: 'center',
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 12,
         borderWidth: 1,
-        borderColor: 'red',
+        borderColor: '#F77',
         padding: 5,
     }
 })
