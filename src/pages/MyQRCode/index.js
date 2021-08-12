@@ -1,6 +1,7 @@
 import React from 'react';
 import QRCode from '../../components/QRCode';
 import * as utils from '../../services/util'
+import Greeting from '../../components/Greeting/Greeting';
 import { StyleSheet,
     TextInput,
     View,
@@ -19,8 +20,10 @@ const MyQRCode = (props) => {
     const user = props.user || props.route.params.user
     
     return (
-        <View style={[styles.container, {backgroundColor: Constants.backgroundColors['MyQRCode']}]}>
-            <Text style={styles.greeting}>{utils.saudacaoHorario(user?.name)}</Text>
+        <View style={[styles.container]}>
+            <Greeting
+                user={user}
+            />
             <Text style={styles.obs}>Use o código abaixo para seu acesso:</Text>
             <QRCode value={user?.id} backgroundColor={Constants.backgroundColors['MyQRCode']}/>
         </View>
@@ -31,7 +34,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        //backgroundColor: '#00AAEE'
+        backgroundColor: Constants.backgroundColors['MyQRCode']
     },
     greeting: {
         fontFamily: 'monospace',

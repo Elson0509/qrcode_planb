@@ -49,7 +49,7 @@ const AddCarsGroup = (props) => {
                             <Text style={styles.menuItemText}>{el.maker} {el.model} {el.color}</Text>
                             <Text style={styles.menuItemText}>Placa: {el.plate}</Text>
                         </View>
-                        <TouchableOpacity onPress={()=>removeVehicle(ind)}>
+                        <TouchableOpacity onPress={()=>props.removeVehicle(ind)}>
                             <Icon name='window-close' size={30}/>
                         </TouchableOpacity>
                     </View>

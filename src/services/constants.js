@@ -19,10 +19,10 @@ export const menuOptions = [
 
 export const backgroundColors = {
     "Dashboard":'#00AAEE',
-    "MyQRCode":'#DDDDDD',
+    "MyQRCode":'#C1C1C1',
     "Units":'#DEB887',
     "Scan":'#FED8B1',
-    "Residents":'#99EDC3',
+    "Residents":'#80E0B0',
     "Visitors":'#9E8EEA',
     "Thirds":'#FF7F7F',
     "Info":'#F699CD',

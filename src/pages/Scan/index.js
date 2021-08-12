@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import ModalUser from '../../components/ModalUser';
 import Scanner from '../../components/Scanner';
 import FooterButtons from '../../components/FooterButtons';
+import * as Constants from '../../services/constants'
 
 import { StyleSheet,
     TextInput,
@@ -42,7 +43,7 @@ const Scan = (props) => {
     }
     
     return (
-    <View style={[styles.container, {backgroundColor: props.route.params.backgroundColor}]}>
+    <View style={[styles.container]}>
         <Modal
             visible={modalVisible}
             transparent={true}
@@ -76,6 +77,7 @@ const styles = StyleSheet.create({
       backgroundColor: 'red',
       alignItems: 'center',
       justifyContent: 'center',
+      backgroundColor: Constants.backgroundColors['Scan'],
     },
     modal: {
       flex: 1,

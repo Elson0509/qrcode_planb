@@ -16,6 +16,7 @@ import { useAuth } from '../../contexts/auth';
 import MyQRCode from '../MyQRCode';
 import * as utils from '../../services/util'
 import Icon from '../../components/Icon';
+import Greeting from '../../components/Greeting/Greeting';
 
 const Dashboard = (props) => {
     const {user} = useAuth()
@@ -41,7 +42,9 @@ const Dashboard = (props) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.greeting}>{utils.saudacaoHorario(user?.name)}</Text>
+            <Greeting
+                user={user}
+            />
             <FlatList
                 data={profiles[user.user_kind]}
                 numColumns={2}

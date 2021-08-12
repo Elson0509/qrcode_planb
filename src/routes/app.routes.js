@@ -14,6 +14,9 @@ import VisitorAdd from '../pages/VisitorAdd';
 import VisitorList from '../pages/VisitorList';
 import VisitorEdit from '../pages/VisitorEdit';
 import Thirds from '../pages/Thirds'
+import ThirdAdd from '../pages/ThirdAdd';
+import ThirdList from '../pages/ThirdList';
+import ThirdEdit from '../pages/ThirdEdit';
 import Units from '../pages/Units'
 import UnitAdd from '../pages/UnitAdd'
 import UnitList from '../pages/UnitList'
@@ -127,6 +130,39 @@ const AppRoutes = _ => {
                 component={Thirds}
                 options={{
                     headerTitle: 'Terceirizados',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Thirds"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="ThirdAdd" 
+                component={ThirdAdd}
+                options={{
+                    headerTitle: 'Adicionar',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Thirds"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="ThirdList" 
+                component={ThirdList}
+                options={{
+                    headerTitle: 'Listar',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Thirds"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="ThirdEdit" 
+                component={ThirdEdit}
+                options={{
+                    headerTitle: 'Editar',
                     headerRight: ()=> logoutButton,
                     headerStyle:{
                         backgroundColor: Constants.backgroundDarkColors["Thirds"]

@@ -15,13 +15,16 @@ import { useAuth } from '../../contexts/auth';
 import * as utils from '../../services/util'
 import Icon from '../../components/Icon';
 import * as Constants from '../../services/constants'
+import Greeting from '../../components/Greeting/Greeting';
 
 const Visitors = (props) => {
     const {user} = useAuth()
 
     return (
-        <View style={[styles.container, {backgroundColor: props.route.params.backgroundColor}]}>
-            <Text style={styles.greeting}>{utils.saudacaoHorario(user?.name)}</Text>
+        <View style={[styles.container]}>
+            <Greeting
+                user={user}
+            />
             <FlatList
                 data={Constants.menuOptions}
                 numColumns={2}
@@ -40,6 +43,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
+        backgroundColor: Constants.backgroundColors['Visitors'],
     },
     greeting: {
         fontFamily: 'monospace',
