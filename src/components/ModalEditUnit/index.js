@@ -7,8 +7,10 @@ const ModalEditUnit = (props) => {
   const [message, setMessage] = useState('')
 
   const confirmHandler = _ =>{
-    if(!props.aptEdit)
-      setMessage('Apartamento não pode estar em branco.')
+    if(!props.unitWillUpdate.bloco_name.trim())
+      setMessage('Bloco não pode estar em branco.')
+    if(!props.unitWillUpdate.unit_number.trim())
+      setMessage('Unidade não pode estar em branco.')
     else{
       setMessage('')
       props.btn1Pressed()
@@ -23,13 +25,14 @@ const ModalEditUnit = (props) => {
           onRequestClose={()=> props.setModalVisible(false)}
       >
         <View style={styles.centeredView}>
-            <View style={styles.modalView}>
+            
+              <View style={styles.modalView}>
                 <Text style={styles.modalTitle}>Editar unidade:</Text>
                 <InputBox 
                   text="Bloco:" 
                   width={190}
-                  value={props.blocoEdit} 
-                  changed={value=>props.setBlocoEdit(value)}
+                  value={props.unitWillUpdate.bloco_name} 
+                  changed={value=>props.setUnitWillUpdate({...props.unitWillUpdate, bloco_name:value})}
                   backgroundColor={Constants.backgroundLightColors['Units']}
                   borderColor={Constants.backgroundDarkColors['Units']}
                   colorInput={Constants.backgroundDarkColors['Units']}
@@ -37,8 +40,8 @@ const ModalEditUnit = (props) => {
                 <InputBox 
                   text="Apartamento:" 
                   width={190}
-                  value={props.aptEdit} 
-                  changed={value=>props.setAptEdit(value)}
+                  value={props.unitWillUpdate.unit_number} 
+                  changed={value=>props.setUnitWillUpdate({...props.unitWillUpdate, unit_number:value})}
                   backgroundColor={Constants.backgroundLightColors['Units']}
                   borderColor={Constants.backgroundDarkColors['Units']}
                   colorInput={Constants.backgroundDarkColors['Units']}

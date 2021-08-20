@@ -3,6 +3,7 @@ import React, {createContext, useState, useEffect, useContext} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as auth from '../services/auth'
 import api from '../services/api'
+import * as Utils from '../services/util'
 
 //createContext only set up the format of the variable
 const AuthContext = createContext(
@@ -37,26 +38,48 @@ export const AuthProvider = props =>{
     }, [])
 
     const signInHandler = async (email, password) => {
-        try{
-            const response = await auth.signIn(email, password)
-
-            setUser(response.user)
-
-            api.defaults.headers['Authorization'] = `Bearer ${response.token}`
+        
+        if(!Utils.validateEmail(email)){
+            setErrorMessage('Email não válido.')
+            return
+        }
+        if(password.length<6){
+            setErrorMessage('Senha muito curta.')
+            return
+        }
+        setLoading(true)
+        api.post('/api/user/login', {
+            email: email.toLowerCase(),
+            password: password
+        })
+        .then((data)=> {
+            const token = data.data.token
+            const user = {
+                name: data.data.name,
+                id: data.data.userId,
+                user_kind: data.data.user_kind,
+                email: data.data.username,
+                condo_id: data.data.condo_id,
+                token
+            }
+            setUser(user)
+            api.defaults.headers['Authorization'] = `Bearer ${token}`
             setErrorMessage('')
-            await AsyncStorage.setItem('@QRSeg:user', JSON.stringify(response.user))
-            await AsyncStorage.setItem('@QRSeg:token', response.token)
-        }
-        catch(e){
-            setErrorMessage(e.message)
-        }
+            AsyncStorage.setItem('@QRSeg:user', JSON.stringify(user)).then()
+            AsyncStorage.setItem('@QRSeg:token', token).then()
+        })
+        .catch((err)=> {
+            setErrorMessage(err.response.data.message)
+        })
+        .finally(()=>{
+            setLoading(false)
+        })
     }
 
     const signOutHandler = async _ => {
         AsyncStorage.clear().then(()=>{
             setUser(null)
         })
-        
     }
     
     return (

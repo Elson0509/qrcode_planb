@@ -30,13 +30,13 @@ const Dashboard = (props) => {
     const menuOptionsInfo = { menuName: "Informações", icon: 'info-circle', key: 'info', screen: 'Info', backgroundColor: Constants.backgroundColors['Info'] }
 
     const profiles = []
-    profiles[1]=[]
     profiles[2]=[]
+    profiles[3]=[]
     //Segurança
-    profiles[1].push(menuOptionsQRCode, menuOptionsScan)
-    profiles[2].push(menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsInfo)
+    profiles[2].push(menuOptionsQRCode, menuOptionsScan)
+    profiles[3].push(menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsInfo)
 
-    if(user.user_kind==0){
+    if(user.user_kind==1){
         return <MyQRCode user={user}/>
     }
 

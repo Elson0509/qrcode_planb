@@ -70,6 +70,7 @@ export default function Signin() {
         <TextInput
           style={styles.input}
           placeholder="Senha"
+          autoCapitalize='none'
           autoCorrect={false}
           secureTextEntry={true}
           value={password}
