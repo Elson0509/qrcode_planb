@@ -1,3 +1,5 @@
+import Toast from 'react-native-root-toast';
+
 export const borderTextInputWidth = 3
 
 export const is_autorized_backgroundColor = '#00B924'
@@ -16,6 +18,12 @@ export const menuOptions = [
 //     { menuName: "Editar", icon: 'user-edit', key: 'edit', screen: 'Edit' },
 //     { menuName: "Listar", icon: 'users', key: 'list', screen: 'List' },
 // ]
+
+export const configToast = {
+    duration: Toast.durations.SHORT,
+    animation: true,
+    hideOnPress: true,
+}
 
 export const backgroundColors = {
     "Dashboard":'#00AAEE',

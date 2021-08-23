@@ -1,11 +1,11 @@
 import React, {useState, Fragment, useEffect} from 'react'
 import {
-    SafeAreaView,
+    View,
     StyleSheet,
     ScrollView,
     FlatList,
     TouchableOpacity,
-    View,
+    SafeAreaView,
     Text,
     ActivityIndicator
   } from 'react-native';
@@ -59,19 +59,30 @@ const UnitList = props => {
 
     const delUnitModal = unit => {
       setUnitSelected(unit)
-      setMessage(`Excluir ${unit.bloco.name ? 'Bloco ' + unit.bloco.name : ''} Apt ${unit.apt}?`)
+      setMessage(`Excluir unidade ${unit.unit_number} do bloco ${unit.bloco_name}, seus moradores e visitantes?`)
       setModal(true)
     }
 
     const deleteUnitConfirmed = _ =>{
       setModal(false)
-      const tempUnits = [...units]
-      tempUnits.forEach((el, ind)=> {
-        if(el.id===unitSelected.id){
-          tempUnits.splice(ind, 1)
+      setLoading(true)
+      api.delete(`/api/unit`, {
+        data:{
+          user_id_last_modify: props.route.params.user.id,
+          bloco_id: unitSelected.bloco_id,
+          number: unitSelected.unit_number
         }
       })
-      setUnits(tempUnits)
+      .then((resp)=> {
+        Toast.show(resp.data.message, Constants.configToast)
+        listUnits()
+      })
+      .catch((err)=> {
+        Toast.show(err.response.data.message, Constants.configToast)
+      })
+      .finally(()=>{
+        setLoading(false)
+      })
     }
 
     const editUnitModal = unit => {
@@ -82,23 +93,22 @@ const UnitList = props => {
 
     const editUnitConfirmed = _ =>{
       setModalEdit(false)
-      const config = {
-        duration: Toast.durations.SHORT,
-        animation: true,
-        hideOnPress: true,
-      }
+      setLoading(true)
       api.post('/api/unit/bloco', {
         unitSelected,
         unitWillUpdate,
         condo_id: props.route.params.user.condo_id,
-        token: props.route.params.user.token
+        user_id_last_modify: props.route.params.user.id
       })
       .then((resp)=> {
-        Toast.show(resp.data.message, config)
+        Toast.show(resp.data.message, configToast)
         listUnits()
       })
       .catch((err)=> {
-        Toast.show(err.response.data.message, config)
+        Toast.show(err.response.data.message, configToast)
+      })
+      .finally(()=>{
+        setLoading(false)
       })
 
       
@@ -111,6 +121,7 @@ const UnitList = props => {
           ||
           <FlatList
             data={unitList()}
+            
             keyExtractor={item=> item.unit_id}
             renderItem={(obj)=>{
               return  (
@@ -149,11 +160,15 @@ const UnitList = props => {
 
 const styles = StyleSheet.create({
     body:{
-      padding:10,
+      paddingRight: 10,
+      paddingLeft: 10,
+      paddingBottom: 90,
       backgroundColor: Constants.backgroundColors['Units'],
-      minHeight:'100%'
+      minHeight:'100%',
+      
     },
     menuItem:{
+      flex: 1,
       borderWidth: 1,
       padding: 10,
       flexDirection: 'row',

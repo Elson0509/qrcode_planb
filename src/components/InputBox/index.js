@@ -27,6 +27,7 @@ const InputBox = (props) => {
                 value={props.value.toString()}
                 autoCorrect={props.autoCorrect || true}
                 onChangeText={props.changed}
+                editable={props.editable === "0" ? false : true}
             />
         </View>
     );

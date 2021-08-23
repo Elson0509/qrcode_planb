@@ -60,7 +60,6 @@ export const AuthProvider = props =>{
                 user_kind: data.data.user_kind,
                 email: data.data.username,
                 condo_id: data.data.condo_id,
-                token
             }
             setUser(user)
             api.defaults.headers['Authorization'] = `Bearer ${token}`

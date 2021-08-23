@@ -5,27 +5,47 @@ import {
     ScrollView,
     View,
     Text,
+    ActivityIndicator,
   } from 'react-native';
-  import InputBox from '../../components/InputBox';
-  import * as Constants from '../../services/constants'
-  import * as Utils from '../../services/util'
-  import FooterButtons from '../../components/FooterButtons';
-  import ModalMessage from '../../components/ModalMessage';
-  import comp from '../../../dummyDataComp.json'
-
+import InputBox from '../../components/InputBox';
+import * as Constants from '../../services/constants'
+import * as Utils from '../../services/util'
+import FooterButtons from '../../components/FooterButtons';
+import ModalMessage from '../../components/ModalMessage';
+import ModalSelectBlocoNewUnit from '../../components/ModalSelectBlocoNewUnit';
+import api from '../../services/api'
+import Toast from 'react-native-root-toast';
 
 const UnitAdd = props => {
     const [block, setBlock] = useState('')
     const [apt, setApt] = useState('')
     const [modal, setModal] = useState(false)
+    const [modalSelectBloco, setModalSelectBloco] = useState(true)
+    const [loading, setLoading] = useState(true)
     const [errorMessage, setErrorMessage] = useState('')
+    const [blocosApi, setBlocosApi] = useState([])
+    const [readonlyBloco, setReadonlyBloco] = useState(false)
+    const [selectedBloco, setSelectedBloco] = useState(null)
 
     useEffect(()=>{
-      
+      api.get(`/api/bloco/condo/${props.route.params.user.condo_id}`)
+      .then(res=> {
+        const newBloco = [{id:"0", name: 'Novo Bloco'}]
+        setBlocosApi(newBloco.concat(res.data))
+      })
+      .catch(()=>{
+
+      })
+      .finally(()=>{
+        setLoading(false)
+      })
     },[])
     
     const addHandler = _ => {
       const errors = []
+      if(!block){
+        errors.push('Bloco não pode estar vazio.')
+      }
       if(!apt){
         errors.push('Apartamento não pode estar vazio.')
       }
@@ -34,14 +54,42 @@ const UnitAdd = props => {
         setModal(true)
       }
       else{
-        //'Salvando informações...'
-        const newUnit = {
-          block,
-          apt
-        }
+        setLoading(true)
+        api.post('api/unit', {
+          number: apt,
+          bloco_id: selectedBloco.id,
+          bloco_name: block,
+          unit_kind_id: 1,
+          user_id_last_modify: props.route.params.user.id,
+          condo_id: props.route.params.user.condo_id,
+        })
+        .then((res)=>{
+          setApt('')
+          Toast.show(res.data.message, Constants.configToast)
+        })
+        .catch((err)=> {
+          Toast.show(err.response.data.message, Constants.configToast)
+        })
+        .finally(()=>{
+          setLoading(false)
+        })
         
       }
     }
+
+    const selectBlocoHandler = bloco =>{
+      setModalSelectBloco(false)
+      if(bloco.id!='0'){
+        setBlock(bloco.name)
+        setSelectedBloco(bloco)
+        setReadonlyBloco('0')
+      }
+    }
+
+    if(loading)
+      return <SafeAreaView style={styles.body}>
+        <ActivityIndicator size="large" color="white"/>
+      </SafeAreaView>
 
     return (
         <SafeAreaView style={styles.body}>
@@ -53,11 +101,13 @@ const UnitAdd = props => {
               backgroundColor={Constants.backgroundLightColors['Units']}
               borderColor={Constants.backgroundDarkColors['Units']}
               colorInput={Constants.backgroundDarkColors['Units']}
+              editable={readonlyBloco}
             />
             <InputBox 
               text="Apartamento:" 
               value={apt} 
               changed={value=>setApt(value)}
+              autoCapitalize='characters'
               backgroundColor={Constants.backgroundLightColors['Units']}
               borderColor={Constants.backgroundDarkColors['Units']}
               colorInput={Constants.backgroundDarkColors['Units']}
@@ -71,11 +121,19 @@ const UnitAdd = props => {
               action2={props.navigation.goBack}
             />
           </ScrollView>
+          
           <ModalMessage
             message={errorMessage}
             title="Atenção"
             modalVisible={modal}
             setModalVisible={setModal}
+          />
+          <ModalSelectBlocoNewUnit
+            blocos={blocosApi}
+            backgroundItem={Constants.backgroundLightColors['Units']}
+            modalVisible={modalSelectBloco}
+            setModalVisible={setModalSelectBloco}
+            selectBlocoHandler={selectBlocoHandler}
           />
         </SafeAreaView>
       );
