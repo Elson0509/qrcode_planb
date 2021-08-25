@@ -24,7 +24,7 @@ const SelectBlocoGroup = (props) => {
             {!!props.selectedUnit && 
                 <View style={[styles.listItem]}>
                     <View>
-                    {!!props.selectedUnit && <Text>Bloco {props.selectedBloco.bloco} Apartamento {props.selectedUnit.number}</Text>}
+                    {!!props.selectedUnit && <Text>Bloco {props.selectedBloco.name} - Unidade {props.selectedUnit.number}</Text>}
                     </View>
                     {!props.noEdit && <TouchableOpacity onPress={props.clearUnit}>
                         <Icon name='window-close' size={30}/>

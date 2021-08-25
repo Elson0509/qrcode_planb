@@ -25,6 +25,15 @@ export const configToast = {
     hideOnPress: true,
 }
 
+export const USER_KIND = {
+    'RESIDENT': 1,
+    'GUARD': 2,
+    'SUPERINTENDENT': 3,
+    'VISITOR': 4,
+    'THIRD': 5,
+    'ADM': 6,
+}
+
 export const backgroundColors = {
     "Dashboard":'#00AAEE',
     "MyQRCode":'#C1C1C1',

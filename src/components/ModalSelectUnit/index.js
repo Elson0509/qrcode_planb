@@ -13,7 +13,7 @@ const ModalSelectUnit = (props) => {
               <View style={styles.modalView}>
                   <Text style={styles.modalTitle}>Selecione a unidade:</Text>
                   {props.bloco && <FlatList
-                    data={props.bloco.apts}
+                    data={props.bloco.units}
                     renderItem={(obj)=>{
                       return <TouchableOpacity 
                                 key={obj.item.id} 

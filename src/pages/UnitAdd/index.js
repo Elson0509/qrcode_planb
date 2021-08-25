@@ -9,7 +9,6 @@ import {
   } from 'react-native';
 import InputBox from '../../components/InputBox';
 import * as Constants from '../../services/constants'
-import * as Utils from '../../services/util'
 import FooterButtons from '../../components/FooterButtons';
 import ModalMessage from '../../components/ModalMessage';
 import ModalSelectBlocoNewUnit from '../../components/ModalSelectBlocoNewUnit';
@@ -56,9 +55,9 @@ const UnitAdd = props => {
       else{
         setLoading(true)
         api.post('api/unit', {
-          number: apt,
+          number: apt.trim(),
           bloco_id: selectedBloco.id,
-          bloco_name: block,
+          bloco_name: block.trim(),
           unit_kind_id: 1,
           user_id_last_modify: props.route.params.user.id,
           condo_id: props.route.params.user.condo_id,

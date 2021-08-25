@@ -2,12 +2,12 @@ import React, {useState, useEffect, useRef} from 'react';
 import { StyleSheet, SafeAreaView, Text, View, Modal, FlatList, TouchableOpacity, Image, ScrollView, TouchableHighlight, Pressable } from 'react-native';
 import {Camera} from 'expo-camera'
 import Icon from '../../components/Icon';
+import { manipulateAsync, SaveFormat } from 'expo-image-manipulator'
 
 const CameraPic = (props) => {
     const [type, setType] = useState(Camera.Constants.Type.back)
     const [hasPermission, setHasPermission] = useState(null)
     const camRef = useRef(null)
-    const [capturedPhoto, setCapturedPhoto] = useState(null)
 
     useEffect(()=>{
         (async () => {
@@ -23,12 +23,24 @@ const CameraPic = (props) => {
         return <Text>Você precisa autorizar o uso de câmera para este aplicativo.</Text>
     }
 
+    const compressImage = async (uri, format = SaveFormat.JPEG) => {
+        //https://docs.expo.dev/versions/latest/sdk/imagemanipulator/
+        //https://stackoverflow.com/questions/37639360/how-to-optimise-an-image-in-react-native
+        const result = await manipulateAsync(
+            uri,
+            [{ resize: { width: 1200 } }],
+            { compress: 0.5, format }
+        );
+    
+        return  { name: `${Date.now()}.${format}`, type: `image/${format}`, ...result };
+    };
+
     const takePicture = async _ => {
         if(camRef){
             const data = await camRef.current.takePictureAsync();
-            setCapturedPhoto(data.uri)
             const userBeingAdded = props.route.params.userBeingAdded
-            userBeingAdded.pic = data.uri
+            const result = await compressImage(data.uri)
+            userBeingAdded.pic = result.uri
             props.navigation.navigate(props.route.params.screen || 'ResidentAdd', 
                 {
                     userBeingAdded, 

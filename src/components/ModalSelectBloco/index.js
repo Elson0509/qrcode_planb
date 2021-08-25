@@ -20,7 +20,7 @@ const ModalSelectBloco = (props) => {
                                 onPress={()=> {props.selectBlocoHandler(obj.item)}}
                                 style={[styles.item, {backgroundColor: props.backgroundItem || '#efe'}]}
                               >
-                                  <Text style={styles.menuItemText}>{obj.item.bloco}</Text>
+                                  <Text style={styles.menuItemText}>{obj.item.name}</Text>
                               </TouchableOpacity>
                     }}
                   />

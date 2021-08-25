@@ -5,6 +5,7 @@ import {
     ScrollView,
     View,
     Text,
+    ActivityIndicator
   } from 'react-native';
 import * as ImagePicker from 'expo-image-picker'
 import * as Constants from '../../services/constants'
@@ -16,7 +17,8 @@ import SelectBlocoGroup from '../../components/SelectBlocoGroup';
 import ModalSelectBloco from '../../components/ModalSelectBloco';
 import ModalSelectUnit from '../../components/ModalSelectUnit';
 import FooterButtons from '../../components/FooterButtons';
-import dummyBlocos from '../../../dummyDataBlocos.json'
+import Toast from 'react-native-root-toast';
+import api from '../../services/api';
 
 const ResidentAdd = props => {
     const [modal, setModal] = useState(false)
@@ -31,14 +33,23 @@ const ResidentAdd = props => {
     const [errorAddVehicleMessage, setErrorAddVehicleMessage] = useState('')
     const [residents, setResidents] = useState([])
     const [vehicles, setVehicles] = useState(props.route?.params?.vehicles || [])
-    const [vehicleBeingAdded, setVehicleBeingAdded] = useState({maker:'', model:'', color:'', plate:''})
-    const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {name: '', identification: '', email: '', pic: ''})
+    const [vehicleBeingAdded, setVehicleBeingAdded] = useState({id: "0", maker:'', model:'', color:'', plate:''})
+    const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {id: "0", name: '', identification: '', email: '', pic: ''})
 
     //fetching blocos
     useEffect(()=>{
-      const data = dummyBlocos.data
-      setBlocos(data)
-      setLoading(false)
+      api.get(`api/condo/${props.route.params.user.condo_id}`)
+        .then(res=>{
+          //console.log(res.data)
+          setBlocos(res.data)
+        })
+        .catch(er=>{
+          Toast.show(err.response.data.message, Constants.configToast)
+        })
+        .finally(()=>{
+          setLoading(false)
+        })
+
     },[])
 
     useEffect(() => {
@@ -51,17 +62,6 @@ const ResidentAdd = props => {
         }
       })();
     }, []);
-
-    //updating info according to unit
-    useEffect(()=>{
-      if(selectedUnit){
-        //upadting info
-      }
-      else{
-        setResidents([])
-        setVehicles([])
-      }
-    }, [selectedUnit])
 
     const removeResident = index => {
       const residentsCopy = [...residents]
@@ -102,12 +102,12 @@ const ResidentAdd = props => {
       }
       setResidents(prev=> [...prev, userBeingAdded])
       setErrorAddResidentMessage('')
-      setUserBeingAdded({name: '', identification: '', email: '', pic: ''})
+      setUserBeingAdded({id: "0", name: '', identification: '', email: '', pic: ''})
       return true
     }
 
     const cancelAddResidentHandler = _ => {
-      setUserBeingAdded({name: '', identification: '', email: '', pic: ''})
+      setUserBeingAdded({id: '0', name: '', identification: '', email: '', pic: ''})
     }
 
     const addVehicleHandler = _ =>{
@@ -133,12 +133,12 @@ const ResidentAdd = props => {
       }
       setVehicles(prev=> [...prev, vehicleBeingAdded])
       setErrorAddVehicleMessage('')
-      setVehicleBeingAdded({maker:'', model:'', color:'', plate:''})
+      setVehicleBeingAdded({id: '0', maker:'', model:'', color:'', plate:''})
       return true
     }
 
     const cancelVehicleHandler = _ => {
-      setVehicleBeingAdded({maker:'', model:'', color:'', plate:''})
+      setVehicleBeingAdded({id: '0', maker:'', model:'', color:'', plate:''})
     }
 
     const photoClickHandler = _ => {
@@ -154,6 +154,30 @@ const ResidentAdd = props => {
     const selectUnitHandler = unit => {
       setSelectedUnit(unit)
       setModalSelectUnit(false)
+      setLoading(true)
+      api.get(`api/user/${unit.id}/${Constants.USER_KIND.RESIDENT}`)
+        .then(res=>{
+          setResidents(res.data)
+          api.get(`api/vehicle/${unit.id}/${Constants.USER_KIND.RESIDENT}`)
+            .then(res2=>{
+              setVehicles(res2.data)
+            })
+            .catch(e2=>{
+              Toast.show(err.response.data.message, Constants.configToast)
+              setSelectedUnit(null)
+              setSelectedBloco(null)
+            })
+            
+        })
+        .catch(e=>{
+          Toast.show(err.response.data.message, Constants.configToast)
+          setSelectedUnit(null)
+          setSelectedBloco(null)
+        })
+        .finally(()=>{
+          setLoading(false)
+        })
+      
     }
 
     const clearUnit = _ =>{
@@ -167,10 +191,85 @@ const ResidentAdd = props => {
       setVehicles([])
     }
 
+    const uploadImgs = newResidents =>{
+      //console.log({newResidents}, {residents})
+      const residentsPics = []
+      newResidents.forEach(nr => {
+        residents.forEach(re => {
+          if(nr.email === re.email && 
+              nr.name === re.name && 
+              nr.identification === re.identification &&
+              re.pic != "")
+              residentsPics.push({id:nr.id, pic: re.pic})
+        })
+      })
+      //console.log({residentsPics})
+      residentsPics.forEach(el=>{
+        const formData = new FormData()
+        formData.append('img', {
+          uri: el.pic,
+          type: 'image/jpg',
+          name:el.id+'.jpg'
+        })
+        api.post(`api/user/image/${el.id}`, formData, {
+          headers: {
+            Accept: 'application/json',
+            'Content-Type': 'multipart/form-data',
+            
+          }
+        })
+        .then(res=>{
+          console.log('sucesso', res.data)
+        })
+        .catch(err=>{
+          console.log('erro', err.response)
+        })
+      })
+    }
+
     //saving...
     const confirmHandler = _ =>{
+      setLoading(true)
+      // console.log({selectedUnit,
+      //   residents,
+      //   vehicles,
+      //   user_id_last_modify: props.route.params.user.id,
+      //   condo_id: props.route.params.user.condo_id})
 
+      api.post('api/vehicle/unit', {
+        selectedUnit,
+        vehicles,
+        user_id_last_modify: props.route.params.user.id
+      })
+      .then((res)=>{
+        api.post('api/user/resident/unit', {
+          selectedUnit, 
+          residents, 
+          condo_id: props.route.params.user.condo_id, 
+          user_id_last_modify: props.route.params.user.id
+        })
+          .then(res2=>{
+            uploadImgs(res2.data.addedResidents)
+            Toast.show(res2.data.message, Constants.configToast)
+            setSelectedUnit(null)
+            setModalSelectBloco(null)
+          })
+          .catch(err2=>{
+            Toast.show(err.response.data.message, Constants.configToast)
+          })
+        })
+        .catch((err)=>{
+          Toast.show(err.response.data.message, Constants.configToast)
+        })
+        .finally(()=>{
+          setLoading(false)
+        })
     }
+
+    if(loading)
+      return <SafeAreaView style={styles.body}>
+        <ActivityIndicator size="large" color="white"/>
+      </SafeAreaView>
 
     return(
       <SafeAreaView style={styles.body}>
@@ -203,18 +302,15 @@ const ResidentAdd = props => {
                 cancelVehicleHandler={cancelVehicleHandler}
                 removeVehicle={removeVehicle}
               />
-              {
-                !!selectedUnit && residents.length > 0 &&
-                  <FooterButtons
-                    backgroundColor={Constants.backgroundColors['Residents']}
-                    title1="Confirmar"
-                    title2="Cancelar"
-                    buttonPadding={15}
-                    fontSize={17}
-                    action1={confirmHandler}
-                    action2={cancelHandler}
-                  />
-              }
+              <FooterButtons
+                backgroundColor={Constants.backgroundColors['Residents']}
+                title1="Confirmar"
+                title2="Cancelar"
+                buttonPadding={15}
+                fontSize={17}
+                action1={confirmHandler}
+                action2={cancelHandler}
+              />
             </View>
           }
         </ScrollView>
