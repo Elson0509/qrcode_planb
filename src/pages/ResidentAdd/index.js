@@ -76,14 +76,17 @@ const ResidentAdd = props => {
     }
 
     const pickImage = async () => {
-      let result = await ImagePicker.launchImageLibraryAsync({
+      const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
         aspect: [3, 4],
         quality: 1,
       });
+      const compressed = await Utils.compressImage(result.uri)
+      
+
       if (!result.cancelled) {
-        setUserBeingAdded(prev=> {return {...prev, pic:result.uri}})
+        setUserBeingAdded(prev=> {return {...prev, pic:compressed.uri}})
       }
     };
 
@@ -192,7 +195,6 @@ const ResidentAdd = props => {
     }
 
     const uploadImgs = newResidents =>{
-      //console.log({newResidents}, {residents})
       const residentsPics = []
       newResidents.forEach(nr => {
         residents.forEach(re => {
@@ -203,7 +205,6 @@ const ResidentAdd = props => {
               residentsPics.push({id:nr.id, pic: re.pic})
         })
       })
-      //console.log({residentsPics})
       residentsPics.forEach(el=>{
         const formData = new FormData()
         formData.append('img', {
@@ -219,10 +220,10 @@ const ResidentAdd = props => {
           }
         })
         .then(res=>{
-          console.log('sucesso', res.data)
+          console.log('success', res.data)
         })
         .catch(err=>{
-          console.log('erro', err.response)
+          console.log('error', err.response)
         })
       })
     }
@@ -230,12 +231,6 @@ const ResidentAdd = props => {
     //saving...
     const confirmHandler = _ =>{
       setLoading(true)
-      // console.log({selectedUnit,
-      //   residents,
-      //   vehicles,
-      //   user_id_last_modify: props.route.params.user.id,
-      //   condo_id: props.route.params.user.condo_id})
-
       api.post('api/vehicle/unit', {
         selectedUnit,
         vehicles,

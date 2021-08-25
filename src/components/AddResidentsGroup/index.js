@@ -15,6 +15,7 @@ import { StyleSheet,
     Keyboard,
     Button,
 } from 'react-native';
+import PicUser from '../PicUser';
 
 const AddResidentsGroup = (props) => {
     const [addingUser, setAddingUser] = useState(false)
@@ -40,16 +41,7 @@ const AddResidentsGroup = (props) => {
                 props.residents.map(((el, ind)=> (
                     <View key={ind} style={[styles.listItem]}>
                         <View style={{flexDirection: 'row'}}>
-                            { !!el.pic && 
-                                <Image
-                                    style={{width: 39, height: 52, marginRight: 5}}
-                                    source={{uri: el.pic}}
-                                /> 
-                                ||
-                                <View style={{marginRight: 5}}>
-                                    <Icon name='portrait' size={52}/>
-                                </View>
-                            }
+                            <PicUser user={el}/>
                             <View style={{marginLeft: 5, marginRight: 5, maxWidth: 210}}>
                                 <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Nome:</Text> {el.name}</Text>
                                 <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Email:</Text> {el.email}</Text>

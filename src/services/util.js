@@ -1,3 +1,5 @@
+import { manipulateAsync, SaveFormat } from 'expo-image-manipulator'
+
 export const saudacaoHorario = (name) => {
     if (!name) return '' 
     const stamp = new Date();
@@ -100,3 +102,15 @@ export const validatePlateFormat = plate => {
            isNumber(plate[5]) &&
            isNumber(plate[6])
 }
+
+export const compressImage = async (uri, format = SaveFormat.JPEG) => {
+    //https://docs.expo.dev/versions/latest/sdk/imagemanipulator/
+    //https://stackoverflow.com/questions/37639360/how-to-optimise-an-image-in-react-native
+    const result = await manipulateAsync(
+        uri,
+        [{ resize: { width: 1200 } }],
+        { compress: 0.15, format }
+    );
+
+    return  { name: `${Date.now()}.${format}`, type: `image/${format}`, ...result };
+};

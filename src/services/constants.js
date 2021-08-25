@@ -4,6 +4,14 @@ export const borderTextInputWidth = 3
 
 export const is_autorized_backgroundColor = '#00B924'
 export const is_not_autorized_backgroundColor = '#FF726F'
+import Constants from 'expo-constants';
+const { manifest } = Constants
+
+export const apiurl = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts.dev
+  ? manifest.debuggerHost.split(`:`).shift().concat(`:3333`)
+  : `api.example.com`;
+
+export const genericProfilePic = require('../../assets/pics/generic-profile.png')
 
 export const menuOptions = [
     { menuName: "Adicionar", icon: 'plus-square', key: 'plus', screen: 'Add' },
