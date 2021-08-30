@@ -39,7 +39,7 @@ const AddResidentsGroup = (props) => {
             </TouchableOpacity>
             {
                 props.residents.map(((el, ind)=> (
-                    <View key={ind} style={[styles.listItem]}>
+                    <View key={el.name+el.id+el.identification+el.email} style={[styles.listItem]}>
                         <View style={{flexDirection: 'row'}}>
                             <PicUser user={el}/>
                             <View style={{marginLeft: 5, marginRight: 5, maxWidth: 210}}>

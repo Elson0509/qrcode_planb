@@ -216,7 +216,7 @@ const AppRoutes = _ => {
             />
             <AppStack.Screen 
                 name="ResidentEdit" 
-                component={ResidentEdit}
+                component={ResidentAdd}
                 options={{
                     headerTitle: 'Editar',
                     headerRight: ()=> logoutButton,

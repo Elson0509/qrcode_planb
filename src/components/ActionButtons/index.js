@@ -11,17 +11,18 @@ import {
 import Icon from '../Icon';
 
 const ActionButtons = (props) => {
+    const IconSize = 28
     return (
-        <View style={{flexDirection: props.flexDirection || 'row'}} >
-            <TouchableOpacity style={{marginRight: 10, marginBottom: 10}}
+        <View style={{flexDirection: props.flexDirection || 'row', justifyContent: 'center'}} >
+            <TouchableOpacity style={{marginRight: 15, marginBottom: 0}}
                 onPress={props.action1}
             >
-                <Icon name="edit" size={30} color='#385165'/>
+                <Icon name="edit" size={IconSize} color='#385165'/>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={props.action2}
             >
-                <Icon name="window-close" size={30} color='red'/>
+                <Icon name="window-close" size={IconSize} color='red'/>
             </TouchableOpacity>
         </View>
     );

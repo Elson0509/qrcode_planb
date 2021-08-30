@@ -25,7 +25,7 @@ const MyQRCode = (props) => {
                 user={user}
             />
             <Text style={styles.obs}>Use o código abaixo para seu acesso:</Text>
-            <QRCode value={user?.id} backgroundColor={Constants.backgroundColors['MyQRCode']}/>
+            <QRCode value={`${Constants.QR_CODE_PREFIX}${user?.id}`} backgroundColor={Constants.backgroundColors['MyQRCode']}/>
         </View>
     )
 };

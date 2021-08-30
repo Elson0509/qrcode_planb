@@ -4,88 +4,173 @@ import {
     StyleSheet,
     ScrollView,
     FlatList,
-    TouchableOpacity,
+    RefreshControl,
+    ActivityIndicator,
     View,
     Text,
   } from 'react-native';
 import ActionButtons from '../../components/ActionButtons';
-import dummyListUsers from '../../../dummyListUsers.json'
 import * as Constants from '../../services/constants'
 import ModalMessage from '../../components/ModalMessage';
+import api from '../../services/api'
+import Toast from 'react-native-root-toast';
+import PicUser from '../../components/PicUser';
 
 const ResidentList = props => {
-    const [users, setUsers] = useState({})
+    const [units, setUnits] = useState([])
+    const [loading, setLoading] = useState(true)
     const [modal, setModal] = useState(false)
     const [message, setMessage] = useState('')
     const [unitSelected, setUnitSelected] = useState(null)
-
+    const [refreshing, setRefreshing] = useState(false)
 
     useEffect(()=>{
-      setUsers(dummyListUsers.data)
+      fetchUsers()
     }, [])
+
+    const fetchUsers = _ => {
+      api.get(`api/user/condo/${props.route.params.user.condo_id}/${Constants.USER_KIND["RESIDENT"]}`)
+      .then(resp=>{
+        setUnits(resp.data)
+      })
+      .catch(err=>{
+        Toast.show(err.response.data.message, Constants.configToast)
+      })
+      .finally(()=>{
+        setLoading(false)
+      })
+    }
 
     const delUnitModal = unit => {
       setUnitSelected(unit)
-      setMessage(`Excluir Bloco ${unit.bloco} unidade ${unit.unidade}?`)
+      setMessage(`Excluir moradores e veículos do Bloco ${unit.bloco_name} unidade ${unit.number}?`)
       setModal(true)
     }
 
     const deleteUnitConfirmed = _ =>{
       setModal(false)
-      const tempUsers = [...users]
-      tempUsers.forEach((el, ind)=> {
-        if(el.id===unitSelected.id){
-          tempUsers.splice(ind, 1)
+      setLoading(true)
+      api.delete(`api/user/unit/${unitSelected.id}`,{
+        data:{
+          user_id_last_modify: props.route.params.user.id,
         }
       })
-      setUsers(tempUsers)
+        .then(res=>{
+          Toast.show(res.data.message, Constants.configToast)
+          fetchUsers()
+        })
+        .catch((err)=>{
+          Toast.show(err.response.data.message, Constants.configToast)
+        })
+        .finally(()=>{
+          setLoading(false)
+        })
     }
 
-    const editHandler = unitId => {
-      props.navigation.navigate('ResidentEdit', {id: unitId})
+    const editHandler = unit => {
+      props.navigation.navigate('ResidentEdit', 
+        {
+          user: props.route.params.user,
+          selectedBloco: {
+            id: unit.bloco_id,
+            name: unit.bloco_name
+          },
+          selectedUnit:{
+            id: unit.id,
+            number: unit.number
+          },
+          residents: unit.residents,
+          vehicles: unit.vehicles,
+          screen: 'ResidentEdit'
+        }
+      )
     }
+
+    const generateInfoUnits = _ =>{
+      const unitsInfo = []
+      units.forEach(bloco=>{
+        bloco.Units.forEach(unit => {
+          const unitInfo = {}
+          unitInfo.bloco_id = bloco.id
+          unitInfo.bloco_name = bloco.name
+          unitInfo.residents = unit.Users
+          unitInfo.vehicles = unit.Vehicles
+          unitInfo.number = unit.number
+          unitInfo.id = unit.id
+          unitsInfo.push(unitInfo)
+        })
+      })
+      return unitsInfo
+    }
+
+    const onRefreshHandler = _ =>{
+      setRefreshing(true)
+      fetchUsers()
+      setRefreshing(false)
+    }
+
+    if(loading)
+      return <SafeAreaView style={styles.body}>
+        <ActivityIndicator size="large" color="white"/>
+      </SafeAreaView>
 
     return (
         <SafeAreaView style={styles.body}>
             <FlatList
-              data={users}
+              data={generateInfoUnits()}
+              keyExtractor={item=>item.id}
               style={{marginBottom: 80, paddingRight:10}}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={()=> onRefreshHandler()}
+                />
+              }
               renderItem={(obj)=>{
                   return (
                     <View 
                       style={styles.menuItem} 
                     >
-                      <Text style={styles.listText}>Bloco {obj.item.bloco} Unidade {obj.item.unidade}</Text>
-                      <View style={{justifyContent: 'space-between', flexDirection: 'row'}}>
-                        <View style={{maxWidth: 250}}>
-                          <View>
-                            <Text style={styles.subTitle}>Moradores:</Text>
-                            {
-                              obj.item.residentes.map((res, ind)=>{
-                                return (
-                                  <Text key={ind}>{ind+1}-{res}</Text>
-                                )
-                              })
-                            }
-                          </View>
-                          <View>
-                            {obj.item.veiculos?.length > 0 && <Text style={styles.subTitle}>Veículos:</Text>}
-                            {(!obj.item.veiculos || obj.item.veiculos.length === 0) && <Text style={{marginTop: 10, textDecorationLine: 'underline'}}>Sem veículos cadastrados</Text>}
-                            {
-                              obj.item.veiculos?.map((car, ind)=>{
-                                return (
-                                  <Text key={ind}>-{`${car.veiculo_montador} ${car.veiculo_modelo} ${car.veiculo_cor} - ${car.veiculo_placa}`}</Text>
-                                )
-                              })
-                            }
-                          </View>
-                        </View>
-                        <View>
+                      <Text style={styles.listText}>Bloco {obj.item.bloco_name} Unidade {obj.item.number}</Text>
+                      <View>
                           <ActionButtons
-                            flexDirection='column'
+                            flexDirection='row'
                             action1={()=> editHandler(obj.item)}
                             action2={()=> delUnitModal(obj.item)}
                           />
+                        </View>
+                      <View style={{justifyContent: 'space-between', flexDirection: 'column'}}>
+                        <View style={{maxWidth: 300}}>
+                          <View>
+                            {(!obj.item.residents || obj.item.residents.length === 0) && <Text style={{marginTop: 10, textDecorationLine: 'underline'}}>Unidade sem moradores</Text>}
+                            { obj.item.residents.length > 0 && <Text style={styles.subTitle}>Moradores:</Text>}
+                            {
+                              obj.item.residents.map((res, ind)=>{
+                                return (
+                                  <View key={res.id} style={{flexDirection: 'row', paddingBottom:3, marginBottom: 5, borderBottomWidth: 1, borderColor: Constants.backgroundDarkColors["Residents"]}}>
+                                    <View>
+                                      <PicUser user={res}/>
+                                    </View>
+                                    <View>
+                                      <Text style={{fontSize: 16, marginLeft: 7}}>{res.name}</Text>
+                                      {!!res.email && <Text style={{fontSize: 16, marginLeft: 7}}>Email: {res.email}</Text>}
+                                    </View>
+                                  </View>
+                                )
+                              })
+                            }
+                          </View>
+                          <View>
+                            {obj.item.vehicles?.length > 0 && <Text style={styles.subTitle}>Veículos:</Text>}
+                            {(!obj.item.vehicles || obj.item.vehicles.length === 0) && <Text style={{marginTop: 10, textDecorationLine: 'underline'}}>Sem veículos cadastrados</Text>}
+                            {
+                              obj.item.vehicles?.map((car, ind)=>{
+                                return (
+                                  <Text key={ind}>-{`${car.maker} ${car.model} ${car.color} - ${car.plate}`}</Text>
+                                )
+                              })
+                            }
+                          </View>
                         </View>
                       </View>
                     </View>

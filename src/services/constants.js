@@ -2,6 +2,8 @@ import Toast from 'react-native-root-toast';
 
 export const borderTextInputWidth = 3
 
+export const QR_CODE_PREFIX = 'epw:'
+
 export const is_autorized_backgroundColor = '#00B924'
 export const is_not_autorized_backgroundColor = '#FF726F'
 import Constants from 'expo-constants';

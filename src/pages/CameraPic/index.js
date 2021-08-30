@@ -35,8 +35,10 @@ const CameraPic = (props) => {
                     selectedBloco: props.route.params.selectedBloco, 
                     selectedUnit: props.route.params.selectedUnit, 
                     vehicles: props.route.params.vehicles,
+                    user: props.route.params.user,
                     selectedDateInit: props.route.params.selectedDateInit,
-                    selectedDateEnd: props.route.params.selectedDateEnd
+                    selectedDateEnd: props.route.params.selectedDateEnd,
+                    screen: props.route.params.screen
                 }
             )
         }

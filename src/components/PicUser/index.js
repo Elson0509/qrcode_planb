@@ -1,16 +1,7 @@
 import React, {useState} from 'react';
 import * as Constants from '../../services/constants'
-import { StyleSheet,
-    TextInput,
-    View,
-    KeyboardAvoidingView,
+import {
     Image,
-    TouchableOpacity,
-    Text,
-    FlatList,
-    Animated,
-    Keyboard,
-    Button,
 } from 'react-native';
 
 const PicUser = (props) => {
@@ -33,11 +24,12 @@ const PicUser = (props) => {
         )
     }
     if(!props.user.pic && props.user.id!="0"){
+        
         return (
             <Image
                 style={{width: 39, height: 52, marginRight: 5}}
                 source={picUri}
-                onError={()=>setPicUri(Constants.genericProfilePic)}
+                onError={()=>{setPicUri(Constants.genericProfilePic)}}
             />
         )
     }

@@ -21,6 +21,7 @@ import Toast from 'react-native-root-toast';
 import api from '../../services/api';
 
 const ResidentAdd = props => {
+  //console.log('residentadd', props)
     const [modal, setModal] = useState(false)
     const [loading, setLoading] = useState(true)
     const [blocos, setBlocos] = useState([])
@@ -31,19 +32,19 @@ const ResidentAdd = props => {
     const [errorMessage, setErrorMessage] = useState('')
     const [errorAddResidentMessage, setErrorAddResidentMessage] = useState('')
     const [errorAddVehicleMessage, setErrorAddVehicleMessage] = useState('')
-    const [residents, setResidents] = useState([])
+    const [residents, setResidents] = useState(props.route?.params?.residents || [])
     const [vehicles, setVehicles] = useState(props.route?.params?.vehicles || [])
     const [vehicleBeingAdded, setVehicleBeingAdded] = useState({id: "0", maker:'', model:'', color:'', plate:''})
     const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {id: "0", name: '', identification: '', email: '', pic: ''})
+    const [screen, setScreen]= useState(props.route?.params?.screen || 'ResidentAdd')
 
     //fetching blocos
     useEffect(()=>{
       api.get(`api/condo/${props.route.params.user.condo_id}`)
         .then(res=>{
-          //console.log(res.data)
           setBlocos(res.data)
         })
-        .catch(er=>{
+        .catch(err=>{
           Toast.show(err.response.data.message, Constants.configToast)
         })
         .finally(()=>{
@@ -64,7 +65,7 @@ const ResidentAdd = props => {
     }, []);
 
     const removeResident = index => {
-      const residentsCopy = [...residents]
+      let residentsCopy = [...residents]
       residentsCopy.splice(index, 1)
       setResidents(residentsCopy)
     }
@@ -145,7 +146,15 @@ const ResidentAdd = props => {
     }
 
     const photoClickHandler = _ => {
-      props.navigation.navigate('CameraPic', {userBeingAdded, selectedBloco, selectedUnit, vehicles})
+      props.navigation.navigate('CameraPic', {
+        userBeingAdded, 
+        selectedBloco, 
+        selectedUnit, 
+        vehicles, 
+        residents, 
+        user:props.route.params.user,
+        screen
+      })
     }
 
     const selectBlocoHandler = bloco => {
@@ -158,21 +167,20 @@ const ResidentAdd = props => {
       setSelectedUnit(unit)
       setModalSelectUnit(false)
       setLoading(true)
-      api.get(`api/user/${unit.id}/${Constants.USER_KIND.RESIDENT}`)
+      api.get(`api/user/unit/${unit.id}/${Constants.USER_KIND.RESIDENT}`)
         .then(res=>{
           setResidents(res.data)
           api.get(`api/vehicle/${unit.id}/${Constants.USER_KIND.RESIDENT}`)
             .then(res2=>{
               setVehicles(res2.data)
             })
-            .catch(e2=>{
-              Toast.show(err.response.data.message, Constants.configToast)
+            .catch(err2=>{
+              Toast.show(err2.response.data.message, Constants.configToast)
               setSelectedUnit(null)
               setSelectedBloco(null)
             })
-            
         })
-        .catch(e=>{
+        .catch(err=>{
           Toast.show(err.response.data.message, Constants.configToast)
           setSelectedUnit(null)
           setSelectedBloco(null)
@@ -250,7 +258,7 @@ const ResidentAdd = props => {
             setModalSelectBloco(null)
           })
           .catch(err2=>{
-            Toast.show(err.response.data.message, Constants.configToast)
+            Toast.show(err2.response.data.message, Constants.configToast)
           })
         })
         .catch((err)=>{
