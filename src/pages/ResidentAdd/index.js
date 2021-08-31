@@ -21,7 +21,6 @@ import Toast from 'react-native-root-toast';
 import api from '../../services/api';
 
 const ResidentAdd = props => {
-  //console.log('residentadd', props)
     const [modal, setModal] = useState(false)
     const [loading, setLoading] = useState(true)
     const [blocos, setBlocos] = useState([])
@@ -50,7 +49,6 @@ const ResidentAdd = props => {
         .finally(()=>{
           setLoading(false)
         })
-
     },[])
 
     useEffect(() => {
@@ -84,8 +82,6 @@ const ResidentAdd = props => {
         quality: 1,
       });
       const compressed = await Utils.compressImage(result.uri)
-      
-
       if (!result.cancelled) {
         setUserBeingAdded(prev=> {return {...prev, pic:compressed.uri}})
       }
@@ -188,7 +184,6 @@ const ResidentAdd = props => {
         .finally(()=>{
           setLoading(false)
         })
-      
     }
 
     const clearUnit = _ =>{
@@ -240,13 +235,13 @@ const ResidentAdd = props => {
     const confirmHandler = _ =>{
       setLoading(true)
       api.post('api/vehicle/unit', {
-        selectedUnit,
+        unit_id: selectedUnit.id,
         vehicles,
         user_id_last_modify: props.route.params.user.id
       })
       .then((res)=>{
         api.post('api/user/resident/unit', {
-          selectedUnit, 
+          unit_id: selectedUnit.id,
           residents, 
           condo_id: props.route.params.user.condo_id, 
           user_id_last_modify: props.route.params.user.id

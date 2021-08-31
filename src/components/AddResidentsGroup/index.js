@@ -57,7 +57,8 @@ const AddResidentsGroup = (props) => {
             }
             {
                 addingUser &&
-                <View>
+                <View style={{marginTop: 15}}>
+                    <Text style={{textAlign:'center'}}>Dados do novo morador</Text>
                     <InputBox
                         text="Nome*:"
                         value={props.userBeingAdded.name}
