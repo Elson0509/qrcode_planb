@@ -84,7 +84,16 @@ export const printDate = date => {
     if (mm < 10) {
         mm = '0' + mm;
     }
-    return dd + '/' + mm + '/' + yyyy;
+
+    const weekday = [];
+    weekday[0] = "Domingo";
+    weekday[1] = "Segunda-feira";
+    weekday[2] = "Terça-feira";
+    weekday[3] = "Quarta-feira";
+    weekday[4] = "Quinta-feira";
+    weekday[5] = "Sexta-feira";
+    weekday[6] = "Sábado";
+    return dd + '/' + mm + '/' + yyyy //+ '('+weekday[date.getDay()] + ')';
 }
 
 export const plateSizeValidator = plate => {

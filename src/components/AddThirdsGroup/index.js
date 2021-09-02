@@ -3,7 +3,9 @@ import Icon from '../Icon';
 import InputBox from '../InputBox';
 import FooterButtons from '../FooterButtons';
 import * as Constants from '../../services/constants'
+import * as Utils from '../../services/util'
 import DateInputBox from '../DateInputBox'
+import PicUser from '../PicUser';
 import { StyleSheet,
     TextInput,
     View,
@@ -41,21 +43,15 @@ const AddThirdsGroup = (props) => {
                 props.residents.map(((el, ind)=> (
                     <View key={ind} style={[styles.listItem]}>
                         <View style={{flexDirection: 'row'}}>
-                            { !!el.pic && 
-                                <Image
-                                    style={{width: 39, height: 52, marginRight: 5}}
-                                    source={{uri: el.pic}}
-                                /> 
-                                ||
-                                <View style={{marginRight: 5}}>
-                                    <Icon name='portrait' size={52}/>
-                                </View>
-                            }
+                            <PicUser user={el}/>
                             <View style={{marginLeft: 5, marginRight: 5, maxWidth: 210}}>
                                 <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Nome:</Text> {el.name}</Text>
                                 {!!el.email && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Email:</Text> {el.email}</Text>}
                                 {!!el.identification && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Id:</Text> {el.identification}</Text>}
                                 {!!el.empresa && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Empresa:</Text> {el.empresa}</Text>}
+                                {!!el.initial_date && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Início:</Text> {Utils.printDate(el.initial_date)}</Text>}
+                                {!!el.final_date && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Fim:</Text> {Utils.printDate(el.final_date)}</Text>}
+                                
                             </View>
                         </View>
                         
@@ -97,17 +93,30 @@ const AddThirdsGroup = (props) => {
                         borderColor={Constants.backgroundDarkColors['Thirds']}
                         colorInput={Constants.backgroundDarkColors['Thirds']}
                     />
-                    {/* <InputBox
-                        text="Email:"
-                        value={props.userBeingAdded.email}
-                        width={295}
-                        changed={val=>props.setUserBeingAdded({...props.userBeingAdded, email: val})}
-                        keyboard={'email-address'}
-                        autoCapitalize='none'
-                        backgroundColor={Constants.backgroundLightColors['Visitors']}
-                        borderColor={Constants.backgroundDarkColors['Visitors']}
-                        colorInput={Constants.backgroundDarkColors['Visitors']}
-                    /> */}
+                    <DateInputBox
+                        changed1={(value)=>props.setDateInit({...props.dateInit, day: value})}
+                        changed2={(value)=>props.setDateInit({...props.dateInit, month: value})}
+                        changed3={(value)=>props.setDateInit({...props.dateInit, year: value})}
+                        text='Data inicial*:'
+                        backgroundColor={props.backgroundColorInput || Constants.backgroundLightColors['Thirds']}
+                        borderColor={props.borderColor || Constants.backgroundDarkColors['Thirds']}
+                        colorInput={props.colorInput || Constants.backgroundDarkColors['Thirds']}
+                        value1={props.dateInit.day}
+                        value2={props.dateInit.month}
+                        value3={props.dateInit.year}
+                    />
+                    <DateInputBox
+                        changed1={(value)=>props.setDateEnd({...props.dateEnd, day: value})}
+                        changed2={(value)=>props.setDateEnd({...props.dateEnd, month: value})}
+                        changed3={(value)=>props.setDateEnd({...props.dateEnd, year: value})}
+                        text='Data final*:'
+                        backgroundColor={props.backgroundColorInput || Constants.backgroundLightColors['Thirds']}
+                        borderColor={props.borderColor || Constants.backgroundDarkColors['Thirds']}
+                        colorInput={props.colorInput || Constants.backgroundDarkColors['Thirds']}
+                        value1={props.dateEnd.day}
+                        value2={props.dateEnd.month}
+                        value3={props.dateEnd.year}
+                    />
                     <Text style={styles.title}>Foto:</Text>
                     {!props.userBeingAdded.pic &&
                     <View style={[styles.buttonAddPhotoGroup]}>

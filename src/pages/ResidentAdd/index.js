@@ -271,7 +271,7 @@ const ResidentAdd = props => {
 
     return(
       <SafeAreaView style={styles.body}>
-        <ScrollView style={{flex: 1, padding:10,}}>
+        <ScrollView style={{flex: 1, padding:10,}} keyboardShouldPersistTaps="handled">
           <SelectBlocoGroup 
             pressed={()=>setModalSelectBloco(true)}
             selectedBloco={selectedBloco}

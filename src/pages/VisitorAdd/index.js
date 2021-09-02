@@ -32,7 +32,7 @@ const VisitorAdd = props => {
     const [errorMessage, setErrorMessage] = useState('')
     const [errorAddResidentMessage, setErrorAddResidentMessage] = useState('')
     const [errorAddVehicleMessage, setErrorAddVehicleMessage] = useState('')
-    const [residents, setResidents] = useState([])
+    const [residents, setResidents] = useState(props.route?.params?.residents || [])
     const [vehicles, setVehicles] = useState(props.route?.params?.vehicles || [])
     const [vehicleBeingAdded, setVehicleBeingAdded] = useState({id:"0", maker:'', model:'', color:'', plate:''})
     const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {name: '', identification: '', pic: ''})
@@ -65,17 +65,6 @@ const VisitorAdd = props => {
         }
       })();
     }, []);
-
-    //updating info according to unit
-    useEffect(()=>{
-      if(selectedUnit){
-        //upadting info
-      }
-      else{
-        setResidents([])
-        setVehicles([])
-      }
-    }, [selectedUnit])
 
     const removeResident = index => {
       const residentsCopy = [...residents]
@@ -345,7 +334,7 @@ const VisitorAdd = props => {
 
     return(
       <SafeAreaView style={styles.body}>
-        <ScrollView style={{flex: 1, padding:10,}}>
+        <ScrollView style={{flex: 1, padding:10,}} keyboardShouldPersistTaps="handled">
           <SelectBlocoGroup 
             backgroundColor={backgroundColorBoxes}
             backgroundColorButtons={backgroundColorButtonBoxes}

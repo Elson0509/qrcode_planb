@@ -105,14 +105,6 @@ const VisitorEdit = props => {
         setErrorAddResidentMessage('Nome não pode estar vazio.')
         return false
       }
-      // if(!userBeingAdded.email){
-      //   setErrorAddResidentMessage('Email não pode estar vazio.')
-      //   return false
-      // }
-      // if(!Utils.validateEmail(userBeingAdded.email)){
-      //   setErrorAddResidentMessage('Email não é válido.')
-      //   return false
-      // }
       setResidents(prev=> [...prev, userBeingAdded])
       setErrorAddResidentMessage('')
       setUserBeingAdded({name: '', identification: '', pic: ''})
