@@ -5,6 +5,7 @@ import {
     ScrollView,
     FlatList,
     TouchableOpacity,
+    RefreshControl,
     SafeAreaView,
     Text,
     ActivityIndicator
@@ -24,6 +25,7 @@ const UnitList = props => {
     const [message, setMessage] = useState('')
     const [unitSelected, setUnitSelected] = useState({})
     const [unitWillUpdate, setUnitWillUpdate] = useState({})
+    const [refreshing, setRefreshing] = useState(false)
 
     useEffect(()=>{
       listUnits()
@@ -32,12 +34,11 @@ const UnitList = props => {
     const listUnits = _ => {
       api.get(`api/condo/${props.route.params.user.condo_id}`)
       .then(resp => {
-        console.log(resp.data)
         setBlocos(resp.data)
         setLoading(false)
       })
       .catch(err=> {
-        console.log(err)
+        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (UL1)', Constants.configToast)
         setLoading(false)
       })
     }
@@ -78,11 +79,17 @@ const UnitList = props => {
         listUnits()
       })
       .catch((err)=> {
-        Toast.show(err.response.data.message, Constants.configToast)
+        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (UL2)', Constants.configToast)
       })
       .finally(()=>{
         setLoading(false)
       })
+    }
+
+    const onRefreshHandler = _ =>{
+      setRefreshing(true)
+      listUnits()
+      setRefreshing(false)
     }
 
     const editUnitModal = unit => {
@@ -102,16 +109,14 @@ const UnitList = props => {
       })
       .then((resp)=> {
         Toast.show(resp.data.message, configToast)
-        listUnits()
       })
       .catch((err)=> {
-        Toast.show(err.response.data.message, configToast)
+        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (UL3)', Constants.configToast)
       })
       .finally(()=>{
         setLoading(false)
+        listUnits()
       })
-
-      
     }
 
     return (
@@ -121,8 +126,16 @@ const UnitList = props => {
           ||
           <FlatList
             data={unitList()}
-            
+            keyboardShouldPersistTaps="handled"
             keyExtractor={item=> item.unit_id}
+            
+            refreshControl={
+              <RefreshControl
+                enabled={true}
+                refreshing={refreshing}
+                onRefresh={()=> onRefreshHandler()}
+              />
+            }
             renderItem={(obj)=>{
               return  (
                 <View 

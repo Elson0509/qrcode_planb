@@ -32,7 +32,7 @@ const ThirdAdd = props => {
     const [errorAddResidentMessage, setErrorAddResidentMessage] = useState('')
     const [errorAddVehicleMessage, setErrorAddVehicleMessage] = useState('')
     const [errorDatesMessage, setErrorDatesMessage] = useState('')
-    const [residents, setResidents] = useState([])
+    const [residents, setResidents] = useState(props.route?.params?.residents?.map(el=>{return {...el, initial_date: new Date(el.initial_date), final_date: new Date(el.final_date)}}) || [])
     const [vehicles, setVehicles] = useState(props.route?.params?.vehicles || [])
     const [vehicleBeingAdded, setVehicleBeingAdded] = useState({id:"0", maker:'', model:'', color:'', plate:''})
     const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {id: "0", name: '', identification: '', pic: '', empresa: ''})
@@ -161,7 +161,17 @@ const ThirdAdd = props => {
     }
 
     const photoClickHandler = _ => {
-      props.navigation.navigate('CameraPic', {userBeingAdded, selectedBloco, selectedUnit, vehicles, selectedDateInit, selectedDateEnd, screen:'ThirdAdd'})
+      props.navigation.navigate('CameraPic', {
+        userBeingAdded, 
+        selectedBloco, 
+        selectedUnit, 
+        vehicles, 
+        selectedDateInit, 
+        selectedDateEnd, 
+        residents: JSON.stringify(residents), 
+        user:props.route.params.user,
+        screen
+      })
     }
 
     const selectBlocoHandler = bloco => {

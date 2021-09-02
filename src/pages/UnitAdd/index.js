@@ -32,8 +32,8 @@ const UnitAdd = props => {
         const newBloco = [{id:"0", name: 'Novo Bloco'}]
         setBlocosApi(newBloco.concat(res.data))
       })
-      .catch(()=>{
-
+      .catch((err)=>{
+        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (UA1)', Constants.configToast)
       })
       .finally(()=>{
         setLoading(false)
@@ -53,11 +53,19 @@ const UnitAdd = props => {
         setModal(true)
       }
       else{
+        // console.log({
+        //   number: apt,
+        //   bloco_id: selectedBloco.id,
+        //   bloco_name: block,
+        //   unit_kind_id: 1,
+        //   user_id_last_modify: props.route.params.user.id,
+        //   condo_id: props.route.params.user.condo_id,
+        // })
         setLoading(true)
         api.post('api/unit', {
-          number: apt.trim(),
+          number: apt,
           bloco_id: selectedBloco.id,
-          bloco_name: block.trim(),
+          bloco_name: block,
           unit_kind_id: 1,
           user_id_last_modify: props.route.params.user.id,
           condo_id: props.route.params.user.condo_id,
@@ -67,12 +75,11 @@ const UnitAdd = props => {
           Toast.show(res.data.message, Constants.configToast)
         })
         .catch((err)=> {
-          Toast.show(err.response.data.message, Constants.configToast)
+          Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (UA2)', Constants.configToast)
         })
         .finally(()=>{
           setLoading(false)
         })
-        
       }
     }
 
@@ -83,6 +90,9 @@ const UnitAdd = props => {
         setSelectedBloco(bloco)
         setReadonlyBloco('0')
       }
+      else{
+        setSelectedBloco({id: '0'})
+      }
     }
 
     if(loading)
@@ -92,7 +102,7 @@ const UnitAdd = props => {
 
     return (
         <SafeAreaView style={styles.body}>
-          <ScrollView >
+          <ScrollView keyboardShouldPersistTaps="handled">
             <InputBox 
               text="Bloco:" 
               value={block} 

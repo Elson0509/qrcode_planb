@@ -69,23 +69,6 @@ const ResidentList = props => {
     }
 
     const editHandler = unit => {
-      const formatResidents = unit.residents.map(el=>{
-        return {...el, initial_date: new Date(el.initial_date), final_date: new Date(el.final_date)}}
-      )
-      console.log({
-        user: props.route.params.user,
-        selectedBloco: {
-          id: unit.bloco_id,
-          name: unit.bloco_name
-        },
-        selectedUnit:{
-          id: unit.id,
-          number: unit.number
-        },
-        residents: unit.residents.map(el=>{return {...el, initial_date: new Date(el.initial_date), final_date: new Date(el.final_date)}}),
-        vehicles: unit.vehicles,
-        screen: 'VisitorEdit'
-      })
       props.navigation.navigate('VisitorEdit', 
         {
           user: props.route.params.user,
@@ -97,7 +80,7 @@ const ResidentList = props => {
             id: unit.id,
             number: unit.number
           },
-          residents: formatResidents,
+          residents: unit.residents,
           vehicles: unit.vehicles,
           screen: 'VisitorEdit'
         }

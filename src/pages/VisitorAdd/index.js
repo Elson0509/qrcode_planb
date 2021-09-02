@@ -32,10 +32,10 @@ const VisitorAdd = props => {
     const [errorMessage, setErrorMessage] = useState('')
     const [errorAddResidentMessage, setErrorAddResidentMessage] = useState('')
     const [errorAddVehicleMessage, setErrorAddVehicleMessage] = useState('')
-    const [residents, setResidents] = useState(props.route?.params?.residents || [])
+    const [residents, setResidents] = useState(props.route?.params?.residents?.map(el=>{return {...el, initial_date: new Date(el.initial_date), final_date: new Date(el.final_date)}}) || [])
     const [vehicles, setVehicles] = useState(props.route?.params?.vehicles || [])
     const [vehicleBeingAdded, setVehicleBeingAdded] = useState({id:"0", maker:'', model:'', color:'', plate:''})
-    const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {name: '', identification: '', pic: ''})
+    const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {id: "0", name: '', identification: '', pic: ''})
     const [dateInit, setDateInit] = useState({day: currentDate.getDate(), month: currentDate.getMonth()+1, year: currentDate.getFullYear()})
     const [dateEnd, setDateEnd] = useState({day: '', month: '', year: ''})
     const [screen, setScreen]= useState(props.route?.params?.screen || 'VisitorAdd')
@@ -113,14 +113,13 @@ const VisitorAdd = props => {
 
       const newVisitor = {
         ...userBeingAdded,
-        id: "0",
         initial_date: dateInicial,
         final_date: dateFinal
       }
 
       setResidents(prev=> [...prev, newVisitor])
       setErrorAddResidentMessage('')
-      setUserBeingAdded({name: '', identification: '', pic: ''})
+      setUserBeingAdded({id: "0", name: '', identification: '', pic: ''})
       return true
     }
 
@@ -165,7 +164,7 @@ const VisitorAdd = props => {
         selectedBloco, 
         selectedUnit, 
         vehicles, 
-        residents, 
+        residents: JSON.stringify(residents), 
         user:props.route.params.user,
         screen
       })

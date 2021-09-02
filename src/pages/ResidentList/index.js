@@ -34,7 +34,7 @@ const ResidentList = props => {
         setUnits(resp.data)
       })
       .catch(err=>{
-        Toast.show(err.response.data.message, Constants.configToast)
+        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RL1)', Constants.configToast)
       })
       .finally(()=>{
         setLoading(false)
@@ -60,7 +60,7 @@ const ResidentList = props => {
           fetchUsers()
         })
         .catch((err)=>{
-          Toast.show(err.response.data.message, Constants.configToast)
+          Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RL2)', Constants.configToast)
         })
         .finally(()=>{
           setLoading(false)
