@@ -3,24 +3,26 @@ import {
     SafeAreaView,
     StyleSheet,
     ScrollView,
-    ActivityIndicator,
     View,
-    Text,
+    ActivityIndicator,
   } from 'react-native';
 import * as ImagePicker from 'expo-image-picker'
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage';
-import AddCarsGroup from '../../components/AddCarsGroup';
 import AddThirdsGroup from '../../components/AddThirdsGroup';
+import AddCarsGroup from '../../components/AddCarsGroup';
 import SelectBlocoGroup from '../../components/SelectBlocoGroup';
 import ModalSelectBloco from '../../components/ModalSelectBloco';
 import ModalSelectUnit from '../../components/ModalSelectUnit';
 import FooterButtons from '../../components/FooterButtons';
+import SelectDatesVisitorsGroup from '../../components/SelectDatesVisitorsGroup';
 import Toast from 'react-native-root-toast';
 import api from '../../services/api';
 
 const ThirdAdd = props => {
+    const currentDate = new Date()
+
     const [modal, setModal] = useState(false)
     const [loading, setLoading] = useState(true)
     const [blocos, setBlocos] = useState([])
@@ -30,16 +32,16 @@ const ThirdAdd = props => {
     const [selectedUnit, setSelectedUnit] = useState(props.route?.params?.selectedUnit || null)
     const [errorMessage, setErrorMessage] = useState('')
     const [errorAddResidentMessage, setErrorAddResidentMessage] = useState('')
+    const [errorSetDateMessage, setErrorSetDateMessage] = useState('')
     const [errorAddVehicleMessage, setErrorAddVehicleMessage] = useState('')
-    const [errorDatesMessage, setErrorDatesMessage] = useState('')
     const [residents, setResidents] = useState(props.route?.params?.residents?.map(el=>{return {...el, initial_date: new Date(el.initial_date), final_date: new Date(el.final_date)}}) || [])
     const [vehicles, setVehicles] = useState(props.route?.params?.vehicles || [])
-    const [vehicleBeingAdded, setVehicleBeingAdded] = useState({id:"0", maker:'', model:'', color:'', plate:''})
-    const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {id: "0", name: '', identification: '', pic: '', empresa: ''})
-    const [dateInit, setDateInit] = useState({day: new Date().getDate(), month: new Date().getMonth()+1, year: new Date().getFullYear()})
+    const [vehicleBeingAdded, setVehicleBeingAdded] = useState({maker:'', model:'', color:'', plate:''})
+    const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {name: '', identification: '', company:'', pic: ''})
+    const [dateInit, setDateInit] = useState({day: currentDate.getDate(), month: currentDate.getMonth()+1, year: currentDate.getFullYear()})
     const [dateEnd, setDateEnd] = useState({day: '', month: '', year: ''})
-    const [selectedDateInit, setSelectedDateInit] = useState(props.route?.params?.setSelectedDateInit || null)
-    const [selectedDateEnd, setSelectedDateEnd] = useState(props.route?.params?.setSelectedDateEnd || null)
+    const [selectedDateInit, setSelectedDateInit] = useState('')
+    const [selectedDateEnd, setSelectedDateEnd] = useState('')
     const [screen, setScreen]= useState(props.route?.params?.screen || 'ThirdAdd')
 
     //fetching blocos
@@ -98,35 +100,39 @@ const ThirdAdd = props => {
         setErrorAddResidentMessage('Nome não pode estar vazio.')
         return false
       }
+      setResidents(prev=> [...prev, userBeingAdded])
+      setErrorAddResidentMessage('')
+      setUserBeingAdded({id: "0", name: '', company:'', identification: '', pic: ''})
+      return true
+    }
+
+    const selectDatesHandler = _ =>{
       if(!Utils.isValidDate(dateInit.day, dateInit.month, dateInit.year) ){
-        setErrorDatesMessage('Data inicial não é válida.')
+        setErrorSetDateMessage('Data inicial não é válida.')
         return false
       }
       if(!Utils.isValidDate(dateEnd.day, dateEnd.month, dateEnd.year) ){
-        setErrorDatesMessage('Data final não é válida.')
+        setErrorSetDateMessage('Data final não é válida.')
         return false
       }
       const dateInicial = new Date(dateInit.year, dateInit.month-1, dateInit.day)
       const dateFinal = new Date(dateEnd.year, dateEnd.month-1, dateEnd.day)
       if(dateFinal<dateInicial){
-        setErrorDatesMessage('Data final precisa ser após a data inicial')
+        setErrorSetDateMessage('Data final precisa ser após a data inicial')
         return false
       }
-
-      const newVisitor = {
-        ...userBeingAdded,
-        id: "0",
-        initial_date: dateInicial,
-        final_date: dateFinal
-      }
-      setResidents(prev=> [...prev, newVisitor])
-      setErrorAddResidentMessage('')
-      setUserBeingAdded({id: "0", name: '', identification: '', pic: '', empresa: ''})
+      setSelectedDateInit(dateInicial)
+      setSelectedDateEnd(dateFinal)
       return true
     }
 
+    const cancelDatesHandler = _ =>{
+      setSelectedDateInit('')
+      setSelectedDateEnd('')
+    }
+
     const cancelAddResidentHandler = _ => {
-      setUserBeingAdded({id: "0", name: '', identification: '', email: '', pic: '', empresa: ''})
+      setUserBeingAdded({name: '', identification: '', company:'', email: '', pic: ''})
     }
 
     const addVehicleHandler = _ =>{
@@ -152,12 +158,12 @@ const ThirdAdd = props => {
       }
       setVehicles(prev=> [...prev, vehicleBeingAdded])
       setErrorAddVehicleMessage('')
-      setVehicleBeingAdded({id:"0", maker:'', model:'', color:'', plate:''})
+      setVehicleBeingAdded({maker:'', model:'', color:'', plate:''})
       return true
     }
 
     const cancelVehicleHandler = _ => {
-      setVehicleBeingAdded({id:"0", maker:'', model:'', color:'', plate:''})
+      setVehicleBeingAdded({maker:'', model:'', color:'', plate:''})
     }
 
     const photoClickHandler = _ => {
@@ -166,8 +172,6 @@ const ThirdAdd = props => {
         selectedBloco, 
         selectedUnit, 
         vehicles, 
-        selectedDateInit, 
-        selectedDateEnd, 
         residents: JSON.stringify(residents), 
         user:props.route.params.user,
         screen
@@ -183,48 +187,7 @@ const ThirdAdd = props => {
     const selectUnitHandler = unit => {
       setSelectedUnit(unit)
       setModalSelectUnit(false)
-      setLoading(true)
       setDateEnd({day: '', month: '', year: ''})
-
-      let unitFound
-      //search for unit of kind Visitor
-      api.get(`api/unit/${selectedBloco.id}/${unit.number}/${Constants.USER_KIND.THIRD}`)
-        .then(res=>{
-          if(res.data){
-            unitFound=res.data
-          }
-          else{
-            unitFound=unit
-          }
-          api.get(`api/user/unit/${unitFound.id}/${Constants.USER_KIND.THIRD}`)
-            .then(res=>{
-              const users = res.data
-              const usersAdjustedDate = users.map(el=> {return {...el, final_date: new Date(el.final_date), initial_date: new Date(el.initial_date)}})
-              
-              setResidents(usersAdjustedDate)
-              api.get(`api/vehicle/${unitFound.id}/${Constants.USER_KIND.THIRD}`)
-                .then(res2=>{
-                  setVehicles(res2.data)
-                })
-                .catch(err2=>{
-                  Toast.show(err2.response.data.message, Constants.configToast)
-                  setSelectedUnit(null)
-                  setSelectedBloco(null)
-                })
-            })
-            .catch(err=>{
-              Toast.show(err.response.data.message, Constants.configToast)
-              setSelectedUnit(null)
-              setSelectedBloco(null)
-            })
-        })
-        .catch(err=>{
-          Toast.show(err.response.data.message, Constants.configToast)
-          return
-        })
-        .finally(()=>{
-          setLoading(false)
-        })
     }
 
     const clearUnit = _ =>{
@@ -236,6 +199,44 @@ const ThirdAdd = props => {
       clearUnit()
       setResidents([])
       setVehicles([])
+    }
+
+    //saving...
+    const confirmHandler = _ =>{
+      //checking if there is date selected and at least one visitor
+      if(!selectedDateInit || !selectedDateEnd){
+        return setErrorMessage('É preciso selecionar um prazo.')
+      }
+      if(!residents.length)
+        return setErrorMessage('É preciso adicionar terceirizados.')
+      setErrorMessage('')
+      setLoading(true)
+      //storing unit for kind Visitor
+      api.post(`api/user/person/unit`,{
+        residents,
+        number: selectedUnit.number,
+        vehicles,
+        bloco_id: selectedBloco.id,
+        selectedDateInit,
+        selectedDateEnd,
+        unit_kind_id: Constants.USER_KIND.THIRD,
+        user_id_last_modify: props.route.params.user.id,
+      })
+      .then(res=>{
+        uploadImgs(res.data.personsAdded)
+        Toast.show(res.data.message, Constants.configToast)
+        setDateEnd({day: '', month: '', year: ''})
+        setSelectedUnit(null)
+        setSelectedBloco(null)
+        setResidents([])
+        setVehicles([])
+      })
+      .catch(err=>{
+        Toast.show(err.response.data.message, Constants.configToast)
+      })
+      .finally(()=>{
+        setLoading(false)
+      })
     }
 
     const uploadImgs = newResidents =>{
@@ -271,74 +272,6 @@ const ThirdAdd = props => {
       })
     }
 
-    //saving...
-    const confirmHandler = _ =>{
-      setLoading(true)
-      //storing unit for kind Visitor
-      api.post(`api/unit`,{
-        number: selectedUnit.number,
-        bloco_id: selectedBloco.id,
-        bloco_name: selectedBloco.name,
-        unit_kind_id: Constants.USER_KIND.THIRD,
-        user_id_last_modify: props.route.params.user.id,
-        condo_id: props.route.params.user.condo_id
-      })
-      .then(res=>{
-        //in case of unit kind Third already stored
-        storeVehiclesAndVisitors(res.data.unit.id)
-      })
-      .catch(err=>{
-        //in case of unit kind Third not already stored
-        if(err.response.data.unit){
-          storeVehiclesAndVisitors(err.response.data.unit.id)
-        }
-      })
-      .finally(()=>{
-        setLoading(false)
-      })
-    }
-
-    const storeVehiclesAndVisitors = unit_id => {
-      console.log(1, {
-        unit_id,
-        vehicles,
-        user_id_last_modify: props.route.params.user.id
-      })
-      api.post('api/vehicle/unit', {
-        unit_id,
-        vehicles,
-        user_id_last_modify: props.route.params.user.id
-      })
-      .then((res)=>{
-        console.log(2, {
-          unit_id,
-          residents, 
-          condo_id: props.route.params.user.condo_id, 
-          user_kind_id: Constants.USER_KIND.THIRD,
-          user_id_last_modify: props.route.params.user.id
-        })
-        api.post('api/user/person/unit', {
-          unit_id,
-          residents, 
-          condo_id: props.route.params.user.condo_id, 
-          user_kind_id: Constants.USER_KIND.THIRD,
-          user_id_last_modify: props.route.params.user.id
-        })
-          .then(res2=>{
-            uploadImgs(res2.data.addedResidents)
-            Toast.show(res2.data.message, Constants.configToast)
-            setSelectedUnit(null)
-            setModalSelectBloco(null)
-          })
-          .catch(err2=>{
-            Toast.show(err2.response.data.message, Constants.configToast)
-          })
-        })
-        .catch((err)=>{
-          Toast.show(err.response.data.message, Constants.configToast)
-        })
-    }
-
     const backgroundColorBoxes = '#FF6666'
     const backgroundColorButtonBoxes = '#FFA0A0'
 
@@ -372,10 +305,22 @@ const ThirdAdd = props => {
                 addResidentHandler={addResidentHandler}
                 cancelAddResidentHandler={cancelAddResidentHandler}
                 removeResident={removeResident}
+              />
+              <SelectDatesVisitorsGroup
+                selectedDateInit={Utils.printDate(selectedDateInit)}
+                selectedDateEnd={Utils.printDate(selectedDateEnd)}
+                selectDatesHandler={selectDatesHandler}
+                cancelDatesHandler={cancelDatesHandler}
+                backgroundColorInput={Constants.backgroundLightColors["Thirds"]}
+                borderColor={Constants.backgroundDarkColors["Thirds"]}
+                colorInput={Constants.backgroundDarkColors["Thirds"]}
+                backgroundColor={backgroundColorBoxes}
+                backgroundColorButtons={backgroundColorButtonBoxes}
                 dateInit={dateInit}
-                dateEnd={dateEnd}
                 setDateInit={setDateInit}
+                dateEnd={dateEnd}
                 setDateEnd={setDateEnd}
+                errorMessage={errorSetDateMessage}
               />
               <AddCarsGroup 
                 backgroundColor={backgroundColorBoxes}
@@ -394,7 +339,7 @@ const ThirdAdd = props => {
                 backgroundColor={Constants.backgroundColors['Thirds']}
                 title1="Confirmar"
                 title2="Cancelar"
-                errorMessage={errorDatesMessage}
+                errorMessage={errorMessage}
                 buttonPadding={15}
                 fontSize={17}
                 action1={confirmHandler}
@@ -414,14 +359,14 @@ const ThirdAdd = props => {
           blocos={blocos}
           modalVisible={modalSelectBloco}
           setModalVisible={setModalSelectBloco}
-          backgroundItem={backgroundColorButtonBoxes}
+          backgroundItem={'#FFE5E5'}
         />
         <ModalSelectUnit
           bloco={selectedBloco}
           modalVisible={modalSelectUnit}
           setModalVisible={setModalSelectUnit}
           selectUnitHandler={selectUnitHandler}
-          backgroundItem={backgroundColorButtonBoxes}
+          backgroundItem={'#FFE5E5'}
         />
       </SafeAreaView>
     );

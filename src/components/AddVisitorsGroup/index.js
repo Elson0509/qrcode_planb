@@ -83,30 +83,6 @@ const AddVisitorsGroup = (props) => {
                         borderColor={Constants.backgroundDarkColors['Visitors']}
                         colorInput={Constants.backgroundDarkColors['Visitors']}
                     />
-                    <DateInputBox
-                        changed1={(value)=>props.setDateInit({...props.dateInit, day: value})}
-                        changed2={(value)=>props.setDateInit({...props.dateInit, month: value})}
-                        changed3={(value)=>props.setDateInit({...props.dateInit, year: value})}
-                        text='Data inicial*:'
-                        backgroundColor={props.backgroundColorInput || Constants.backgroundLightColors['Visitors']}
-                        borderColor={props.borderColor || Constants.backgroundDarkColors['Visitors']}
-                        colorInput={props.colorInput || Constants.backgroundDarkColors['Visitors']}
-                        value1={props.dateInit.day}
-                        value2={props.dateInit.month}
-                        value3={props.dateInit.year}
-                    />
-                    <DateInputBox
-                        changed1={(value)=>props.setDateEnd({...props.dateEnd, day: value})}
-                        changed2={(value)=>props.setDateEnd({...props.dateEnd, month: value})}
-                        changed3={(value)=>props.setDateEnd({...props.dateEnd, year: value})}
-                        text='Data final*:'
-                        backgroundColor={props.backgroundColorInput || Constants.backgroundLightColors['Visitors']}
-                        borderColor={props.borderColor || Constants.backgroundDarkColors['Visitors']}
-                        colorInput={props.colorInput || Constants.backgroundDarkColors['Visitors']}
-                        value1={props.dateEnd.day}
-                        value2={props.dateEnd.month}
-                        value3={props.dateEnd.year}
-                    />
                     <Text style={styles.title}>Foto:</Text>
                     {!props.userBeingAdded.pic &&
                     <View style={[styles.buttonAddPhotoGroup]}>

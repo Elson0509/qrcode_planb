@@ -29,6 +29,12 @@ const ResidentList = props => {
       fetchUsers()
     }, [])
 
+    let beginOfDay = new Date()
+    beginOfDay.setHours(0)
+    beginOfDay.setMinutes(0)
+    beginOfDay.setSeconds(0)
+    beginOfDay.setMilliseconds(0)
+
     const fetchUsers = _ => {
       api.get(`api/user/condo/${props.route.params.user.condo_id}/${Constants.USER_KIND["VISITOR"]}`)
       .then(resp=>{
@@ -161,6 +167,12 @@ const ResidentList = props => {
                                     {!!res.email && <Text style={{fontSize: 16, marginLeft: 7}}>Email: {res.email}</Text>}
                                     {!!res.initial_date && <Text style={{fontSize: 16, marginLeft: 7}}>Início: {Utils.printDate(new Date(res.initial_date))}</Text>}
                                     {!!res.final_date && <Text style={{fontSize: 16, marginLeft: 7}}>Fim: {Utils.printDate(new Date(res.final_date))}</Text>}
+                                    {
+                                      new Date(res.final_date) >= beginOfDay ?
+                                        <Text style={{fontSize: 16, marginLeft: 7}}>Status: Válido</Text>
+                                        :
+                                        <Text style={{fontSize: 16, marginLeft: 7, fontWeight: 'bold', color: 'red'}}>Status: Expirado</Text>
+                                    }
                                   </View>
                                 </View>
                               )
