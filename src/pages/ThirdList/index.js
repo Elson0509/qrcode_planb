@@ -170,9 +170,13 @@ const ResidentList = props => {
                                     {!!res.final_date && <Text style={{fontSize: 16, marginLeft: 7}}>Fim: {Utils.printDate(new Date(res.final_date))}</Text>}
                                     {
                                       new Date(res.final_date) >= beginOfDay ?
-                                        <Text style={{fontSize: 16, marginLeft: 7}}>Status: Válido</Text>
+                                        <Text style={{fontSize: 16, marginLeft: 7}}>
+                                          Status: Válido
+                                        </Text>
                                         :
-                                        <Text style={{fontSize: 16, marginLeft: 7, fontWeight: 'bold', color: 'red'}}>Status: Expirado</Text>
+                                        <Text style={{fontSize: 16, marginLeft: 7, fontWeight: 'bold', color: 'red'}}>
+                                          Status: Expirado
+                                        </Text>
                                     }
                                   </View>
                                 </View>

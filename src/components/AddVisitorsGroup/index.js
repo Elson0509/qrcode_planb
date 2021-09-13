@@ -48,8 +48,6 @@ const AddVisitorsGroup = (props) => {
                                 <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Nome:</Text> {el.name}</Text>
                                 {!!el.email && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Email:</Text> {el.email}</Text>}
                                 {!!el.identification && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Id:</Text> {el.identification}</Text>}
-                                {!!el.initial_date && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Início:</Text> {Utils.printDate(new Date(el.initial_date))}</Text>}
-                                {!!el.final_date && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Término:</Text> {Utils.printDate(new Date(el.final_date))}</Text>}
                             </View>
                         </View>
                         

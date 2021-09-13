@@ -116,7 +116,7 @@ const AppRoutes = _ => {
             />
             <AppStack.Screen 
                 name="VisitorEdit" 
-                component={VisitorAdd}
+                component={VisitorEdit}
                 options={{
                     headerTitle: 'Editar',
                     headerRight: ()=> logoutButton,
@@ -160,7 +160,7 @@ const AppRoutes = _ => {
             />
             <AppStack.Screen 
                 name="ThirdEdit" 
-                component={ThirdAdd}
+                component={ThirdEdit}
                 options={{
                     headerTitle: 'Editar',
                     headerRight: ()=> logoutButton,

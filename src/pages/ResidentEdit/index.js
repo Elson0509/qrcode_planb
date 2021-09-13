@@ -38,14 +38,12 @@ const ResidentEdit = props => {
     //fetching data from the unit
     useEffect(()=>{
       const data = dummyEditUsers.data
-      //console.log('dummyEditUsers', data)
       const unit = {}
       unit.number = props.route.params.id.unidade
       const bloco = {}
       bloco.bloco = props.route.params.id.bloco
       setSelectedUnit(unit)
       setSelectedBloco(bloco)
-      console.log('data.residents',data.residents)
       setResidents(data.residents)
       setVehicles(data.veiculos)
       setLoading(false)
