@@ -37,6 +37,11 @@ const isNumber = c => {
     return c >= '0' && c <= '9'
 }
 
+export const isUUID = uuid => {
+    const resp = uuid.match('^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$');
+    return resp !== null
+}
+
 export const isBrazilLicensePlateNewModel = plate =>{
     if(plate.length != 7)
         return false

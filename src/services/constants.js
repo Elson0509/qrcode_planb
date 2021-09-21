@@ -3,29 +3,29 @@ import Toast from 'react-native-root-toast';
 export const borderTextInputWidth = 3
 
 export const QR_CODE_PREFIX = 'epw:'
+export const TYPE_DATA_QRCODE = 256
 
 export const is_autorized_backgroundColor = '#00B924'
 export const is_not_autorized_backgroundColor = '#FF726F'
 import Constants from 'expo-constants';
 const { manifest } = Constants
 
+export const apiurlPrefix = 'http://'
+//export const apiurl = `purple-goose-66.loca.lt`
+
 export const apiurl = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts.dev
   ? manifest.debuggerHost.split(`:`).shift().concat(`:3333`)
-  : `api.example.com`;
+  : `api.example.com`;//*/
 
 export const genericProfilePic = require('../../assets/pics/generic-profile.png')
 
 export const menuOptions = [
     { menuName: "Adicionar", icon: 'plus-square', key: 'plus', screen: 'Add' },
-    //{ menuName: "Apagar", icon: 'trash-alt', key: 'del', screen: 'Del' },
-    //{ menuName: "Editar", icon: 'edit', key: 'edit', screen: 'Edit' },
     { menuName: "Listar", icon: 'list-alt', key: 'list', screen: 'List' },
 ]
 
 // export const menuOptions = [
 //     { menuName: "Adicionar", icon: 'user-plus', key: 'plus', screen: 'Add' },
-//     { menuName: "Apagar", icon: 'user-minus', key: 'del', screen: 'Del' },
-//     { menuName: "Editar", icon: 'user-edit', key: 'edit', screen: 'Edit' },
 //     { menuName: "Listar", icon: 'users', key: 'list', screen: 'List' },
 // ]
 

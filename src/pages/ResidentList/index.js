@@ -26,6 +26,10 @@ const ResidentList = props => {
 
     useEffect(()=>{
       fetchUsers()
+      const willFocusSubscription = props.navigation.addListener('focus', ()=> {
+        fetchUsers()
+      })
+      return willFocusSubscription
     }, [])
 
     const fetchUsers = _ => {

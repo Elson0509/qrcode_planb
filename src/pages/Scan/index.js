@@ -20,16 +20,13 @@ import { StyleSheet,
 
 
 const Scan = (props) => {
-    const [modalVisible, setModalVisible] = useState(true)
-    const [modalUserVisible, setModalUserVisible] = useState(false)
     const [uid, setUid] = useState(0)
     const [type, setType] = useState(0)
 
-    const onCodeScanned = ({ type, data }) => {
-        setUid(data)
-        setType(type)
-        setModalVisible(false)
-        setModalUserVisible(true)
+    const onCodeScanned = ( typeInput, dataInput ) => {
+        setUid(dataInput)
+        setType(typeInput)
+        props.navigation.navigate('Scanned', {dataInput, typeInput})
     }
     
     const rescan = () => {
@@ -44,29 +41,15 @@ const Scan = (props) => {
     
     return (
     <View style={[styles.container]}>
-        <Modal
-            visible={modalVisible}
-            transparent={true}
-            animationType="fade"
-            onRequestClose={()=> setModalVisible(false)}
-            >
-            <View style={styles.modal}>
-                <Scanner onCodeScanned={onCodeScanned}/>
-                <FooterButtons
-                    backgroundColor={props.route.params.backgroundColor}
-                    title2="Cancelar"
-                    action2={cancelHandler}
-                />
-
-            </View>
-        </Modal>
-        <ModalUser 
-            backgroundColor={props.route.params.backgroundColor}
-            modalVisible={modalUserVisible} 
-            rescan={rescan} 
-            navigation={props.navigation} 
-            uid={uid} 
-            type={type}/>
+        <View style={styles.modal}>
+            <Scanner onCodeScanned={onCodeScanned}/>
+            <FooterButtons
+                //backgroundColor={props.route.params.backgroundColor}
+                backgroundColor='black'
+                title2="Cancelar"
+                action2={cancelHandler}
+            />
+        </View>
     </View>
     );
 };
@@ -77,7 +60,8 @@ const styles = StyleSheet.create({
       backgroundColor: 'red',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: Constants.backgroundColors['Scan'],
+      //backgroundColor: Constants.backgroundColors['Scan'],
+      backgroundColor: 'black',
     },
     modal: {
       flex: 1,

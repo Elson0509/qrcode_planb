@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Text, View, StyleSheet, Button } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
-export default function Scanner(props) {
+export default Scanner = props =>{
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
 
@@ -14,9 +14,8 @@ export default function Scanner(props) {
   }, []);
 
   const handleBarCodeScanned = ({ type, data }) => {
-    setScanned(true);
-    props.onCodeScanned( {type, data} )
-    //alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    //setScanned(true);
+    props.onCodeScanned( type, data )
   };
 
   if (hasPermission === null) {
@@ -29,15 +28,11 @@ export default function Scanner(props) {
   return (
     <View style={{
         flex: 1,
-
-        //height: '100%',
-        //width: '100%',
-        //flexDirection: "column",
-        //justifyContent: 'flex-end'
     }}>
       <BarCodeScanner
         onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
+        //style={StyleSheet.absoluteFillObject}
+        style={{height: 500, width: 360, marginTop: 100}}
       />
       {scanned && <Button title={'Repetir escaneamento'} onPress={() => setScanned(false)} />}
     </View>

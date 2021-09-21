@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, Modal, FlatList, TouchableOpacity, Image, ScrollView, TouchableHighlight, Pressable } from 'react-native';
 
 const ModalSelectUnit = (props) => {
+  console.log(props)
   return (
       <Modal
           visible={props.modalVisible}
@@ -13,7 +14,7 @@ const ModalSelectUnit = (props) => {
               <View style={styles.modalView}>
                   <Text style={styles.modalTitle}>Selecione a unidade:</Text>
                   {props.bloco && <FlatList
-                    data={props.bloco.units}
+                    data={props.bloco.Units}
                     renderItem={(obj)=>{
                       return <TouchableOpacity 
                                 key={obj.item.id} 

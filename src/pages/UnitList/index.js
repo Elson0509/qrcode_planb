@@ -46,7 +46,7 @@ const UnitList = props => {
     const unitList = _ => {
       const units = []
       blocos.forEach(elbloco=> {
-        elbloco.units.forEach(elunit=> {
+        elbloco.Units.forEach(elunit=> {
           const unit = {}
           unit.bloco_id = elbloco.id
           unit.bloco_name = elbloco.name

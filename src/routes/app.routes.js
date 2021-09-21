@@ -24,6 +24,7 @@ import ResidentAdd from '../pages/ResidentAdd'
 import ResidentList from '../pages/ResidentList'
 import ResidentEdit from '../pages/ResidentEdit'
 import * as Constants from '../services/constants'
+import Scanned from '../pages/Scanned'
 
 const AppStack = createStackNavigator()
 
@@ -59,6 +60,13 @@ const AppRoutes = _ => {
             <AppStack.Screen 
                 name="Scan" 
                 component={Scan}
+                options={{
+                    headerShown: false
+                }}
+            />
+            <AppStack.Screen 
+                name="Scanned" 
+                component={Scanned}
                 options={{
                     headerShown: false
                 }}
