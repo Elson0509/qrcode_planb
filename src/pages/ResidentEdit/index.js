@@ -16,8 +16,6 @@ import SelectBlocoGroup from '../../components/SelectBlocoGroup';
 import ModalSelectBloco from '../../components/ModalSelectBloco';
 import ModalSelectUnit from '../../components/ModalSelectUnit';
 import FooterButtons from '../../components/FooterButtons';
-import dummyBlocos from '../../../dummyDataBlocos.json'
-import dummyEditUsers from '../../../dummyEditUsers.json'
 
 const ResidentEdit = props => {
     const [modal, setModal] = useState(false)
@@ -37,7 +35,6 @@ const ResidentEdit = props => {
 
     //fetching data from the unit
     useEffect(()=>{
-      const data = dummyEditUsers.data
       const unit = {}
       unit.number = props.route.params.id.unidade
       const bloco = {}

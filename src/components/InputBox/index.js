@@ -22,8 +22,10 @@ const InputBox = (props) => {
                 ]}
                 placeholder={props.placeholder || ''}
                 autoCapitalize={props.autoCapitalize || 'sentences'}
+                //characters || words || sentences || none
                 autoFocus={ props.autoFocus || false}
                 keyboardType={props.keyboard || "default"}
+                //default || number-pad || decimal-pad || numeric || email-address || phone-pad
                 value={props.value.toString()}
                 autoCorrect={props.autoCorrect || true}
                 onChangeText={props.changed}

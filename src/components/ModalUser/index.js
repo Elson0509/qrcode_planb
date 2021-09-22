@@ -1,7 +1,5 @@
 import React, {useState, useEffect, Fragment} from 'react';
 import { StyleSheet, Text, View, Modal, Button, Image, ScrollView } from 'react-native';
-import dummyUsers from '../../../dummyData.json'
-import dummyResidents from '../../../dummyDataResidents.json'
 import Placa from '../Placa';
 import Icon from '../Icon'
 import FooterButtons from '../FooterButtons';

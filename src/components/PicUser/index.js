@@ -6,7 +6,6 @@ import {
 
 const PicUser = (props) => {
     const [picUri, setPicUri] = useState({uri: `${Constants.apiurlPrefix}${Constants.apiurl}/img/${props.user.id}.jpg`})
-    //const [picUri, setPicUri] = useState({uri: `https://neat-rattlesnake-34.loca.lt/img/d0fdc700-c53e-4849-8c69-a52f4daa9357.jpg`})
 
     console.log(`${Constants.apiurlPrefix}${Constants.apiurl}/img/${props.user.id}.jpg`)
 

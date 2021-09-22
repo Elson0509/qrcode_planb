@@ -14,16 +14,16 @@ const ActionButtons = (props) => {
     const IconSize = 28
     return (
         <View style={{flexDirection: props.flexDirection || 'row', justifyContent: 'center'}} >
-            <TouchableOpacity style={{marginRight: 15, marginBottom: 0}}
+            {props.noEditButton ? null : <TouchableOpacity style={{marginRight: 15, marginBottom: 0}}
                 onPress={props.action1}
             >
                 <Icon name="edit" size={IconSize} color='#385165'/>
-            </TouchableOpacity>
-            <TouchableOpacity
+            </TouchableOpacity>}
+            {props.noDeleteButton ? null : <TouchableOpacity
                 onPress={props.action2}
             >
                 <Icon name="window-close" size={IconSize} color='red'/>
-            </TouchableOpacity>
+            </TouchableOpacity>}
         </View>
     );
 };

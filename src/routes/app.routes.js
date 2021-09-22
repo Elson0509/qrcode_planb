@@ -22,7 +22,9 @@ import UnitAdd from '../pages/UnitAdd'
 import UnitList from '../pages/UnitList'
 import ResidentAdd from '../pages/ResidentAdd'
 import ResidentList from '../pages/ResidentList'
-import ResidentEdit from '../pages/ResidentEdit'
+import Guards from '../pages/Guards';
+import GuardAdd from '../pages/GuardAdd'
+import GuardList from '../pages/GuardList';
 import * as Constants from '../services/constants'
 import Scanned from '../pages/Scanned'
 
@@ -32,7 +34,6 @@ const AppRoutes = _ => {
     const {signOut} = useAuth()
 
     const logoutButton = <Button onPress={()=> signOut()} title='Logout' color='#444' accessibilityLabel="sair" />
-     
 
     return (
         <AppStack.Navigator>
@@ -76,6 +77,39 @@ const AppRoutes = _ => {
                 component={CameraPic}
                 options={{
                     headerShown: false
+                }}
+            />
+            <AppStack.Screen 
+                name="Guards" 
+                component={Guards}
+                options={{
+                    headerTitle: 'Guardas',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Guards"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="GuardAdd" 
+                component={GuardAdd}
+                options={{
+                    headerTitle: 'Adicionar',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Guards"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="GuardList" 
+                component={GuardList}
+                options={{
+                    headerTitle: 'Listar',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Guards"]
+                    }
                 }}
             />
             <AppStack.Screen 

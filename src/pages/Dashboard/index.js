@@ -1,15 +1,9 @@
 import React from 'react';
 import { StyleSheet,
-    TextInput,
     View,
-    KeyboardAvoidingView,
-    Image,
     TouchableOpacity,
-    ImageBackground,
     Text,
     FlatList,
-    Animated,
-    Keyboard,
     } from 'react-native';
 import * as Constants from '../../services/constants'
 import { useAuth } from '../../contexts/auth';
@@ -27,6 +21,7 @@ const Dashboard = (props) => {
     const menuOptionsResidents = { menuName: "Moradores", icon: 'house-user', key: 'resident', screen: 'Residents', backgroundColor: Constants.backgroundColors['Residents'] }
     const menuOptionsVisitor = { menuName: "Visitantes", icon: 'user-friends', key: 'visitor', screen: 'Visitors', backgroundColor: Constants.backgroundColors['Visitors'] }
     const menuOptionsService = { menuName: "Terceirizados", icon: 'people-carry', key: 'service', screen: 'Thirds', backgroundColor: Constants.backgroundColors['Thirds'] } //permissionário
+    const menuOptionsGuard = { menuName: "Guardas", icon: 'user-shield', key: 'guard', screen: 'Guards', backgroundColor: Constants.backgroundColors['Guards'] }
     const menuOptionsInfo = { menuName: "Informações", icon: 'info-circle', key: 'info', screen: 'Info', backgroundColor: Constants.backgroundColors['Info'] }
 
     const profiles = []
@@ -34,7 +29,7 @@ const Dashboard = (props) => {
     profiles[3]=[]
     //Segurança
     profiles[2].push(menuOptionsQRCode, menuOptionsScan)
-    profiles[3].push(menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsInfo)
+    profiles[3].push(menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsGuard, menuOptionsInfo)
 
     if(user.user_kind==1){
         return <MyQRCode user={user}/>

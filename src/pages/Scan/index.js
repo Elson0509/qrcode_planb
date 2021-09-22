@@ -1,21 +1,9 @@
 import React, {useState} from 'react';
-import ModalUser from '../../components/ModalUser';
 import Scanner from '../../components/Scanner';
 import FooterButtons from '../../components/FooterButtons';
-import * as Constants from '../../services/constants'
 
 import { StyleSheet,
-    TextInput,
     View,
-    KeyboardAvoidingView,
-    Image,
-    Modal,
-    Button,
-    TouchableOpacity,
-    Text,
-    FlatList,
-    Animated,
-    Keyboard,
     } from 'react-native';
 
 
@@ -60,7 +48,6 @@ const styles = StyleSheet.create({
       backgroundColor: 'red',
       alignItems: 'center',
       justifyContent: 'center',
-      //backgroundColor: Constants.backgroundColors['Scan'],
       backgroundColor: 'black',
     },
     modal: {

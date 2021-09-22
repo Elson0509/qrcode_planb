@@ -166,7 +166,7 @@ const styles = StyleSheet.create({
     },
     buttonAddphotoIsClicked:{
         borderRadius: 8,
-        backgroundColor: '#90EE90',
+        backgroundColor: Constants.backgroundLightColors['Residents'],
         marginTop: 15,
         padding: 15,
         alignItems: 'center',
