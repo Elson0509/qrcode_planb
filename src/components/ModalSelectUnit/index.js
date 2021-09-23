@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Text, View, Modal, FlatList, TouchableOpacity, Image, ScrollView, TouchableHighlight, Pressable } from 'react-native';
 
 const ModalSelectUnit = (props) => {
-  console.log(props)
   return (
       <Modal
           visible={props.modalVisible}

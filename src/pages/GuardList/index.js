@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {
     SafeAreaView,
     StyleSheet,
-    ScrollView,
     FlatList,
     RefreshControl,
     ActivityIndicator,
@@ -11,7 +10,6 @@ import {
   } from 'react-native';
 import ActionButtons from '../../components/ActionButtons';
 import * as Constants from '../../services/constants'
-import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage';
 import api from '../../services/api'
 import Toast from 'react-native-root-toast';

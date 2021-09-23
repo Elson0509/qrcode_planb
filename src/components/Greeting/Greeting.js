@@ -13,9 +13,9 @@ import * as Utils from '../../services/util'
 const Greeting = (props) => {
     return (
         <View style={styles.container}>
-            <TouchableHighlight style={styles.shield} on>
+            {/* <TouchableHighlight style={styles.shield} on>
                 <Icon name="shield-alt" color='white' size={30}/>
-            </TouchableHighlight>
+            </TouchableHighlight> */}
             <Text style={styles.greeting}>{Utils.saudacaoHorario(props.user?.name)}</Text>
         </View>
     );

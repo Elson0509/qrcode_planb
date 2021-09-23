@@ -3,14 +3,13 @@ import Constants from 'expo-constants';
 
 const { manifest } = Constants
 
-export const apiurlPrefix = 'http://'
-//export const apiurl = `purple-goose-66.loca.lt`
+export const apiurlPrefix = 'https://'
+export const apiurl = `tame-squid-18.loca.lt`
 //lt --port 3000
 
-export const apiurl = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts.dev
+/*export const apiurl = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts.dev
   ? manifest.debuggerHost.split(`:`).shift().concat(`:3333`)
   : `api.example.com`;//*/
-
 
 export const borderTextInputWidth = 3
 
@@ -43,7 +42,9 @@ export const USER_KIND = {
 }
 
 export const backgroundColors = {
+    "Cars":'#00FFFF',
     "Dashboard":'#00AAEE',
+    "Events":'#FF69B4',
     "Guards":'#CCCC00',
     "Info":'#F699CD',
     "MyQRCode":'#C1C1C1',
@@ -52,8 +53,12 @@ export const backgroundColors = {
     "Thirds":'#FF7F7F',
     "Units":'#DEB887',
     "Visitors":'#9E8EEA',
+    "Survey": '#FFFFFF'
 }
+
 export const backgroundLightColors = {
+    "Cars":'#8AFFFF',
+    "Events":'#FFB6C1',
     "Guards":'#FFFF99',
     "Info":'#FEC5E5',
     "MyQRCode":'#EEEEEE',
@@ -63,8 +68,11 @@ export const backgroundLightColors = {
     "Units":'#FFEBCD',
     "Visitors":'#CFBFFF',
 }
+
 export const backgroundDarkColors = {
+    "Cars":'#007575',
     "Dashboard":'#0088CC',
+    "Events":'#FF1493',
     "Guards":'#999900',
     "Info":'#FD5DA8',
     "MyQRCode":'#AAAAAA',

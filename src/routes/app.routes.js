@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import Dashboard from '../pages/Dashboard'
 import { StyleSheet,
     Button
@@ -6,25 +6,26 @@ import { StyleSheet,
 import { createStackNavigator } from '@react-navigation/stack'
 import { useAuth } from '../contexts/auth'
 import MyQRCode from '../pages/MyQRCode';
-import Scan from '../pages/Scan';
+import Scan from '../pages/Scan'
 import CameraPic from '../pages/CameraPic'
 import Residents from '../pages/Residents'
 import Visitors from '../pages/Visitors'
-import VisitorAdd from '../pages/VisitorAdd';
-import VisitorList from '../pages/VisitorList';
-import VisitorEdit from '../pages/VisitorEdit';
+import VisitorAdd from '../pages/VisitorAdd'
+import VisitorList from '../pages/VisitorList'
+import VisitorEdit from '../pages/VisitorEdit'
 import Thirds from '../pages/Thirds'
-import ThirdAdd from '../pages/ThirdAdd';
-import ThirdList from '../pages/ThirdList';
-import ThirdEdit from '../pages/ThirdEdit';
+import ThirdAdd from '../pages/ThirdAdd'
+import ThirdList from '../pages/ThirdList'
+import ThirdEdit from '../pages/ThirdEdit'
 import Units from '../pages/Units'
 import UnitAdd from '../pages/UnitAdd'
 import UnitList from '../pages/UnitList'
 import ResidentAdd from '../pages/ResidentAdd'
 import ResidentList from '../pages/ResidentList'
-import Guards from '../pages/Guards';
+import ResidentSearch from '../pages/ResidentSearch'
+import Guards from '../pages/Guards'
 import GuardAdd from '../pages/GuardAdd'
-import GuardList from '../pages/GuardList';
+import GuardList from '../pages/GuardList'
 import * as Constants from '../services/constants'
 import Scanned from '../pages/Scanned'
 
@@ -109,17 +110,6 @@ const AppRoutes = _ => {
                     headerRight: ()=> logoutButton,
                     headerStyle:{
                         backgroundColor: Constants.backgroundDarkColors["Guards"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="Residents" 
-                component={Residents}
-                options={{
-                    headerTitle: 'Moradores',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Residents"]
                     }
                 }}
             />
@@ -246,6 +236,17 @@ const AppRoutes = _ => {
                 }}
             />
             <AppStack.Screen 
+                name="Residents" 
+                component={Residents}
+                options={{
+                    headerTitle: 'Moradores',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Residents"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
                 name="ResidentAdd" 
                 component={ResidentAdd}
                 options={{
@@ -278,7 +279,19 @@ const AppRoutes = _ => {
                     }
                 }}
             />
+            <AppStack.Screen 
+                name="ResidentSearch" 
+                component={ResidentSearch}
+                options={{
+                    headerTitle: 'Pesquisar',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Residents"]
+                    }
+                }}
+            />
         </AppStack.Navigator>
+        
     )
 }
 

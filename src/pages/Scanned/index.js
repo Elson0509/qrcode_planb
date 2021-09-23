@@ -56,7 +56,6 @@ const Scanned = (props) => {
                     setbackgroundColorScreen(Constants.backgroundColors['Thirds'])
                     setUserType('Terceirizados')
                 }
-                //console.log(res.data)
                 setLoading(false)
             })
             .catch(err=>{

@@ -8,7 +8,6 @@ import { StyleSheet,
 import * as Constants from '../../services/constants'
 import { useAuth } from '../../contexts/auth';
 import MyQRCode from '../MyQRCode';
-import * as utils from '../../services/util'
 import Icon from '../../components/Icon';
 import Greeting from '../../components/Greeting/Greeting';
 
@@ -22,18 +21,24 @@ const Dashboard = (props) => {
     const menuOptionsVisitor = { menuName: "Visitantes", icon: 'user-friends', key: 'visitor', screen: 'Visitors', backgroundColor: Constants.backgroundColors['Visitors'] }
     const menuOptionsService = { menuName: "Terceirizados", icon: 'people-carry', key: 'service', screen: 'Thirds', backgroundColor: Constants.backgroundColors['Thirds'] } //permissionário
     const menuOptionsGuard = { menuName: "Guardas", icon: 'user-shield', key: 'guard', screen: 'Guards', backgroundColor: Constants.backgroundColors['Guards'] }
+    const menuOptionsCar = { menuName: "Pernoite", icon: 'car', key: 'car', screen: 'Car', backgroundColor: Constants.backgroundColors['Cars'] }
+    const menuOptionsEventResident = { menuName: "Ocorrências", icon: 'exclamation', key: 'event', screen: 'Events', backgroundColor: Constants.backgroundColors['Events'] }
+    const menuOptionsEventGuard = { menuName: "Ronda", icon: 'exclamation', key: 'event', screen: 'Events', backgroundColor: Constants.backgroundColors['Events'] }
+    const menuOptionsSurvey = { menuName: "Avaliação", icon: 'smile', key: 'pesquisa', screen: 'Survey', backgroundColor: Constants.backgroundColors['Survey'] }
     const menuOptionsInfo = { menuName: "Informações", icon: 'info-circle', key: 'info', screen: 'Info', backgroundColor: Constants.backgroundColors['Info'] }
 
     const profiles = []
-    profiles[2]=[]
-    profiles[3]=[]
-    //Segurança
-    profiles[2].push(menuOptionsQRCode, menuOptionsScan)
-    profiles[3].push(menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsGuard, menuOptionsInfo)
+    profiles[Constants.USER_KIND['RESIDENT']]=[]
+    profiles[Constants.USER_KIND['GUARD']]=[]
+    profiles[Constants.USER_KIND['SUPERINTENDENT']]=[]
+    
+    profiles[Constants.USER_KIND['RESIDENT']]=[menuOptionsQRCode, menuOptionsEventResident, menuOptionsSurvey]
+    profiles[Constants.USER_KIND['GUARD']].push(menuOptionsQRCode, menuOptionsScan, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsCar, menuOptionsEventGuard)
+    profiles[Constants.USER_KIND['SUPERINTENDENT']].push(menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsGuard, menuOptionsCar, menuOptionsEventGuard, menuOptionsSurvey)
 
-    if(user.user_kind==1){
-        return <MyQRCode user={user}/>
-    }
+    // if(user.user_kind==1){
+    //     return <MyQRCode user={user}/>
+    // }
 
     return (
         <View style={styles.container}>
@@ -44,10 +49,12 @@ const Dashboard = (props) => {
                 data={profiles[user.user_kind]}
                 numColumns={2}
                 renderItem={(obj)=>{
-                    return <TouchableOpacity style={[styles.menuItem, {backgroundColor: obj.item.backgroundColor }]} onPress={()=> {props.navigation.navigate(obj.item.screen, {user: user, backgroundColor: obj.item.backgroundColor})}}>
-                               <Icon name={obj.item.icon} size={55}/>
-                               <Text style={styles.menuItemText}>{obj.item.menuName}</Text>
-                           </TouchableOpacity>
+                    return (
+                        <TouchableOpacity style={[styles.menuItem, {backgroundColor: obj.item.backgroundColor }]} onPress={()=> {props.navigation.navigate(obj.item.screen, {user: user, backgroundColor: obj.item.backgroundColor})}}>
+                            <Icon name={obj.item.icon} size={55}/>
+                            <Text style={styles.menuItemText}>{obj.item.menuName}</Text>
+                        </TouchableOpacity>
+                    )
                 }}
             />
         </View>
@@ -59,23 +66,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         backgroundColor: Constants.backgroundColors['Dashboard'],
-    },
-    greeting: {
-        fontFamily: 'monospace',
-        fontWeight: '700',
-        color: 'white',
-        letterSpacing: 1,
-        fontSize: 20,
-        marginTop: 10,
-        borderBottomColor: '#ccc',
-        borderBottomWidth: 1,
-        marginBottom: 30
-    },
-    menuContainer:{
-        flex: 1,
-        flexDirection: 'row',
-        flexWrap: 'wrap',
-        justifyContent: 'space-between'
+        paddingBottom: 10
     },
     menuItem:{
         width: '45%',

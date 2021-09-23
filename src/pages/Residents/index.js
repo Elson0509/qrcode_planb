@@ -1,18 +1,12 @@
 import React from 'react';
 import { StyleSheet,
-    TextInput,
     View,
-    KeyboardAvoidingView,
-    Image,
     TouchableOpacity,
     Text,
     FlatList,
-    Animated,
-    Keyboard,
     } from 'react-native';
 
 import { useAuth } from '../../contexts/auth';
-import * as utils from '../../services/util'
 import Icon from '../../components/Icon';
 import * as Constants from '../../services/constants'
 import Greeting from '../../components/Greeting/Greeting';
@@ -20,13 +14,22 @@ import Greeting from '../../components/Greeting/Greeting';
 const Residents = (props) => {
     const {user} = useAuth()
 
+    const menuOptionsResidents = [ ]
+
+    if(user.user_kind == Constants.USER_KIND['SUPERINTENDENT']){
+        menuOptionsResidents.push({ menuName: "Adicionar", icon: 'plus-square', key: 'plus', screen: 'Add' })
+    }
+    menuOptionsResidents.push({ menuName: "Listar", icon: 'list-alt', key: 'list', screen: 'List' })
+    menuOptionsResidents.push({ menuName: "Pesquisar", icon: 'search', key: 'search', screen: 'Search' })
+        
+
     return (
         <View style={[styles.container]}>
             <Greeting
                 user={user}
             />
             <FlatList
-                data={Constants.menuOptions}
+                data={menuOptionsResidents}
                 numColumns={2}
                 renderItem={(obj)=>{
                     return <TouchableOpacity 

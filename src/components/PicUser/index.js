@@ -6,9 +6,7 @@ import {
 
 const PicUser = (props) => {
     const [picUri, setPicUri] = useState({uri: `${Constants.apiurlPrefix}${Constants.apiurl}/img/${props.user.id}.jpg`})
-
-    console.log(`${Constants.apiurlPrefix}${Constants.apiurl}/img/${props.user.id}.jpg`)
-
+   //console.log(`${Constants.apiurlPrefix}${Constants.apiurl}/img/${props.user.id}.jpg`)
     if(!!props.user.pic){
         return (
             <Image
@@ -31,7 +29,7 @@ const PicUser = (props) => {
             <Image
                 style={{width: props.width || 39, height: props.height || 52, marginRight: 5, resizeMode:'contain'}}
                 source={picUri}
-                onError={(err)=>{console.log(err.nativeEvent); {setPicUri(Constants.genericProfilePic)}}}
+                onError={(err)=>{/*console.log(err.nativeEvent); */{setPicUri(Constants.genericProfilePic)}}}
             />
         )
     }
