@@ -42,7 +42,7 @@ const ResidentSearch = props => {
         setUnits(resp.data)
       })
       .catch(err=>{
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RL1)', Constants.configToast)
+        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RS1)', Constants.configToast)
       })
       .finally(()=>{
         setLoading(false)

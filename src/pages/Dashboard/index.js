@@ -36,10 +36,6 @@ const Dashboard = (props) => {
     profiles[Constants.USER_KIND['GUARD']].push(menuOptionsQRCode, menuOptionsScan, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsCar, menuOptionsEventGuard)
     profiles[Constants.USER_KIND['SUPERINTENDENT']].push(menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsGuard, menuOptionsCar, menuOptionsEventGuard, menuOptionsSurvey)
 
-    // if(user.user_kind==1){
-    //     return <MyQRCode user={user}/>
-    // }
-
     return (
         <View style={styles.container}>
             <Greeting

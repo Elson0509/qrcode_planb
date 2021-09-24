@@ -6,6 +6,8 @@ import { StyleSheet,
 import { createStackNavigator } from '@react-navigation/stack'
 import { useAuth } from '../contexts/auth'
 import MyQRCode from '../pages/MyQRCode';
+import Car from '../pages/Car'
+import CarSearch from '../pages/CarSearch';
 import Scan from '../pages/Scan'
 import CameraPic from '../pages/CameraPic'
 import Residents from '../pages/Residents'
@@ -78,6 +80,28 @@ const AppRoutes = _ => {
                 component={CameraPic}
                 options={{
                     headerShown: false
+                }}
+            />
+            <AppStack.Screen 
+                name="Car" 
+                component={Car}
+                options={{
+                    headerTitle: 'Pernoite',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Cars"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="CarSearch" 
+                component={CarSearch}
+                options={{
+                    headerTitle: 'Pesquisar',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Cars"]
+                    }
                 }}
             />
             <AppStack.Screen 

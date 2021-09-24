@@ -3,11 +3,11 @@ import Constants from 'expo-constants';
 
 const { manifest } = Constants
 
-export const apiurlPrefix = 'https://'
-export const apiurl = `tame-squid-18.loca.lt`
+export const apiurlPrefix = 'http://'
+//export const apiurl = `tame-squid-18.loca.lt`
 //lt --port 3000
 
-/*export const apiurl = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts.dev
+export const apiurl = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts.dev
   ? manifest.debuggerHost.split(`:`).shift().concat(`:3333`)
   : `api.example.com`;//*/
 
@@ -16,6 +16,7 @@ export const borderTextInputWidth = 3
 //scan qr code
 export const QR_CODE_PREFIX = 'epw:'
 export const TYPE_DATA_QRCODE = 256
+export const MAX_COMMENT_SIZE = 500
 export const is_autorized_backgroundColor = '#00B924'
 export const is_not_autorized_backgroundColor = '#FF726F'
 
@@ -42,7 +43,7 @@ export const USER_KIND = {
 }
 
 export const backgroundColors = {
-    "Cars":'#00FFFF',
+    "Cars":'#00CCEE',
     "Dashboard":'#00AAEE',
     "Events":'#FF69B4',
     "Guards":'#CCCC00',
@@ -70,7 +71,7 @@ export const backgroundLightColors = {
 }
 
 export const backgroundDarkColors = {
-    "Cars":'#007575',
+    "Cars":'#00A2A2',
     "Dashboard":'#0088CC',
     "Events":'#FF1493',
     "Guards":'#999900',
