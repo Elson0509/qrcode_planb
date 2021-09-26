@@ -308,7 +308,7 @@ const ResidentAdd = props => {
                 buttonPadding={15}
                 fontSize={17}
                 action1={confirmHandler}
-                action2={cancelHandler}
+                action2={props.navigation.goBack}
               />
             </View>
           }

@@ -32,13 +32,14 @@ const CameraPic = (props) => {
             props.navigation.navigate(props.route.params.screen || 'ResidentAdd', 
                 {
                     userBeingAdded, 
-                    selectedBloco: props.route.params.selectedBloco, 
-                    selectedUnit: props.route.params.selectedUnit, 
-                    vehicles: props.route.params.vehicles,
-                    user: props.route.params.user,
-                    selectedDateInit: props.route.params.selectedDateInit,
-                    selectedDateEnd: props.route.params.selectedDateEnd,
-                    screen: props.route.params.screen
+                    selectedBloco: props.route?.params?.selectedBloco, 
+                    selectedUnit: props.route?.params?.selectedUnit, 
+                    vehicles: props.route?.params?.vehicles,
+                    user: props.route.params?.user,
+                    selectedDateInit: props.route.params?.selectedDateInit,
+                    selectedDateEnd: props.route.params?.selectedDateEnd,
+                    screen: props.route.params?.screen,
+                    pic: result.uri
                 }
             )
         }

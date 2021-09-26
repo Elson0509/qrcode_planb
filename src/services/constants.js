@@ -4,7 +4,7 @@ import Constants from 'expo-constants';
 const { manifest } = Constants
 
 export const apiurlPrefix = 'http://'
-//export const apiurl = `tame-squid-18.loca.lt`
+//export const apiurl = `weak-lizard-7.loca.lt`
 //lt --port 3000
 
 export const apiurl = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts.dev
