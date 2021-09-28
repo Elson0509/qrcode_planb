@@ -166,7 +166,7 @@ const ResidentList = props => {
                                   <View>
                                     <PicUser user={res}/>
                                   </View>
-                                  <View>
+                                  <View style={{maxWidth: 250}}>
                                     <Text style={{fontSize: 16, marginLeft: 7, fontWeight: 'bold'}}>{res.name}</Text>
                                     {!!res.email && <Text style={{fontSize: 16, marginLeft: 7}}>Email: {res.email}</Text>}
                                     {!!res.company && <Text style={{fontSize: 16, marginLeft: 7}}>Empresa: {res.company}</Text>}

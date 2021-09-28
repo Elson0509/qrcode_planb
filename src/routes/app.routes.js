@@ -8,6 +8,7 @@ import { useAuth } from '../contexts/auth'
 import MyQRCode from '../pages/MyQRCode';
 import Car from '../pages/Car'
 import CarSearch from '../pages/CarSearch';
+import CarList from '../pages/CarList';
 import Scan from '../pages/Scan'
 import CameraPic from '../pages/CameraPic'
 import Residents from '../pages/Residents'
@@ -87,6 +88,17 @@ const AppRoutes = _ => {
                 component={Car}
                 options={{
                     headerTitle: 'Pernoite',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Cars"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="CarList" 
+                component={CarList}
+                options={{
+                    headerTitle: 'Listar',
                     headerRight: ()=> logoutButton,
                     headerStyle:{
                         backgroundColor: Constants.backgroundDarkColors["Cars"]

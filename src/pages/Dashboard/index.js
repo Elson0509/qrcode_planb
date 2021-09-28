@@ -21,20 +21,17 @@ const Dashboard = (props) => {
     const menuOptionsVisitor = { menuName: "Visitantes", icon: 'user-friends', key: 'visitor', screen: 'Visitors', backgroundColor: Constants.backgroundColors['Visitors'] }
     const menuOptionsService = { menuName: "Terceirizados", icon: 'people-carry', key: 'service', screen: 'Thirds', backgroundColor: Constants.backgroundColors['Thirds'] } //permissionário
     const menuOptionsGuard = { menuName: "Guardas", icon: 'user-shield', key: 'guard', screen: 'Guards', backgroundColor: Constants.backgroundColors['Guards'] }
-    const menuOptionsCar = { menuName: "Pernoite", icon: 'car', key: 'car', screen: 'Car', backgroundColor: Constants.backgroundColors['Cars'] }
+    const menuOptionsCarSuperIntendent = { menuName: "Pernoite", icon: 'car', key: 'car', screen: 'Car', backgroundColor: Constants.backgroundColors['Cars'] }
+    const menuOptionsCarGuard = { menuName: "Pernoite", icon: 'car', key: 'car', screen: 'CarSearch', backgroundColor: Constants.backgroundColors['Cars'] }
     const menuOptionsEventResident = { menuName: "Ocorrências", icon: 'exclamation', key: 'event', screen: 'Events', backgroundColor: Constants.backgroundColors['Events'] }
     const menuOptionsEventGuard = { menuName: "Ronda", icon: 'exclamation', key: 'event', screen: 'Events', backgroundColor: Constants.backgroundColors['Events'] }
     const menuOptionsSurvey = { menuName: "Avaliação", icon: 'smile', key: 'pesquisa', screen: 'Survey', backgroundColor: Constants.backgroundColors['Survey'] }
     const menuOptionsInfo = { menuName: "Informações", icon: 'info-circle', key: 'info', screen: 'Info', backgroundColor: Constants.backgroundColors['Info'] }
 
     const profiles = []
-    profiles[Constants.USER_KIND['RESIDENT']]=[]
-    profiles[Constants.USER_KIND['GUARD']]=[]
-    profiles[Constants.USER_KIND['SUPERINTENDENT']]=[]
-    
     profiles[Constants.USER_KIND['RESIDENT']]=[menuOptionsQRCode, menuOptionsEventResident, menuOptionsSurvey]
-    profiles[Constants.USER_KIND['GUARD']].push(menuOptionsQRCode, menuOptionsScan, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsCar, menuOptionsEventGuard)
-    profiles[Constants.USER_KIND['SUPERINTENDENT']].push(menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsGuard, menuOptionsCar, menuOptionsEventGuard, menuOptionsSurvey)
+    profiles[Constants.USER_KIND['GUARD']]=[menuOptionsQRCode, menuOptionsScan, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsCarGuard, menuOptionsEventGuard]
+    profiles[Constants.USER_KIND['SUPERINTENDENT']]=[menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsGuard, menuOptionsCarSuperIntendent, menuOptionsEventGuard, menuOptionsSurvey]
 
     return (
         <View style={styles.container}>

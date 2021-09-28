@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Modal, Button, Image, ScrollView, TouchableHighlight, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Modal, Pressable } from 'react-native';
 
 const ModalMessage = (props) => {
     return (

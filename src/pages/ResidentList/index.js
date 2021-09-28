@@ -151,7 +151,7 @@ const ResidentList = props => {
                             {
                               obj.item.residents.map((res, ind)=>{
                                 return (
-                                  <View key={res.id} style={{flexDirection: 'row', paddingBottom:3, marginBottom: 5, borderBottomWidth: 1, borderColor: Constants.backgroundDarkColors["Residents"]}}>
+                                  <View key={res.id} style={{flexDirection: 'row', paddingBottom:3, marginBottom: 5, maxWidth: 250, borderBottomWidth: 1, borderColor: Constants.backgroundDarkColors["Residents"]}}>
                                     <View>
                                       <PicUser user={res}/>
                                     </View>

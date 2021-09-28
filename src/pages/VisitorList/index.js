@@ -166,7 +166,7 @@ const ResidentList = props => {
                                   <View>
                                     <PicUser user={res}/>
                                   </View>
-                                  <View>
+                                  <View style={{maxWidth: 250}}>
                                     <Text style={{fontSize: 16, marginLeft: 7, fontWeight: 'bold'}}>{res.name}</Text>
                                     {!!res.email && <Text style={{fontSize: 16, marginLeft: 7}}>Email: {res.email}</Text>}
                                     {!!res.initial_date && <Text style={{fontSize: 16, marginLeft: 7}}>Início: {Utils.printDate(new Date(res.initial_date))}</Text>}

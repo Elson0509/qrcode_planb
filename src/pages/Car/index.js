@@ -17,13 +17,7 @@ const Car = (props) => {
     const menuOptionsCars = [
         { menuName: "Pesquisar", icon: 'search', key: 'search', screen: 'Search' },
         { menuName: "Listar", icon: 'list-alt', key: 'list', screen: 'List' }
-     ]
-
-    if(user.user_kind == Constants.USER_KIND['GUARD']){
-        props.navigation.navigate('CarSreach')
-    }
-    
-       
+    ]
 
     return (
         <View style={[styles.container]}>
