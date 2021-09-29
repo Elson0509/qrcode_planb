@@ -109,8 +109,8 @@ const Scanned = (props) => {
                     
                     <View style={{alignItems:'center', marginTop: 10}}>
                         {!dataFetched.Vehicles.length && <Text style={{textDecorationLine: 'underline', fontSize: 15,}}>Não há veículos cadastrados.</Text>}
-                        {dataFetched.Vehicles.length && <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 'bold', marginBottom: 0, letterSpacing: 1, textDecorationLine: 'underline'}}>Veículos cadastrados</Text>}
-                        {dataFetched.Vehicles.length && 
+                        {!!dataFetched.Vehicles.length && <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 'bold', marginBottom: 0, letterSpacing: 1, textDecorationLine: 'underline'}}>Veículos cadastrados</Text>}
+                        {!!dataFetched.Vehicles.length && 
                             dataFetched.Vehicles.map((el, ind)=>{
                                 return (
                                     <View key={ind} style={{borderBottomWidth: 1, padding: 12}}>

@@ -16,6 +16,7 @@ import ModalMessage from '../../components/ModalMessage';
 import api from '../../services/api'
 import Toast from 'react-native-root-toast';
 import PicUser from '../../components/PicUser';
+import ModalQRCode from '../../components/ModalQRCode';
 
 const ResidentList = props => {
     const [units, setUnits] = useState([])
@@ -24,6 +25,8 @@ const ResidentList = props => {
     const [message, setMessage] = useState('')
     const [unitSelected, setUnitSelected] = useState(null)
     const [refreshing, setRefreshing] = useState(false)
+    const [showModalQRCode, setShowModalQRCode] = useState(false)
+    const [unitIdModalQRCode, setUnitIdModalQRCode] = useState('')
 
     useEffect(()=>{
       fetchUsers()
@@ -38,6 +41,11 @@ const ResidentList = props => {
     beginOfDay.setMinutes(0)
     beginOfDay.setSeconds(0)
     beginOfDay.setMilliseconds(0)
+
+    const modalQRCodeHandler = id => {
+      setUnitIdModalQRCode(Constants.QR_CODE_PREFIX + id)
+      setShowModalQRCode(true)
+    }
 
     const fetchUsers = _ => {
       api.get(`api/user/condo/${props.route.params.user.condo_id}/${Constants.USER_KIND["THIRD"]}`)
@@ -152,6 +160,8 @@ const ResidentList = props => {
                           flexDirection='row'
                           action1={()=> editHandler(obj.item)}
                           action2={()=> delUnitModal(obj.item)}
+                          action3={()=> modalQRCodeHandler(obj.item.id)}
+                          qrCodeButton={true}
                         />
                       </View>
                     <View style={{justifyContent: 'space-between', flexDirection: 'column'}}>
@@ -213,6 +223,11 @@ const ResidentList = props => {
               btn1Text='Apagar'
               modalVisible={modal}
               setModalVisible={setModal}
+            />
+            <ModalQRCode
+              modalVisible={showModalQRCode}
+              setModalVisible={setShowModalQRCode}
+              value={unitIdModalQRCode}
             />
         </SafeAreaView>
       );

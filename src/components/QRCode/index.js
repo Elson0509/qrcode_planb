@@ -9,6 +9,7 @@ const index = (props) => {
             value={props.value}
             size={300}
             logo={logo}
+            quietZone={30}
             logoBackgroundColor={props.backgroundColor || '#FFFFFF'}
             backgroundColor={props.backgroundColor || '#FFFFFF'}
         />

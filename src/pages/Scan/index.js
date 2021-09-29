@@ -8,22 +8,16 @@ import { StyleSheet,
 
 
 const Scan = (props) => {
-    const [uid, setUid] = useState(0)
-    const [type, setType] = useState(0)
+    //const [uid, setUid] = useState(0)
+    //const [type, setType] = useState(0)
 
     const onCodeScanned = ( typeInput, dataInput ) => {
-        setUid(dataInput)
-        setType(typeInput)
+        //setUid(dataInput)
+        //setType(typeInput)
         props.navigation.navigate('Scanned', {dataInput, typeInput})
-    }
-    
-    const rescan = () => {
-        setModalVisible(true)
-        setModalUserVisible(false)
     }
 
     const cancelHandler = () =>{
-        setModalVisible(false)
         props.navigation.navigate('Dashboard')
     }
     
@@ -32,7 +26,6 @@ const Scan = (props) => {
         <View style={styles.modal}>
             <Scanner onCodeScanned={onCodeScanned}/>
             <FooterButtons
-                //backgroundColor={props.route.params.backgroundColor}
                 backgroundColor='black'
                 title2="Cancelar"
                 action2={cancelHandler}
