@@ -91,10 +91,11 @@ const Scanned = (props) => {
         if(dataFetched && dataFetched.unit_kind_id){
             return (
                 <View style={{backgroundColor: backgroundColorScreen, padding: 10}}>
-                    <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 'bold', marginBottom: 15, letterSpacing: 1, textDecorationLine: 'underline'}}>{userType}</Text>
+                    <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 'bold', marginBottom: 10, letterSpacing: 1, textDecorationLine: 'underline'}}>{userType}</Text>
+                    <Text style={{textAlign: 'center', fontSize: 18, marginBottom: 0}}>Autorizado por {'\n'} Bloco {dataFetched.Bloco.name} {'\n'} Unidade {dataFetched.number}</Text>
                     {dataFetched.Users.map((el, ind)=>{
                         return(
-                            <View key={el.id} style={{flexDirection: 'row', marginVertical: 5, borderBottomWidth: 1}}>
+                            <View key={el.id} style={{flexDirection: 'row', marginVertical: 5, borderWidth: 2, borderColor: '#ddd' ,marginBottom: 4}}>
                                 <View>
                                     <PicUser user={el} height={130} width={98}/>
                                 </View>

@@ -25,8 +25,6 @@ const ResidentSearch = props => {
     const [unitSelected, setUnitSelected] = useState(null)
     const [refreshing, setRefreshing] = useState(false)
     const [nameFilter, setNameFilter] = useState('')
-    const [idFilter, setIdFilter] = useState('')
-    const [plateFilter, setPlateFilter] = useState('')
 
     useEffect(()=>{
       fetchUsers()
@@ -113,23 +111,16 @@ const ResidentSearch = props => {
 
     const filterData = _ => {
       let filteredData = generateInfoUnits()
-      
+
       if(!!nameFilter){
-        filteredData = filteredData.filter(el => {
-          return el.residents.some(res => res.name.toLowerCase().indexOf(nameFilter.trim().toLowerCase()) >=0)
+        const names = filteredData.filter(el => {
+          return el.residents.some(res => res.name.toLowerCase().indexOf(nameFilter.trim().toLowerCase()) >=0 || res.identification.toLowerCase().indexOf(nameFilter.trim().toLowerCase()) >=0)
         })
-      }
+        const cars = filteredData.filter(el => {
+          return el.vehicles.some(veh => veh.plate.toLowerCase().indexOf(nameFilter.trim().toLowerCase()) >=0)
+        })
 
-      if(!!idFilter){
-        filteredData = filteredData.filter(el => {
-          return el.residents.some(res => res.identification.toLowerCase().indexOf(idFilter.trim().toLowerCase()) >=0)
-        })
-      }
-
-      if(!!plateFilter){
-        filteredData = filteredData.filter(el => {
-          return el.vehicles.some(veh => veh.plate.toLowerCase().indexOf(plateFilter.trim().toLowerCase()) >=0)
-        })
+        filteredData = names.concat(cars)
       }
       
       return filteredData
@@ -150,7 +141,7 @@ const ResidentSearch = props => {
         <SafeAreaView style={styles.body}>
           <View style={{paddingHorizontal: 10}}>
             <InputBox
-              text='Nome:'
+              text=''
               colorLabel='black'
               backgroundColor={Constants.backgroundLightColors['Residents']}
               borderColor={Constants.backgroundDarkColors['Residents']}
@@ -158,26 +149,7 @@ const ResidentSearch = props => {
               autoCapitalize='words'
               value={nameFilter}
               changed={(val=>setNameFilter(val))}
-            />
-            <InputBox
-              text='Identidade:'
-              colorLabel='black'
-              backgroundColor={Constants.backgroundLightColors['Residents']}
-              borderColor={Constants.backgroundDarkColors['Residents']}
-              colorInput={Constants.backgroundDarkColors['Residents']}
-              autoCapitalize='characters'
-              value={idFilter}
-              changed={(val=>setIdFilter(val))}
-            />
-            <InputBox
-              text='Placa:'
-              colorLabel='black'
-              backgroundColor={Constants.backgroundLightColors['Residents']}
-              borderColor={Constants.backgroundDarkColors['Residents']}
-              colorInput={Constants.backgroundDarkColors['Residents']}
-              autoCapitalize='characters'
-              value={plateFilter}
-              changed={(val=>setPlateFilter(val))}
+              placeholder='Pesquisa por nome, identidade ou placa'
             />
           </View>
           <FlatList

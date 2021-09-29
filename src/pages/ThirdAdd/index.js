@@ -17,6 +17,7 @@ import ModalSelectBloco from '../../components/ModalSelectBloco';
 import ModalSelectUnit from '../../components/ModalSelectUnit';
 import FooterButtons from '../../components/FooterButtons';
 import SelectDatesVisitorsGroup from '../../components/SelectDatesVisitorsGroup';
+import ModalQRCode from '../../components/ModalQRCode';
 import Toast from 'react-native-root-toast';
 import api from '../../services/api';
 
@@ -43,6 +44,8 @@ const ThirdAdd = props => {
     const [selectedDateInit, setSelectedDateInit] = useState('')
     const [selectedDateEnd, setSelectedDateEnd] = useState('')
     const [screen, setScreen]= useState(props.route?.params?.screen || 'ThirdAdd')
+    const [showModalQRCode, setShowModalQRCode] = useState(false)
+    const [unitIdModalQRCode, setUnitIdModalQRCode] = useState('')
 
     //fetching blocos
     useEffect(()=>{
@@ -230,6 +233,10 @@ const ThirdAdd = props => {
         setSelectedBloco(null)
         setResidents([])
         setVehicles([])
+        setLoading(false)
+        //showing QRCode
+        setUnitIdModalQRCode(Constants.QR_CODE_PREFIX + res.data.newUnit.id)
+        setShowModalQRCode(true)
       })
       .catch(err=>{
         Toast.show(err.response.data.message, Constants.configToast)
@@ -367,6 +374,12 @@ const ThirdAdd = props => {
           setModalVisible={setModalSelectUnit}
           selectUnitHandler={selectUnitHandler}
           backgroundItem={'#FFE5E5'}
+        />
+        <ModalQRCode
+          text={`QR Code dos ${"\n"}terceirizados adicionados`}
+          modalVisible={showModalQRCode}
+          setModalVisible={setShowModalQRCode}
+          value={unitIdModalQRCode}
         />
       </SafeAreaView>
     );
