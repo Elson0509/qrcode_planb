@@ -29,6 +29,8 @@ import ResidentSearch from '../pages/ResidentSearch'
 import Guards from '../pages/Guards'
 import GuardAdd from '../pages/GuardAdd'
 import GuardList from '../pages/GuardList'
+import Events from '../pages/Events'
+import EventAdd from '../pages/EventAdd'
 import * as Constants from '../services/constants'
 import Scanned from '../pages/Scanned'
 
@@ -113,6 +115,28 @@ const AppRoutes = _ => {
                     headerRight: ()=> logoutButton,
                     headerStyle:{
                         backgroundColor: Constants.backgroundDarkColors["Cars"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="EventsGuard" 
+                component={Events}
+                options={{
+                    headerTitle: 'Ronda',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Events"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="EventAdd" 
+                component={EventAdd}
+                options={{
+                    headerTitle: 'Adicionar',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Events"]
                     }
                 }}
             />
