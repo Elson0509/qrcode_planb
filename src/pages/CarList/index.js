@@ -121,11 +121,16 @@ const CarList = props => {
                                   source={{uri: `${Constants.apiurlPrefix}${Constants.apiurl}/img/${obj.item.id}.jpg`}}
                                 />
                               </TouchableOpacity>
-                              <View style={{maxWidth: 250}}>
-                                <Text style={{fontSize: 12, marginLeft: 7}}>Data: {Utils.printDateAndHour(new Date(obj.item.created_at))}</Text>
-                                <Text style={{fontSize: 12, marginLeft: 7,}}>Veículo registrado: {obj.item.is_registered_vehicle ? 'Sim' : 'Não'}</Text>
-                                <Text style={{fontSize: 12, marginLeft: 7,}}>Quem registrou: {obj.item.userRegistering.name}</Text>
-                                <Text style={{fontSize: 12, marginLeft: 7,}}>{obj.item.description ? `Descrição: ${obj.item.description}` : `Sem descrição`}</Text>
+                              <View style={{width: 250}}>
+                                <Text style={{fontSize: 12, marginLeft: 7}}><Text style={{fontWeight:'bold'}}>Data:</Text> {Utils.printDateAndHour(new Date(obj.item.created_at))}</Text>
+                                <Text style={{fontSize: 12, marginLeft: 7,}}><Text style={{fontWeight:'bold'}}>Veículo registrado:</Text> {obj.item.is_registered_vehicle ? 'Sim' : 'Não'}</Text>
+                                <Text style={{fontSize: 12, marginLeft: 7,}}><Text style={{fontWeight:'bold'}}>Quem registrou:</Text> {obj.item.userRegistering.name}</Text>
+                                {!obj.item.description && <Text style={{fontSize: 12, marginLeft: 7,}}>Sem descrição</Text>}
+                                {!!obj.item.description && (
+                                  <View style={{width: 245, padding: 5, borderWidth: 1, backgroundColor: 'white', borderRadius: 10, marginTop: 5}}>
+                                    <Text style={{fontSize: 12, marginLeft: 7,}}><Text style={{fontWeight:'bold'}}>Descrição:</Text> {obj.item.description}</Text>
+                                  </View>
+                                )}
                               </View>
                             </View>
                         </View>

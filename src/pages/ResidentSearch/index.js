@@ -119,8 +119,13 @@ const ResidentSearch = props => {
         const cars = filteredData.filter(el => {
           return el.vehicles.some(veh => veh.plate.toLowerCase().indexOf(nameFilter.trim().toLowerCase()) >=0)
         })
+        cars.forEach(car=>{
+          if(names.every(name=> name.id!=car.id)){
+            names.push(car)
+          }
+        })
 
-        filteredData = names.concat(cars)
+        filteredData = names
       }
       
       return filteredData

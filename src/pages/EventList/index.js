@@ -120,14 +120,15 @@ const EventList = props => {
                                   source={{uri: `${Constants.apiurlPrefix}${Constants.apiurl}/img/${obj.item.id}.jpg`}}
                                 />
                               </TouchableOpacity>
-                              <View style={{maxWidth: 250}}>
+                              <View style={{width: 245}}>
                                 <Text style={{fontSize: 12, marginLeft: 7}}>Data: {Utils.printDateAndHour(new Date(obj.item.created_at))}</Text>
-                                <Text style={{fontSize: 12, marginLeft: 7,}}>Quem registrou: {obj.item.userRegistering.name}</Text>
-                                {/*tipo*/}
+                                <Text style={{fontSize: 12, marginLeft: 7,}}>Quem registrou: {obj.item.userRegistering.name} ({Constants.USER_KIND_NAME[obj.item.userRegistering.user_kind_id]})</Text>
                                 {!!obj.item.userRegistering?.Unit && <Text style={{fontSize: 12, marginLeft: 7,}}>Unidade: Bloco {obj.item.userRegistering.Unit.Bloco.name} - unidade {obj.item.userRegistering.Unit.number}</Text>}
-                                {!!obj.item.title && <Text style={{fontSize: 12, marginLeft: 7,}}>Título: {obj.item.title}</Text>}
-                                {!!obj.item.place && <Text style={{fontSize: 12, marginLeft: 7,}}>Local: {obj.item.place}</Text>}
-                                <Text style={{fontSize: 12, marginLeft: 7,}}>{obj.item.description ? `Descrição: ${obj.item.description}` : `Sem descrição`}</Text>
+                                <View style={{width: 245, padding: 5, borderWidth: 1, backgroundColor: 'white', borderRadius: 10, marginTop: 5}}>
+                                  {!!obj.item.title && <Text style={{fontSize: 12, marginLeft: 7,}}><Text style={{fontWeight:'bold'}}>Título:</Text> {obj.item.title}</Text>}
+                                  {!!obj.item.place && <Text style={{fontSize: 12, marginLeft: 7,}}><Text style={{fontWeight:'bold'}}>Local:</Text> {obj.item.place}</Text>}
+                                  {!!obj.item.description && <Text style={{fontSize: 12, marginLeft: 7,}}><Text style={{fontWeight:'bold'}}>Descrição:</Text> {obj.item.description}</Text>}
+                                </View>
                               </View>
                             </View>
                         </View>
