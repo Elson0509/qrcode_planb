@@ -37,26 +37,25 @@ const EventAdd = props => {
     }, []);
 
     const uploadImg = newId =>{
-      if(userBeingAdded.pic!=''){
-        const formData = new FormData()
-        formData.append('img', {
-          uri: userBeingAdded.pic,
-          type: 'image/jpg',
-          title:newId+'.jpg'
-        })
-        api.post(`api/user/image/${newId}`, formData, {
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'multipart/form-data',
-          }
-        })
-        .then(res=>{
-          console.log('success', res.data)
-        })
-        .catch(err=>{
-          console.log('error', err.response)
-        })
-      }
+      const formData = new FormData()
+      formData.append('img', {
+        uri: userBeingAdded.pic,
+        type: 'image/jpg',
+        name:newId+'.jpg'
+      })
+      api.post(`api/user/image/${newId}`, formData, {
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        }
+      })
+      .then(res=>{
+        console.log('success', res.data)
+      })
+      .catch(err=>{
+        console.log('error', err.response)
+      })
+      
     }
 
     const photoClickHandler = _ => {

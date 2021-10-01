@@ -31,6 +31,7 @@ import GuardAdd from '../pages/GuardAdd'
 import GuardList from '../pages/GuardList'
 import Events from '../pages/Events'
 import EventAdd from '../pages/EventAdd'
+import EventList from '../pages/EventList'
 import * as Constants from '../services/constants'
 import Scanned from '../pages/Scanned'
 
@@ -134,6 +135,17 @@ const AppRoutes = _ => {
                 component={EventAdd}
                 options={{
                     headerTitle: 'Adicionar',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: Constants.backgroundDarkColors["Events"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="EventList" 
+                component={EventList}
+                options={{
+                    headerTitle: 'Listar',
                     headerRight: ()=> logoutButton,
                     headerStyle:{
                         backgroundColor: Constants.backgroundDarkColors["Events"]
