@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     SafeAreaView,
     StyleSheet,
@@ -7,16 +7,52 @@ import {
     Text,
     TouchableHighlight,
   } from 'react-native';
-import Icon from '../Icon';
+import {withBadge, Icon} from 'react-native-elements'
+import IconApp from '../Icon';
 import * as Utils from '../../services/util'
+import api from '../../services/api';
+import { useNavigation } from '@react-navigation/native'
 
 const Greeting = (props) => {
+    const [newMessagesQtt, setNewMessagesQtt] = useState(0)
+
+    const navigation = useNavigation();
+
+    useEffect(()=>{
+        fetchQttNewMessages()
+      const willFocusSubscription = navigation.addListener('focus', ()=> {
+        fetchQttNewMessages()
+      })
+      return willFocusSubscription
+    },[])
+
+    const fetchQttNewMessages = _ => {
+        api.get(`api/message/count/${props.user.id}`)
+        .then(res=> {
+            setNewMessagesQtt(res.data.count)
+        })
+        .catch((err)=> {
+            console.log(err)
+        })
+    }
+
+    const clickMessageHandler = _ => {
+        navigation.navigate('Messages', {user: props.user})
+    }
+
+    const BadgedIcon  = withBadge(newMessagesQtt)(Icon)
+
     return (
         <View style={styles.container}>
-            {/* <TouchableHighlight style={styles.shield} on>
-                <Icon name="shield-alt" color='white' size={30}/>
-            </TouchableHighlight> */}
             <Text style={styles.greeting}>{Utils.saudacaoHorario(props.user?.name)}</Text>
+            <TouchableHighlight style={styles.iconMessage} onPress={()=> clickMessageHandler()}>
+                {newMessagesQtt === 0 ?
+                <IconApp name="envelope" color='white' size={26}/>
+                :
+                <BadgedIcon type="font-awesome-5" name="envelope" color='white'/>
+                }
+            </TouchableHighlight>
+            
         </View>
     );
 };
@@ -27,9 +63,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         
     },
-    shield: {
+    iconMessage: {
         position: 'absolute',
-        left: 0,
+        right: 8,
         padding: 5,
         borderWidth: 3,
         borderColor: 'white',

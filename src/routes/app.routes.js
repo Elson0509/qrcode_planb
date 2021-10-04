@@ -32,6 +32,7 @@ import GuardList from '../pages/GuardList'
 import Events from '../pages/Events'
 import EventAdd from '../pages/EventAdd'
 import EventList from '../pages/EventList'
+import MessageList from '../pages/MessageList';
 import * as Constants from '../services/constants'
 import Scanned from '../pages/Scanned'
 
@@ -182,6 +183,17 @@ const AppRoutes = _ => {
                     headerRight: ()=> logoutButton,
                     headerStyle:{
                         backgroundColor: Constants.backgroundDarkColors["Guards"]
+                    }
+                }}
+            />
+            <AppStack.Screen 
+                name="Messages" 
+                component={MessageList}
+                options={{
+                    headerTitle: 'Mensagens',
+                    headerRight: ()=> logoutButton,
+                    headerStyle:{
+                        backgroundColor: '#ddd'
                     }
                 }}
             />
