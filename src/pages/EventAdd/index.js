@@ -157,6 +157,7 @@ const EventAdd = props => {
               borderColor={Constants.backgroundDarkColors['Events']}
               colorInput={Constants.backgroundDarkColors['Events']}
               placeholder='Detalhes da ocorrência'
+              width={340}
             />
             <Text style={styles.title}>Foto:</Text>
             {!userBeingAdded.pic &&

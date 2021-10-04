@@ -7,6 +7,7 @@ import {
   } from 'react-native';
 import * as Constants from '../../services/constants'
 
+
 const CommentBox = (props) => {
 
     const changeHandler = value => {
@@ -24,6 +25,7 @@ const CommentBox = (props) => {
                     padding: 10,
                     borderRadius: 10,
                     maxHeight: 100,
+                    width:props.width || 250,
                     backgroundColor: props.backgroundColor || 'white', 
                     borderColor: props.borderColor || 'black',
                     color: props.colorInput || 'black',

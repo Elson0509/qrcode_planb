@@ -17,6 +17,7 @@ import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage';
 import api from '../../services/api'
 import Toast from 'react-native-root-toast';
+import ModalReply from '../../components/ModalReply'
 
 const EventList = props => {
     const [events, setEvents] = useState([])
@@ -26,6 +27,9 @@ const EventList = props => {
     const [refreshing, setRefreshing] = useState(false)
     const [selectedEvent, setSelectedEvent] = useState(null)
     const [isModalPhotoActive, setIsModalPhotoActive] = useState(false)
+    const [modalGeneric, setModalGeneric] = useState(false)
+    const [replyMessage, setReplyMessage] = useState('')
+    const [subject, setSubject] = useState('')
 
     useEffect(()=>{
       fetchEvents()
@@ -81,6 +85,32 @@ const EventList = props => {
       setIsModalPhotoActive(true)
     }
 
+    const replyHandler = item => {
+      console.log(item)
+      setSelectedEvent(item)
+      setModalGeneric(true)
+      setSubject('Re: ' + item.title)
+      setReplyMessage('')
+    }
+
+    const sendHandler = _ => {
+      api.post(`api/message/`, {
+        messageBody: replyMessage,
+        subject,
+        receiver: selectedEvent.userRegistering.id
+      })
+      .then(resp=>{
+        setModalGeneric(false)
+        Toast.show(resp.data.message, Constants.configToast)
+      })
+      .catch(err=>{
+        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CL3)', Constants.configToast)
+      })
+      .finally(()=>{
+        setLoading(false)
+      })
+    }
+
     if(loading)
       return <SafeAreaView style={styles.body}>
         <ActivityIndicator size="large" color="white"/>
@@ -106,31 +136,32 @@ const EventList = props => {
                     <View>
                       <ActionButtons
                         flexDirection='row'
-                        noEditButton
+                        editIcon='reply'
+                        action1={()=> replyHandler(obj.item)}
                         action2={()=> delEvent(obj.item)}
                       />
                     </View>
                     <View style={{justifyContent: 'space-between', flexDirection: 'column'}}>
                       <View style={{maxWidth: 300}}>
                         <View>
-                            <View style={{flexDirection: 'row', paddingBottom:3, marginBottom: 5, borderColor: Constants.backgroundDarkColors["Events"]}}>
-                              <TouchableOpacity onPress={()=> onClickPhotoHandler(obj.item)}>
-                                <Image
-                                  style={{width: 60, height: 80, marginRight: 5}}
-                                  source={{uri: `${Constants.apiurlPrefix}${Constants.apiurl}/img/${obj.item.id}.jpg`}}
-                                />
-                              </TouchableOpacity>
-                              <View style={{width: 245}}>
-                                <Text style={{fontSize: 12, marginLeft: 7}}>Data: {Utils.printDateAndHour(new Date(obj.item.created_at))}</Text>
-                                <Text style={{fontSize: 12, marginLeft: 7,}}>Quem registrou: {obj.item.userRegistering.name} ({Constants.USER_KIND_NAME[obj.item.userRegistering.user_kind_id]})</Text>
-                                {!!obj.item.userRegistering?.Unit && <Text style={{fontSize: 12, marginLeft: 7,}}>Unidade: Bloco {obj.item.userRegistering.Unit.Bloco.name} - unidade {obj.item.userRegistering.Unit.number}</Text>}
-                                <View style={{width: 245, padding: 5, borderWidth: 1, backgroundColor: 'white', borderRadius: 10, marginTop: 5}}>
-                                  {!!obj.item.title && <Text style={{fontSize: 12, marginLeft: 7,}}><Text style={{fontWeight:'bold'}}>Título:</Text> {obj.item.title}</Text>}
-                                  {!!obj.item.place && <Text style={{fontSize: 12, marginLeft: 7,}}><Text style={{fontWeight:'bold'}}>Local:</Text> {obj.item.place}</Text>}
-                                  {!!obj.item.description && <Text style={{fontSize: 12, marginLeft: 7,}}><Text style={{fontWeight:'bold'}}>Descrição:</Text> {obj.item.description}</Text>}
-                                </View>
+                          <View style={{flexDirection: 'row', paddingBottom:3, marginBottom: 5, borderColor: Constants.backgroundDarkColors["Events"]}}>
+                            <TouchableOpacity onPress={()=> onClickPhotoHandler(obj.item)}>
+                              <Image
+                                style={{width: 60, height: 80, marginRight: 5}}
+                                source={{uri: `${Constants.apiurlPrefix}${Constants.apiurl}/img/${obj.item.id}.jpg`}}
+                              />
+                            </TouchableOpacity>
+                            <View style={{width: 245}}>
+                              <Text style={{fontSize: 12, marginLeft: 7}}>Data: {Utils.printDateAndHour(new Date(obj.item.created_at))}</Text>
+                              <Text style={{fontSize: 12, marginLeft: 7,}}>Quem registrou: {obj.item.userRegistering.name} ({Constants.USER_KIND_NAME[obj.item.userRegistering.user_kind_id]})</Text>
+                              {!!obj.item.userRegistering?.Unit && <Text style={{fontSize: 12, marginLeft: 7,}}>Unidade: Bloco {obj.item.userRegistering.Unit.Bloco.name} - unidade {obj.item.userRegistering.Unit.number}</Text>}
+                              <View style={{width: 245, padding: 5, borderWidth: 1, backgroundColor: 'white', borderRadius: 10, marginTop: 5}}>
+                                {!!obj.item.title && <Text style={{fontSize: 12, marginLeft: 7,}}><Text style={{fontWeight:'bold'}}>Título:</Text> {obj.item.title}</Text>}
+                                {!!obj.item.place && <Text style={{fontSize: 12, marginLeft: 7,}}><Text style={{fontWeight:'bold'}}>Local:</Text> {obj.item.place}</Text>}
+                                {!!obj.item.description && <Text style={{fontSize: 12, marginLeft: 7,}}><Text style={{fontWeight:'bold'}}>Descrição:</Text> {obj.item.description}</Text>}
                               </View>
                             </View>
+                          </View>
                         </View>
                       </View>
                     </View>
@@ -151,6 +182,15 @@ const EventList = props => {
               modalVisible={isModalPhotoActive}
               setModalVisible={setIsModalPhotoActive}
               id={selectedEvent?.id}
+            />
+            <ModalReply
+              modal={modalGeneric}
+              setModal={setModalGeneric}
+              setReplyMessage={setReplyMessage}
+              replyMessage={replyMessage}
+              subject={subject}
+              setSubject={setSubject}
+              sendHandler={sendHandler}
             />
         </SafeAreaView>
       );

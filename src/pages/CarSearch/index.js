@@ -203,7 +203,7 @@ const CarSearch = props => {
           {((filterData().length==0 && !!plateFilter.trim()) || checked) && (
             <View>
               <Text style={{textAlign:'center', marginBottom: 8, marginTop: 15, fontWeight: 'bold'}}>Reportar veículo</Text>
-              <CommentBox value={comment} setValue={setComment} placeholder='Detalhes da ocorrência'/>
+              <CommentBox value={comment} setValue={setComment} placeholder='Detalhes da ocorrência' width={340}/>
               <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: "center", justifyContent: "center", borderWidth: 1, padding: 12, backgroundColor: Constants.backgroundLightColors['Cars']}}>
                 <CheckBox
                   value={is_registered_vehicle}

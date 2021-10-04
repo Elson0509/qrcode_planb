@@ -17,7 +17,7 @@ import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage';
 import api from '../../services/api'
 import Toast from 'react-native-root-toast';
-
+import ModalReply from '../../components/ModalReply'
 
 const CarList = props => {
     const [overnights, setOvernights] = useState([])
@@ -27,6 +27,9 @@ const CarList = props => {
     const [refreshing, setRefreshing] = useState(false)
     const [selectedOvernight, setSelectedOvernight] = useState(null)
     const [isModalPhotoActive, setIsModalPhotoActive] = useState(false)
+    const [modalGeneric, setModalGeneric] = useState(false)
+    const [replyMessage, setReplyMessage] = useState('')
+    const [subject, setSubject] = useState('')
 
     useEffect(()=>{
       fetchOvernights()
@@ -82,6 +85,31 @@ const CarList = props => {
       setIsModalPhotoActive(true)
     }
 
+    const replyHandler = item => {
+      setSelectedOvernight(item)
+      setModalGeneric(true)
+      setSubject('')
+      setReplyMessage('')
+    }
+
+    const sendHandler = _ => {
+      api.post(`api/message/`, {
+        messageBody: replyMessage,
+        subject,
+        receiver: selectedOvernight.userRegistering.id
+      })
+      .then(resp=>{
+        setModalGeneric(false)
+        Toast.show(resp.data.message, Constants.configToast)
+      })
+      .catch(err=>{
+        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CL3)', Constants.configToast)
+      })
+      .finally(()=>{
+        setLoading(false)
+      })
+    }
+
     if(loading)
       return <SafeAreaView style={styles.body}>
         <ActivityIndicator size="large" color="white"/>
@@ -107,7 +135,8 @@ const CarList = props => {
                     <View>
                       <ActionButtons
                         flexDirection='row'
-                        noEditButton
+                        editIcon='reply'
+                        action1={()=> replyHandler(obj.item)}
                         action2={()=> delOvernight(obj.item)}
                       />
                     </View>
@@ -153,6 +182,15 @@ const CarList = props => {
               modalVisible={isModalPhotoActive}
               setModalVisible={setIsModalPhotoActive}
               id={selectedOvernight?.id}
+            />
+            <ModalReply
+              modal={modalGeneric}
+              setModal={setModalGeneric}
+              setReplyMessage={setReplyMessage}
+              replyMessage={replyMessage}
+              subject={subject}
+              setSubject={setSubject}
+              sendHandler={sendHandler}
             />
         </SafeAreaView>
       );

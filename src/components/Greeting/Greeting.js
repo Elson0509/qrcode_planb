@@ -65,10 +65,10 @@ const styles = StyleSheet.create({
     },
     iconMessage: {
         position: 'absolute',
-        right: 8,
+        right: 12,
         padding: 5,
-        borderWidth: 3,
-        borderColor: 'white',
+        //borderWidth: 3,
+        //borderColor: 'white',
         borderRadius: 5,
     },  
     greeting: {

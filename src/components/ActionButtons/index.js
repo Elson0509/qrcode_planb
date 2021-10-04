@@ -18,12 +18,12 @@ const ActionButtons = (props) => {
             {props.noEditButton ? null : <TouchableOpacity style={{marginRight: 15, marginBottom: 0}}
                 onPress={props.action1}
             >
-                <Icon name="edit" size={IconSize} color='#385165'/>
+                <Icon name={props.editIcon || "edit"} size={IconSize} color='#385165'/>
             </TouchableOpacity>}
             {props.noDeleteButton ? null : <TouchableOpacity style={{paddingTop: 2}}
                 onPress={props.action2}
             >
-                <Icon name="window-close" size={IconSize} color='red'/>
+                <Icon name={props.closeIcon || "window-close"} size={IconSize} color='red'/>
             </TouchableOpacity>}
             {props.qrCodeButton && <TouchableOpacity style={{marginLeft: 23, paddingTop: 2}}
                 onPress={props.action3}
