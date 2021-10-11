@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import * as auth from '../services/auth'
 import api from '../services/api'
 import * as Utils from '../services/util'
+import * as Constants from '../services/constants'
 
 //createContext only set up the format of the variable
 const AuthContext = createContext(
@@ -26,7 +27,6 @@ export const AuthProvider = props =>{
         const loadStoragegData = async () => {
             const storagedUser = await AsyncStorage.getItem('@QRSeg:user')
             const storagedToken = await AsyncStorage.getItem('@QRSeg:token')
-            //await new Promise(resolve => setTimeout(resolve, 2000))///
             if(storagedUser && storagedToken){
                 api.defaults.headers['Authorization'] = `Bearer ${storagedToken}`
                 setUser(JSON.parse(storagedUser))
@@ -43,7 +43,7 @@ export const AuthProvider = props =>{
             setErrorMessage('Email não válido.')
             return
         }
-        if(password.length<6){
+        if(password.length<Constants.MIN_PASSWORD_SIZE){
             setErrorMessage('Senha muito curta.')
             return
         }

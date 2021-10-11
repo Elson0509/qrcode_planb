@@ -140,7 +140,7 @@ export const compressImage = async (uri, format = SaveFormat.JPEG) => {
     const result = await manipulateAsync(
         uri,
         [{ resize: { width: 1200 } }],
-        { compress: 0.15, format }
+        { compress: 0.35, format }
     );
 
     return  { name: `${Date.now()}.${format}`, type: `image/${format}`, ...result };

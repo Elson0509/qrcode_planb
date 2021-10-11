@@ -44,9 +44,13 @@ const Scanned = (props) => {
             .then(res=>{
                 setErrorMessage('')
                 setDataFetched(res.data)
-                if(res.data.user_kind_id){
+                if(res.data.user_kind_id == Constants.USER_KIND['RESIDENT']){
                     setbackgroundColorScreen(Constants.backgroundColors['Residents'])
                     setUserType('Residente')
+                }
+                if(res.data.user_kind_id == Constants.USER_KIND['SUPERINTENDENT']){
+                    setbackgroundColorScreen(Constants.backgroundColors['Residents'])
+                    setUserType('Administrador')
                 }
                 if(res.data.unit_kind_id && res.data.unit_kind_id === Constants.USER_KIND['VISITOR']){
                     setbackgroundColorScreen(Constants.backgroundColors['Visitors'])
@@ -56,6 +60,7 @@ const Scanned = (props) => {
                     setbackgroundColorScreen(Constants.backgroundColors['Thirds'])
                     setUserType('Terceirizados')
                 }
+
                 setLoading(false)
             })
             .catch(err=>{
@@ -65,18 +70,19 @@ const Scanned = (props) => {
     },[])
 
     const formatData = () => {
-        //user
+        //user || superintendent
         if(dataFetched && dataFetched.user_kind_id){
             return (
                 <View style={{backgroundColor: backgroundColorScreen, alignItems:'center', padding: 10}}>
+                    <Text style={{textAlign: 'center', fontSize: 20, fontWeight: 'bold', letterSpacing: 1, textDecorationLine: 'underline'}}>{userType}</Text>
                     <PicUser user={dataFetched} height={240} width={200}/>
                     <Text style={{marginTop: 8, fontSize: 18, fontWeight: 'bold'}}>{dataFetched.name}</Text>
                     {!!dataFetched.Unit?.Bloco?.name && <Text style={{marginTop: 4, fontSize: 18}}>{`Bloco ${dataFetched.Unit.Bloco.name}`}</Text>}
                     {!!dataFetched.Unit?.number && <Text style={{marginTop: 4, fontSize: 18, marginBottom: 20}}>{`Unidade ${dataFetched.Unit.number}`}</Text>}
-                    {!dataFetched.Unit.Vehicles.length && <Text style={{textDecorationLine: 'underline', fontSize: 15,}}>Não há veículos cadastrados.</Text>}
-                    {!!dataFetched.Unit.Vehicles.length && <Text style={{fontSize: 15, marginBottom: 0}}>Veículos cadastrados:</Text>}
-                    {!!dataFetched.Unit.Vehicles.length && 
-                        dataFetched.Unit.Vehicles.map((el, ind)=>{
+                    {!dataFetched.Unit?.Vehicles.length && <Text style={{textDecorationLine: 'underline', fontSize: 15,}}>Não há veículos cadastrados.</Text>}
+                    {!!dataFetched.Unit?.Vehicles.length && <Text style={{fontSize: 15, marginBottom: 0}}>Veículos cadastrados:</Text>}
+                    {!!dataFetched.Unit?.Vehicles.length && 
+                        dataFetched.Unit?.Vehicles.map((el, ind)=>{
                             return (
                                 <View key={ind} style={{borderBottomWidth: 1, padding: 12}}>
                                     <Text style={{textAlign: 'center', fontSize: 15, fontWeight: 'bold', marginBottom: 5}}>{`${el.maker} ${el.model} ${el.color}`}</Text>
@@ -91,7 +97,7 @@ const Scanned = (props) => {
         if(dataFetched && dataFetched.unit_kind_id){
             return (
                 <View style={{backgroundColor: backgroundColorScreen, padding: 10}}>
-                    <Text style={{textAlign: 'center', fontSize: 22, fontWeight: 'bold', marginBottom: 10, letterSpacing: 1, textDecorationLine: 'underline'}}>{userType}</Text>
+                    <Text style={{textAlign: 'center', fontSize: 20, fontWeight: 'bold', letterSpacing: 1, textDecorationLine: 'underline'}}>{userType}</Text>
                     <Text style={{textAlign: 'center', fontSize: 18, marginBottom: 0}}>Autorizado por {'\n'} Bloco {dataFetched.Bloco.name} {'\n'} Unidade {dataFetched.number}</Text>
                     {dataFetched.Users.map((el, ind)=>{
                         return(

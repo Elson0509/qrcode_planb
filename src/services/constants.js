@@ -4,7 +4,7 @@ import Constants from 'expo-constants';
 const { manifest } = Constants
 
 export const apiurlPrefix = 'http://'
-//export const apiurl = `weak-lizard-7.loca.lt`
+//export const apiurl = `breezy-bear-98.loca.lt`
 //lt --port 3000
 
 export const apiurl = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts.dev
@@ -19,6 +19,8 @@ export const TYPE_DATA_QRCODE = 256
 export const MAX_COMMENT_SIZE = 500
 export const is_autorized_backgroundColor = '#00B924'
 export const is_not_autorized_backgroundColor = '#FF726F'
+
+export const MIN_PASSWORD_SIZE = 6
 
 export const genericProfilePic = require('../../assets/pics/generic-profile.png')
 
