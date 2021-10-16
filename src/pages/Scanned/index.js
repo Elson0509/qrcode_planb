@@ -21,6 +21,8 @@ const Scanned = (props) => {
 
     const messageError = 'Esse QR Code não é válido ou o usuário não está cadastrado.'
 
+    console.log(props)
+
     useEffect(()=>{
         if(typeData!=Constants.TYPE_DATA_QRCODE){
             setLoading(false)
@@ -44,6 +46,7 @@ const Scanned = (props) => {
             .then(res=>{
                 setErrorMessage('')
                 setDataFetched(res.data)
+                
                 if(res.data.user_kind_id == Constants.USER_KIND['RESIDENT']){
                     setbackgroundColorScreen(Constants.backgroundColors['Residents'])
                     setUserType('Residente')
@@ -51,6 +54,10 @@ const Scanned = (props) => {
                 if(res.data.user_kind_id == Constants.USER_KIND['SUPERINTENDENT']){
                     setbackgroundColorScreen(Constants.backgroundColors['Residents'])
                     setUserType('Administrador')
+                }
+                if(res.data.user_kind_id == Constants.USER_KIND['GUARD']){
+                    setbackgroundColorScreen(Constants.backgroundColors['Guards'])
+                    setUserType('Vigilante')
                 }
                 if(res.data.unit_kind_id && res.data.unit_kind_id === Constants.USER_KIND['VISITOR']){
                     setbackgroundColorScreen(Constants.backgroundColors['Visitors'])
