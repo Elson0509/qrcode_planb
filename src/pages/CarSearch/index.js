@@ -205,11 +205,10 @@ const CarSearch = props => {
               <Text style={{textAlign:'center', marginBottom: 8, marginTop: 15, fontWeight: 'bold'}}>Reportar veículo</Text>
               <CommentBox value={comment} setValue={setComment} placeholder='Detalhes da ocorrência' width={340}/>
               <View style={{flexDirection: 'row', alignSelf: 'center', alignItems: "center", justifyContent: "center", borderWidth: 1, padding: 12, backgroundColor: Constants.backgroundLightColors['Cars']}}>
-                <CheckBox
-                  value={is_registered_vehicle}
-                  onValueChange={setIs_registered_vehicle}
-                />
                 <Text style={{color: 'black', fontWeight: 'bold'}}>Veículo está cadastrado?</Text>
+                <TouchableOpacity onPress={()=>setIs_registered_vehicle(prev=>!prev)} style={{padding: 8, borderColor: 'black', borderWidth: 1, borderRadius: 5 ,marginLeft: 12, backgroundColor: is_registered_vehicle ? '#8F8' : '#F88'}}>
+                  <Text>{is_registered_vehicle ? 'Sim' : 'Não'}</Text>
+                </TouchableOpacity>
               </View>
               <View style={{alignItems: 'center'}}>
                 {

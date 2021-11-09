@@ -1,40 +1,21 @@
-import React, {Fragment} from 'react';
+import React from 'react';
 import Dashboard from '../pages/Dashboard'
-import { StyleSheet,
-    Button
-    } from 'react-native';
+import { Button } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack'
 import { useAuth } from '../contexts/auth'
 import MyQRCode from '../pages/MyQRCode';
-import Car from '../pages/Car'
-import CarSearch from '../pages/CarSearch';
-import CarList from '../pages/CarList';
 import Scan from '../pages/Scan'
 import CameraPic from '../pages/CameraPic'
-import Residents from '../pages/Residents'
-import Visitors from '../pages/Visitors'
-import VisitorAdd from '../pages/VisitorAdd'
-import VisitorList from '../pages/VisitorList'
-import VisitorEdit from '../pages/VisitorEdit'
-import Thirds from '../pages/Thirds'
-import ThirdAdd from '../pages/ThirdAdd'
-import ThirdList from '../pages/ThirdList'
-import ThirdEdit from '../pages/ThirdEdit'
-import Units from '../pages/Units'
-import UnitAdd from '../pages/UnitAdd'
-import UnitList from '../pages/UnitList'
-import ResidentAdd from '../pages/ResidentAdd'
-import ResidentList from '../pages/ResidentList'
-import ResidentSearch from '../pages/ResidentSearch'
-import Guards from '../pages/Guards'
-import GuardAdd from '../pages/GuardAdd'
-import GuardList from '../pages/GuardList'
-import Events from '../pages/Events'
-import EventAdd from '../pages/EventAdd'
-import EventList from '../pages/EventList'
 import MessageList from '../pages/MessageList';
 import * as Constants from '../services/constants'
 import Scanned from '../pages/Scanned'
+import CarRoutes from './CarRoutes';
+import EventRoutes from './EventRoutes';
+import GuardRoutes from './GuardRoutes';
+import VisitorRoutes from './VisitorRoutes';
+import ThirdRoutes from './ThirdRoutes';
+import UnitRoutes from './UnitRoutes';
+import ResidentRoutes from './ResidentRoutes';
 
 const AppStack = createStackNavigator()
 
@@ -87,105 +68,119 @@ const AppRoutes = _ => {
                     headerShown: false
                 }}
             />
-            <AppStack.Screen 
-                name="Car" 
-                component={Car}
-                options={{
-                    headerTitle: 'Pernoite',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Cars"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="CarList" 
-                component={CarList}
-                options={{
-                    headerTitle: 'Listar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Cars"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="CarSearch" 
-                component={CarSearch}
-                options={{
-                    headerTitle: 'Pesquisar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Cars"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="EventsGuard" 
-                component={Events}
-                options={{
-                    headerTitle: 'Ronda',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Events"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="EventAdd" 
-                component={EventAdd}
-                options={{
-                    headerTitle: 'Adicionar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Events"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="EventList" 
-                component={EventList}
-                options={{
-                    headerTitle: 'Listar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Events"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="Guards" 
-                component={Guards}
-                options={{
-                    headerTitle: 'Guardas',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Guards"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="GuardAdd" 
-                component={GuardAdd}
-                options={{
-                    headerTitle: 'Adicionar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Guards"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="GuardList" 
-                component={GuardList}
-                options={{
-                    headerTitle: 'Listar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Guards"]
-                    }
-                }}
-            />
+            {
+                CarRoutes.map(el=>(
+                    <AppStack.Screen 
+                        key={el.name}
+                        name={el.name}
+                        component={el.component}
+                        options={{
+                            headerTitle: el.headerTitle,
+                            headerRight: ()=> logoutButton,
+                            headerStyle:{
+                                backgroundColor: Constants.backgroundDarkColors[el.backgroundDarkColor]
+                            }
+                        }}
+                    />
+                ))
+            }
+            {
+                EventRoutes.map(el=>(
+                    <AppStack.Screen 
+                        key={el.name}
+                        name={el.name}
+                        component={el.component}
+                        options={{
+                            headerTitle: el.headerTitle,
+                            headerRight: ()=> logoutButton,
+                            headerStyle:{
+                                backgroundColor: Constants.backgroundDarkColors[el.backgroundDarkColor]
+                            }
+                        }}
+                    />
+                ))
+            }
+            {
+                GuardRoutes.map(el=>(
+                    <AppStack.Screen 
+                        key={el.name}
+                        name={el.name}
+                        component={el.component}
+                        options={{
+                            headerTitle: el.headerTitle,
+                            headerRight: ()=> logoutButton,
+                            headerStyle:{
+                                backgroundColor: Constants.backgroundDarkColors[el.backgroundDarkColor]
+                            }
+                        }}
+                    />
+                ))
+            }
+            {
+                VisitorRoutes.map(el=>(
+                    <AppStack.Screen 
+                        key={el.name}
+                        name={el.name}
+                        component={el.component}
+                        options={{
+                            headerTitle: el.headerTitle,
+                            headerRight: ()=> logoutButton,
+                            headerStyle:{
+                                backgroundColor: Constants.backgroundDarkColors[el.backgroundDarkColor]
+                            }
+                        }}
+                    />
+                ))
+            }
+            {
+                ThirdRoutes.map(el=>(
+                    <AppStack.Screen 
+                        key={el.name}
+                        name={el.name}
+                        component={el.component}
+                        options={{
+                            headerTitle: el.headerTitle,
+                            headerRight: ()=> logoutButton,
+                            headerStyle:{
+                                backgroundColor: Constants.backgroundDarkColors[el.backgroundDarkColor]
+                            }
+                        }}
+                    />
+                ))
+            }
+            {
+                UnitRoutes.map(el=>(
+                    <AppStack.Screen 
+                        key={el.name}
+                        name={el.name}
+                        component={el.component}
+                        options={{
+                            headerTitle: el.headerTitle,
+                            headerRight: ()=> logoutButton,
+                            headerStyle:{
+                                backgroundColor: Constants.backgroundDarkColors[el.backgroundDarkColor]
+                            }
+                        }}
+                    />
+                ))
+            }
+            {
+                ResidentRoutes.map(el=>(
+                    <AppStack.Screen 
+                        key={el.name}
+                        name={el.name}
+                        component={el.component}
+                        options={{
+                            headerTitle: el.headerTitle,
+                            headerRight: ()=> logoutButton,
+                            headerStyle:{
+                                backgroundColor: Constants.backgroundDarkColors[el.backgroundDarkColor]
+                            }
+                        }}
+                    />
+                ))
+            }
+            
             <AppStack.Screen 
                 name="Messages" 
                 component={MessageList}
@@ -197,183 +192,8 @@ const AppRoutes = _ => {
                     }
                 }}
             />
-            <AppStack.Screen 
-                name="Visitors" 
-                component={Visitors}
-                options={{
-                    headerTitle: 'Visitantes',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Visitors"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="VisitorAdd" 
-                component={VisitorAdd}
-                options={{
-                    headerTitle: 'Adicionar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Visitors"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="VisitorList" 
-                component={VisitorList}
-                options={{
-                    headerTitle: 'Listar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Visitors"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="VisitorEdit" 
-                component={VisitorEdit}
-                options={{
-                    headerTitle: 'Editar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Visitors"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="Thirds" 
-                component={Thirds}
-                options={{
-                    headerTitle: 'Terceirizados',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Thirds"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="ThirdAdd" 
-                component={ThirdAdd}
-                options={{
-                    headerTitle: 'Adicionar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Thirds"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="ThirdList" 
-                component={ThirdList}
-                options={{
-                    headerTitle: 'Listar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Thirds"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="ThirdEdit" 
-                component={ThirdEdit}
-                options={{
-                    headerTitle: 'Editar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Thirds"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="Units" 
-                component={Units}
-                options={{
-                    headerTitle: 'Unidades',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Units"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="UnitAdd" 
-                component={UnitAdd}
-                options={{
-                    headerTitle: 'Adicionar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Units"],
-                        
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="UnitList" 
-                component={UnitList}
-                options={{
-                    headerTitle: 'Listar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Units"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="Residents" 
-                component={Residents}
-                options={{
-                    headerTitle: 'Moradores',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Residents"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="ResidentAdd" 
-                component={ResidentAdd}
-                options={{
-                    headerTitle: 'Adicionar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Residents"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="ResidentEdit" 
-                component={ResidentAdd}
-                options={{
-                    headerTitle: 'Editar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Residents"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="ResidentList" 
-                component={ResidentList}
-                options={{
-                    headerTitle: 'Listar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Residents"]
-                    }
-                }}
-            />
-            <AppStack.Screen 
-                name="ResidentSearch" 
-                component={ResidentSearch}
-                options={{
-                    headerTitle: 'Pesquisar',
-                    headerRight: ()=> logoutButton,
-                    headerStyle:{
-                        backgroundColor: Constants.backgroundDarkColors["Residents"]
-                    }
-                }}
-            />
+
+            
         </AppStack.Navigator>
         
     )

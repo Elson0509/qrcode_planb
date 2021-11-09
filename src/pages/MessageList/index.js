@@ -77,7 +77,8 @@ const MessageList = props => {
 
     const viewMessageHandler = itemMessage => {
       setSelectedMessage(itemMessage)
-      api.put(`/api/message/${itemMessage.id}`)
+      if(!itemMessage.is_read)
+        api.put(`/api/message/${itemMessage.id}`)
       setModalViewMessage(true)
     }
 

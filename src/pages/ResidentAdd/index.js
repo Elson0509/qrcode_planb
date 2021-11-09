@@ -160,7 +160,6 @@ const ResidentAdd = props => {
     }
 
     const selectUnitHandler = unit => {
-      
       setSelectedUnit(unit)
       setModalSelectUnit(false)
       setLoading(true)

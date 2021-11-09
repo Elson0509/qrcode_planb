@@ -28,11 +28,13 @@ const Dashboard = (props) => {
     const menuOptionsEventSuperintendent = { menuName: "Ronda", icon: 'exclamation', key: 'event', screen: 'EventsGuard', backgroundColor: Constants.backgroundColors['Events'] }
     const menuOptionsSurvey = { menuName: "Avaliação", icon: 'smile', key: 'pesquisa', screen: 'Survey', backgroundColor: Constants.backgroundColors['Survey'] }
     const menuOptionsInfo = { menuName: "Informações", icon: 'info-circle', key: 'info', screen: 'Info', backgroundColor: Constants.backgroundColors['Info'] }
+    const menuOptionsCondo = { menuName: "Condomínios", icon: 'city', key: 'condo', screen: 'Condo', backgroundColor: Constants.backgroundColors['Residents'] }
 
     const profiles = []
     profiles[Constants.USER_KIND['RESIDENT']]=[menuOptionsQRCode, menuOptionsEventResident, menuOptionsSurvey]
     profiles[Constants.USER_KIND['GUARD']]=[menuOptionsQRCode, menuOptionsScan, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsCarGuard, menuOptionsEventGuard]
     profiles[Constants.USER_KIND['SUPERINTENDENT']]=[menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsGuard, menuOptionsCarSuperIntendent, menuOptionsEventSuperintendent]
+    profiles[Constants.USER_KIND['ADM']]=[menuOptionsCondo]
 
     return (
         <View style={styles.container}>
