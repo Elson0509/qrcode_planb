@@ -16,6 +16,7 @@ import VisitorRoutes from './VisitorRoutes';
 import ThirdRoutes from './ThirdRoutes';
 import UnitRoutes from './UnitRoutes';
 import ResidentRoutes from './ResidentRoutes';
+import CondoRoutes from './CondoRoutes';
 
 const AppStack = createStackNavigator()
 
@@ -180,6 +181,22 @@ const AppRoutes = _ => {
                     />
                 ))
             }
+            {
+                CondoRoutes.map(el=>(
+                    <AppStack.Screen 
+                        key={el.name}
+                        name={el.name}
+                        component={el.component}
+                        options={{
+                            headerTitle: el.headerTitle,
+                            headerRight: ()=> logoutButton,
+                            headerStyle:{
+                                backgroundColor: Constants.backgroundDarkColors[el.backgroundDarkColor]
+                            }
+                        }}
+                    />
+                ))
+            }
             
             <AppStack.Screen 
                 name="Messages" 
@@ -192,10 +209,7 @@ const AppRoutes = _ => {
                     }
                 }}
             />
-
-            
         </AppStack.Navigator>
-        
     )
 }
 

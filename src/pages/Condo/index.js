@@ -27,12 +27,12 @@ const Thirds = (props) => {
             <FlatList
                 data={Constants.menuOptions}
                 numColumns={2}
-                renderItem={(obj)=>{
-                    return <TouchableOpacity style={styles.menuItem} onPress={()=> {props.navigation.navigate(`Third${obj.item.screen}`, {user: user})}}>
-                               <Icon name={obj.item.icon} size={55}/>
-                               <Text style={styles.menuItemText}>{obj.item.menuName}</Text>
-                           </TouchableOpacity>
-                }}
+                renderItem={(obj)=>(
+                    <TouchableOpacity style={styles.menuItem} onPress={()=> {props.navigation.navigate(`Condo${obj.item.screen}`, {user: user})}}>
+                        <Icon name={obj.item.icon} size={55}/>
+                        <Text style={styles.menuItemText}>{obj.item.menuName}</Text>
+                    </TouchableOpacity>
+                )}
             />
         </View>
     );
