@@ -16,7 +16,7 @@ import Icon from '../../components/Icon';
 import * as Constants from '../../services/constants'
 import Greeting from '../../components/Greeting/Greeting';
 
-const Condo = (props) => {
+const Sindico = (props) => {
     const {user} = useAuth()
 
     return (
@@ -28,7 +28,7 @@ const Condo = (props) => {
                 data={Constants.menuOptions}
                 numColumns={2}
                 renderItem={(obj)=>(
-                    <TouchableOpacity style={styles.menuItem} onPress={()=> {props.navigation.navigate(`Condo${obj.item.screen}`, {user: user})}}>
+                    <TouchableOpacity style={styles.menuItem} onPress={()=> {props.navigation.navigate(`Sindico${obj.item.screen}`, {user: user})}}>
                         <Icon name={obj.item.icon} size={55}/>
                         <Text style={styles.menuItemText}>{obj.item.menuName}</Text>
                     </TouchableOpacity>
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        backgroundColor: Constants.backgroundColors['Residents'],
+        backgroundColor: Constants.backgroundColors['Visitors'],
     },
     greeting: {
         fontFamily: 'monospace',
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
         borderColor: 'black',
         borderWidth: 1,
         padding: 20,
-        backgroundColor: Constants.backgroundLightColors["Residents"],
+        backgroundColor: Constants.backgroundLightColors["Visitors"],
         alignItems: 'center',
     },
     menuItemText:{
@@ -80,4 +80,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Condo;
+export default Sindico;
