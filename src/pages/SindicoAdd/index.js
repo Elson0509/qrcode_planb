@@ -121,7 +121,7 @@ const SindicoAdd = props => {
         user_kind_id: Constants.USER_KIND["SUPERINTENDENT"],
         identification: userBeingAdded.identification,
         email: userBeingAdded.email,
-        userBeingAdded_id_last_modify: props.route.params.user.id,
+        user_id_last_modify: props.route.params.user.id,
       })
       .then((res)=>{
         uploadImg(res.data.userId)

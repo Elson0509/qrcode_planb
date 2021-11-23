@@ -18,6 +18,7 @@ import UnitRoutes from './UnitRoutes';
 import ResidentRoutes from './ResidentRoutes';
 import CondoRoutes from './CondoRoutes';
 import SindicoRoutes from './SindicoRoutes';
+import SlotRoutes from './SlotRoutes'
 
 const AppStack = createStackNavigator()
 
@@ -200,6 +201,22 @@ const AppRoutes = _ => {
             }
             {
                 SindicoRoutes.map(el=>(
+                    <AppStack.Screen 
+                        key={el.name}
+                        name={el.name}
+                        component={el.component}
+                        options={{
+                            headerTitle: el.headerTitle,
+                            headerRight: ()=> logoutButton,
+                            headerStyle:{
+                                backgroundColor: Constants.backgroundDarkColors[el.backgroundDarkColor]
+                            }
+                        }}
+                    />
+                ))
+            }
+            {
+                SlotRoutes.map(el=>(
                     <AppStack.Screen 
                         key={el.name}
                         name={el.name}

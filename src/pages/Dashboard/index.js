@@ -30,11 +30,12 @@ const Dashboard = (props) => {
     const menuOptionsInfo = { menuName: "Informações", icon: 'info-circle', key: 'info', screen: 'Info', backgroundColor: Constants.backgroundColors['Info'] }
     const menuOptionsCondo = { menuName: "Condomínios", icon: 'city', key: 'condo', screen: 'Condo', backgroundColor: Constants.backgroundColors['Residents'] }
     const menuOptionsSindico = { menuName: "Síndicos", icon: 'users-cog', key: 'sindico', screen: 'Sindico', backgroundColor: Constants.backgroundColors['Visitors'] }
+    const menuOptionsSlot = { menuName: "Estacionamento", icon: 'car-side', key: 'slot', screen: 'Slot', backgroundColor: Constants.backgroundColors['Slot']}
 
     const profiles = []
     profiles[Constants.USER_KIND['RESIDENT']]=[menuOptionsQRCode, menuOptionsEventResident, menuOptionsSurvey]
-    profiles[Constants.USER_KIND['GUARD']]=[menuOptionsQRCode, menuOptionsScan, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsCarGuard, menuOptionsEventGuard]
-    profiles[Constants.USER_KIND['SUPERINTENDENT']]=[menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsGuard, menuOptionsCarSuperIntendent, menuOptionsEventSuperintendent]
+    profiles[Constants.USER_KIND['GUARD']]=[menuOptionsQRCode, menuOptionsScan, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsCarGuard, menuOptionsEventGuard, menuOptionsSlot]
+    profiles[Constants.USER_KIND['SUPERINTENDENT']]=[menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsGuard, menuOptionsCarSuperIntendent, menuOptionsEventSuperintendent, menuOptionsSlot]
     profiles[Constants.USER_KIND['ADM']]=[menuOptionsCondo, menuOptionsSindico]
 
     return (
