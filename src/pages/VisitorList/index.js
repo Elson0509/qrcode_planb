@@ -1,4 +1,4 @@
-import React, {useState, Fragment, useEffect} from 'react';
+import React, {useState, useEffect} from 'react'
 import {
     SafeAreaView,
     StyleSheet,
@@ -7,17 +7,19 @@ import {
     ActivityIndicator,
     View,
     Text,
-  } from 'react-native';
-import ActionButtons from '../../components/ActionButtons';
+  } from 'react-native'
+import ActionButtons from '../../components/ActionButtons'
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
-import ModalMessage from '../../components/ModalMessage';
+import ModalMessage from '../../components/ModalMessage'
 import api from '../../services/api'
-import Toast from 'react-native-root-toast';
-import PicUser from '../../components/PicUser';
-import ModalQRCode from '../../components/ModalQRCode';
+import Toast from 'react-native-root-toast'
+import PicUser from '../../components/PicUser'
+import ModalQRCode from '../../components/ModalQRCode'
+import { useAuth } from '../../contexts/auth'
 
-const ResidentList = props => {
+const VisitorList = props => {
+    const {user} = useAuth()
     const [units, setUnits] = useState([])
     const [loading, setLoading] = useState(true)
     const [modal, setModal] = useState(false)
@@ -155,6 +157,8 @@ const ResidentList = props => {
                   >
                     <Text style={styles.listText}>Bloco {obj.item.bloco_name} Unidade {obj.item.number}</Text>
                     <View>
+                      {
+                        user.user_kind === Constants.USER_KIND['SUPERINTENDENT'] && 
                         <ActionButtons
                           flexDirection='row'
                           action1={()=> editHandler(obj.item)}
@@ -162,6 +166,7 @@ const ResidentList = props => {
                           action3={()=> modalQRCodeHandler(obj.item.id)}
                           qrCodeButton={true}
                         />
+                      }
                       </View>
                     <View style={{justifyContent: 'space-between', flexDirection: 'column'}}>
                       <View style={{maxWidth: 300}}>
@@ -254,4 +259,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default ResidentList
+export default VisitorList
