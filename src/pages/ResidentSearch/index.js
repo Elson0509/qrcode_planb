@@ -115,10 +115,10 @@ const ResidentSearch = props => {
 
     if(!!nameFilter){
         unitsInfo = unitsInfo.filter(el=>{
-            return el.residents.some(res=>res.name.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
-                el.vehicles.some(vei=> vei.plate.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
-                el.bloco_name.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1 ||
-                el.number.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1 
+          return el.residents.some(res=>res.name.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
+            el.vehicles.some(vei=> vei.plate.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
+            el.bloco_name.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1 ||
+            el.number.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1 
         })
     }
 

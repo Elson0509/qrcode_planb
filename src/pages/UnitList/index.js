@@ -15,6 +15,7 @@ import ActionButtons from '../../components/ActionButtons'
 import ModalMessage from '../../components/ModalMessage'
 import ModalEditUnit from '../../components/ModalEditUnit'
 import api from '../../services/api'
+import ModalConfirmPass from '../../components/ModalConfirmPass';
 import Toast from 'react-native-root-toast';
 
 const UnitList = props => {
@@ -26,6 +27,7 @@ const UnitList = props => {
     const [unitSelected, setUnitSelected] = useState({})
     const [unitWillUpdate, setUnitWillUpdate] = useState({})
     const [refreshing, setRefreshing] = useState(false)
+    const [passModal, setPassModal] = useState(false)
 
     useEffect(()=>{
       listUnits()
@@ -65,7 +67,7 @@ const UnitList = props => {
     }
 
     const deleteUnitConfirmed = _ =>{
-      setModal(false)
+      setPassModal(false)
       setLoading(true)
       api.delete(`/api/unit`, {
         data:{
@@ -84,6 +86,10 @@ const UnitList = props => {
       .finally(()=>{
         setLoading(false)
       })
+    }
+    const modalConfirmPassHandler = () => {
+      setModal(false)
+      setPassModal(true)
     }
 
     const onRefreshHandler = _ =>{
@@ -154,7 +160,7 @@ const UnitList = props => {
           <ModalMessage
             message={message}
             title="Confirme"
-            btn1Pressed={deleteUnitConfirmed}
+            btn1Pressed={modalConfirmPassHandler}
             btn2Text='Cancelar'
             btn1Text='Apagar'
             modalVisible={modal}
@@ -166,6 +172,11 @@ const UnitList = props => {
             setModalVisible={setModalEdit}
             unitWillUpdate={unitWillUpdate}
             setUnitWillUpdate={setUnitWillUpdate}
+          />
+          <ModalConfirmPass
+            modal={passModal}
+            setModal={setPassModal}
+            action={deleteUnitConfirmed}
           />
         </SafeAreaView>
       );

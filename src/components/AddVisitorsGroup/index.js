@@ -72,7 +72,7 @@ const AddVisitorsGroup = (props) => {
                         colorInput={Constants.backgroundDarkColors['Visitors']}
                     />
                     <InputBox
-                        text="Identidade:"
+                        text="Documento*:"
                         value={props.userBeingAdded.identification}
                         width={295}
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, identification: val})}

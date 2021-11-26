@@ -96,11 +96,19 @@ const VisitorAdd = props => {
       if (!result.cancelled) {
         setUserBeingAdded(prev=> {return {...prev, pic:compressed.uri}})
       }
-    };
+    }
 
     const addResidentHandler = _ =>{
       if(!userBeingAdded.name){
         setErrorAddResidentMessage('Nome não pode estar vazio.')
+        return false
+      }
+      if(!userBeingAdded.identification){
+        setErrorAddResidentMessage('Documento não pode estar vazio.')
+        return false
+      }
+      if(!userBeingAdded.pic){
+        setErrorAddResidentMessage('É necessário adicionar uma foto.')
         return false
       }
       setResidents(prev=> [...prev, userBeingAdded])

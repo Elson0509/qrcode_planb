@@ -83,11 +83,17 @@ const GuardAdd = props => {
       if(!userBeingAdded.name){
         return setErrorMessage('Nome não pode estar vazio.')
       }
+      if(!userBeingAdded.identification){
+        return setErrorMessage('Documento não pode estar vazio.')
+      }
       if(!userBeingAdded.email){
         return setErrorMessage('Email não pode estar vazio.')
       }
       if(!Utils.validateEmail(userBeingAdded.email)){
         return setErrorMessage('Email não válido.')
+      }
+      if(!userBeingAdded.pic){
+        return setErrorMessage('É necessário adicionar uma foto.')
       }
       setLoading(true)
       api.post('api/user/signup', {
@@ -131,7 +137,7 @@ const GuardAdd = props => {
               colorInput={Constants.backgroundDarkColors['Guards']}
             />
             <InputBox 
-              text="Identidade:" 
+              text="Documento*:" 
               value={userBeingAdded.identification} 
               autoCapitalize="characters"
               changed={value=>setUserBeingAdded({...userBeingAdded, identification:value})}

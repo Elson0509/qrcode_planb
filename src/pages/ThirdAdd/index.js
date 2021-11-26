@@ -103,6 +103,18 @@ const ThirdAdd = props => {
         setErrorAddResidentMessage('Nome não pode estar vazio.')
         return false
       }
+      if(!userBeingAdded.identification){
+        setErrorAddResidentMessage('Documento não pode estar vazio.')
+        return false
+      }
+      if(!userBeingAdded.company){
+        setErrorAddResidentMessage('Empresa não pode estar vazio.')
+        return false
+      }
+      if(!userBeingAdded.pic){
+        setErrorAddResidentMessage('É necessário adicionar uma foto.')
+        return false
+      }
       setResidents(prev=> [...prev, userBeingAdded])
       setErrorAddResidentMessage('')
       setUserBeingAdded({id: "0", name: '', company:'', identification: '', pic: ''})

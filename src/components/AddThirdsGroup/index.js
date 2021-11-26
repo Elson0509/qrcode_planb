@@ -71,7 +71,7 @@ const AddThirdsGroup = (props) => {
                         colorInput={Constants.backgroundDarkColors['Thirds']}
                     />
                     <InputBox
-                        text="Identidade:"
+                        text="Documento*:"
                         value={props.userBeingAdded.identification}
                         width={295}
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, identification: val})}
@@ -81,7 +81,7 @@ const AddThirdsGroup = (props) => {
                         colorInput={Constants.backgroundDarkColors['Thirds']}
                     />
                     <InputBox
-                        text="Empresa:"
+                        text="Empresa*:"
                         value={props.userBeingAdded.company}
                         width={295}
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, company: val})}

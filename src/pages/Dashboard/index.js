@@ -20,7 +20,7 @@ const Dashboard = (props) => {
     const menuOptionsResidents = { menuName: "Moradores", icon: 'house-user', key: 'resident', screen: 'Residents', backgroundColor: Constants.backgroundColors['Residents'] }
     const menuOptionsVisitor = { menuName: "Visitantes", icon: 'user-friends', key: 'visitor', screen: 'Visitors', backgroundColor: Constants.backgroundColors['Visitors'] }
     const menuOptionsService = { menuName: "Terceirizados", icon: 'people-carry', key: 'service', screen: 'Thirds', backgroundColor: Constants.backgroundColors['Thirds'] } //permissionário
-    const menuOptionsGuard = { menuName: "Guardas", icon: 'user-shield', key: 'guard', screen: 'Guards', backgroundColor: Constants.backgroundColors['Guards'] }
+    const menuOptionsGuard = { menuName: "Colaboradores", icon: 'user-shield', key: 'guard', screen: 'Guards', backgroundColor: Constants.backgroundColors['Guards'] }
     const menuOptionsCarSuperIntendent = { menuName: "Pernoite", icon: 'car', key: 'car', screen: 'Car', backgroundColor: Constants.backgroundColors['Cars'] }
     const menuOptionsCarGuard = { menuName: "Pernoite", icon: 'car', key: 'car', screen: 'CarSearch', backgroundColor: Constants.backgroundColors['Cars'] }
     const menuOptionsEventResident = { menuName: "Ocorrências", icon: 'exclamation', key: 'event', screen: 'EventAdd', backgroundColor: Constants.backgroundColors['Events'] }

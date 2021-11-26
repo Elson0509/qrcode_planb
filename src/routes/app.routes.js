@@ -33,6 +33,7 @@ const AppRoutes = _ => {
                 name="Dashboard" 
                 component={Dashboard}
                 options={{
+                    title:'Painel Principal',
                     headerRight: () => logoutButton,
                     headerStyle:{
                         backgroundColor: Constants.backgroundDarkColors["Dashboard"]
