@@ -1,6 +1,5 @@
 import Residents from '../../pages/Residents'
 import ResidentAdd from '../../pages/ResidentAdd'
-import ResidentList from '../../pages/ResidentList'
 import ResidentSearch from '../../pages/ResidentSearch'
 
 const ResidentRoutes = [
@@ -24,15 +23,9 @@ const ResidentRoutes = [
     },
     {
         name: 'ResidentList',
-        component: ResidentList,
-        backgroundDarkColor: 'Residents',
-        headerTitle: 'Listar'
-    },
-    {
-        name: 'ResidentSearch',
         component: ResidentSearch,
         backgroundDarkColor: 'Residents',
-        headerTitle: 'Pesquisar'
+        headerTitle: 'Listar'
     },
 ]
 

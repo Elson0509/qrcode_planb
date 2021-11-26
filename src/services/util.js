@@ -6,7 +6,7 @@ export const saudacaoHorario = (name) => {
     const hours = stamp.getHours();
     const first = firstName(name)
     if (hours>=0 && hours<6) {
-       return `Boa Madrugada, ${first}`;
+       return `Boa Noite, ${first}`;
    }
    
    if (hours>=6 && hours<12) {

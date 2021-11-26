@@ -7,7 +7,6 @@ import { StyleSheet,
     } from 'react-native';
 import * as Constants from '../../services/constants'
 import { useAuth } from '../../contexts/auth';
-import MyQRCode from '../MyQRCode';
 import Icon from '../../components/Icon';
 import Greeting from '../../components/Greeting/Greeting';
 
@@ -17,6 +16,7 @@ const Dashboard = (props) => {
     const menuOptionsQRCode = { menuName: "Meu QR Code", icon: 'qrcode', key: 'QRCode', screen: 'MyQRCode', backgroundColor: Constants.backgroundColors['MyQRCode'] }
     const menuOptionsScan = { menuName: "Escanear", icon: 'camera', key: 'Scan', screen: 'Scan', backgroundColor: Constants.backgroundColors['Scan'] }
     const menuOptionsUnits = { menuName: "Unidades", icon: 'building', key: 'building', screen: 'Units', backgroundColor: Constants.backgroundColors['Units'] }
+    const menuOptionsResidentsToGuard = { menuName: "Moradores", icon: 'house-user', key: 'residentGuard', screen: 'ResidentList', backgroundColor: Constants.backgroundColors['Residents'] }
     const menuOptionsResidents = { menuName: "Moradores", icon: 'house-user', key: 'resident', screen: 'Residents', backgroundColor: Constants.backgroundColors['Residents'] }
     const menuOptionsVisitor = { menuName: "Visitantes", icon: 'user-friends', key: 'visitor', screen: 'Visitors', backgroundColor: Constants.backgroundColors['Visitors'] }
     const menuOptionsService = { menuName: "Terceirizados", icon: 'people-carry', key: 'service', screen: 'Thirds', backgroundColor: Constants.backgroundColors['Thirds'] } //permissionário
@@ -34,7 +34,7 @@ const Dashboard = (props) => {
 
     const profiles = []
     profiles[Constants.USER_KIND['RESIDENT']]=[menuOptionsQRCode, menuOptionsEventResident, menuOptionsSurvey]
-    profiles[Constants.USER_KIND['GUARD']]=[menuOptionsQRCode, menuOptionsScan, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsCarGuard, menuOptionsEventGuard, menuOptionsSlot]
+    profiles[Constants.USER_KIND['GUARD']]=[menuOptionsQRCode, menuOptionsScan, menuOptionsResidentsToGuard, menuOptionsVisitor, menuOptionsService, menuOptionsCarGuard, menuOptionsEventGuard, menuOptionsSlot]
     profiles[Constants.USER_KIND['SUPERINTENDENT']]=[menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsGuard, menuOptionsCarSuperIntendent, menuOptionsEventSuperintendent, menuOptionsSlot]
     profiles[Constants.USER_KIND['ADM']]=[menuOptionsCondo, menuOptionsSindico]
 

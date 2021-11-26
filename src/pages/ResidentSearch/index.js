@@ -15,6 +15,7 @@ import api from '../../services/api'
 import Toast from 'react-native-root-toast';
 import PicUser from '../../components/PicUser';
 import InputBox from '../../components/InputBox';
+import ModalConfirmPass from '../../components/ModalConfirmPass';
 import { useAuth } from '../../contexts/auth';
 
 const ResidentSearch = props => {
@@ -26,6 +27,7 @@ const ResidentSearch = props => {
   const [unitSelected, setUnitSelected] = useState(null)
   const [refreshing, setRefreshing] = useState(false)
   const [nameFilter, setNameFilter] = useState('')
+  const [passModal, setPassModal] = useState(false)
 
   useEffect(()=>{
     fetchUsers()
@@ -49,13 +51,16 @@ const ResidentSearch = props => {
   }
 
   const delUnitModal = unit => {
+    if(!unit.residents.length && !unit.vehicles.length){
+      return Toast.show('Unidade sem moradores para apagar.', Constants.configToast)
+    }
     setUnitSelected(unit)
     setMessage(`Excluir moradores e veículos do Bloco ${unit.bloco_name} unidade ${unit.number}?`)
     setModal(true)
   }
 
   const deleteUnitConfirmed = _ =>{
-    setModal(false)
+    setPassModal(false)
     setLoading(true)
     api.delete(`api/user/unit/${unitSelected.id}`,{
       data:{
@@ -94,7 +99,7 @@ const ResidentSearch = props => {
   }
 
   const generateInfoUnits = _ =>{
-    const unitsInfo = []
+    let unitsInfo = []
     units.forEach(bloco=>{
       bloco.Units.forEach(unit => {
         const unitInfo = {}
@@ -107,29 +112,22 @@ const ResidentSearch = props => {
         unitsInfo.push(unitInfo)
       })
     })
+
+    if(!!nameFilter){
+        unitsInfo = unitsInfo.filter(el=>{
+            return el.residents.some(res=>res.name.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
+                el.vehicles.some(vei=> vei.plate.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
+                el.bloco_name.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1 ||
+                el.number.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1 
+        })
+    }
+
     return unitsInfo
   }
 
-  const filterData = _ => {
-    let filteredData = generateInfoUnits()
-
-    if(!!nameFilter){
-      const names = filteredData.filter(el => {
-        return el.residents.some(res => res.name.toLowerCase().indexOf(nameFilter.trim().toLowerCase()) >=0 || res.identification.toLowerCase().indexOf(nameFilter.trim().toLowerCase()) >=0)
-      })
-      const cars = filteredData.filter(el => {
-        return el.vehicles.some(veh => veh.plate.toLowerCase().indexOf(nameFilter.trim().toLowerCase()) >=0)
-      })
-      cars.forEach(car=>{
-        if(names.every(name=> name.id!=car.id)){
-          names.push(car)
-        }
-      })
-
-      filteredData = names
-    }
-    
-    return filteredData
+  const modalConfirmPassHandler = () => {
+    setModal(false)
+    setPassModal(true)
   }
 
   const onRefreshHandler = _ =>{
@@ -155,11 +153,11 @@ const ResidentSearch = props => {
           autoCapitalize='words'
           value={nameFilter}
           changed={(val=>setNameFilter(val))}
-          placeholder='Pesquisa por nome, identidade ou placa'
+          placeholder='Pesquisa por nome, placa, bloco ou número'
         />
       </View>
       <FlatList
-        data={filterData()}
+        data={generateInfoUnits()}
         keyExtractor={item=>item.id}
         style={{marginBottom: 80, paddingRight:10}}
         refreshControl={
@@ -175,14 +173,14 @@ const ResidentSearch = props => {
               >
                 <Text style={styles.listText}>Bloco {obj.item.bloco_name} Unidade {obj.item.number}</Text>
                 <View>
-                  {/* {
+                  {
                     user.user_kind === Constants.USER_KIND['SUPERINTENDENT'] && 
                     <ActionButtons
                       flexDirection='row'
                       action1={()=> editHandler(obj.item)}
                       action2={()=> delUnitModal(obj.item)}
                     />
-                  } */}
+                  }
                   </View>
                 <View style={{justifyContent: 'space-between', flexDirection: 'column'}}>
                   <View style={{maxWidth: 300}}>
@@ -226,11 +224,16 @@ const ResidentSearch = props => {
       <ModalMessage
         message={message}
         title="Confirme"
-        btn1Pressed={deleteUnitConfirmed}
+        btn1Pressed={modalConfirmPassHandler}
         btn2Text='Cancelar'
         btn1Text='Apagar'
         modalVisible={modal}
         setModalVisible={setModal}
+      />
+      <ModalConfirmPass
+        modal={passModal}
+        setModal={setPassModal}
+        action={deleteUnitConfirmed}
       />
     </SafeAreaView>
   );

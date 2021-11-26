@@ -20,9 +20,7 @@ const Residents = (props) => {
         menuOptionsResidents.push({ menuName: "Adicionar", icon: 'plus-square', key: 'plus', screen: 'Add' })
     }
     menuOptionsResidents.push({ menuName: "Listar", icon: 'list-alt', key: 'list', screen: 'List' })
-    menuOptionsResidents.push({ menuName: "Pesquisar", icon: 'search', key: 'search', screen: 'Search' })
         
-
     return (
         <View style={[styles.container]}>
             <Greeting

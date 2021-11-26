@@ -25,7 +25,7 @@ const InputBox = (props) => {
                 //characters || words || sentences || none
                 autoFocus={ props.autoFocus || false}
                 keyboardType={props.keyboard || "default"}
-                secureTextEntry={props.secureTextEntry || 'false'}
+                secureTextEntry={props.secureTextEntry || false}
                 //default || number-pad || decimal-pad || numeric || email-address || phone-pad
                 value={props.value.toString()}
                 autoCorrect={props.autoCorrect || true}

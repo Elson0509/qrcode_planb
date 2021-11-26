@@ -15,6 +15,7 @@ import ModalMessage from '../../components/ModalMessage';
 import api from '../../services/api'
 import Toast from 'react-native-root-toast';
 import PicUser from '../../components/PicUser';
+import InputBox from '../../components/InputBox';
 import ModalQRCode from '../../components/ModalQRCode';
 import { useAuth } from '../../contexts/auth';
 
@@ -27,6 +28,7 @@ const ThirdList = props => {
   const [unitSelected, setUnitSelected] = useState(null)
   const [refreshing, setRefreshing] = useState(false)
   const [showModalQRCode, setShowModalQRCode] = useState(false)
+  const [nameFilter, setNameFilter] = useState('')
   const [unitIdModalQRCode, setUnitIdModalQRCode] = useState('')
 
   useEffect(()=>{
@@ -107,7 +109,7 @@ const ThirdList = props => {
   }
 
   const generateInfoUnits = _ =>{
-    const unitsInfo = []
+    let unitsInfo = []
     units.forEach(bloco=>{
       bloco.Units.forEach(unit => {
         const unitInfo = {}
@@ -120,6 +122,17 @@ const ThirdList = props => {
         unitsInfo.push(unitInfo)
       })
     })
+
+    if(!!nameFilter){
+        unitsInfo = unitsInfo.filter(el=>{
+            return el.residents.some(res=>res.name.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
+                el.vehicles.some(vei=> vei.plate.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
+                el.residents.some(res=>res.company && res.company.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
+                el.bloco_name.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1 ||
+                el.number.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1 
+        })
+    }
+
     return unitsInfo
   }
 
@@ -136,103 +149,116 @@ const ThirdList = props => {
 
   return (
     <SafeAreaView style={styles.body}>
-        <FlatList
-          data={generateInfoUnits()}
-          keyExtractor={item=>item.id}
-          style={{marginBottom: 80, paddingRight:10}}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={()=> onRefreshHandler()}
-            />
-          }
-          renderItem={(obj)=>{
-            //don't show if there is not visitors and vehicles
-            if(obj.item.residents.length === 0 && obj.item.vehicles.length === 0)
-              return null
+      <View style={{paddingHorizontal: 10}}>
+        <InputBox
+          text=''
+          colorLabel='black'
+          backgroundColor={Constants.backgroundLightColors['Thirds']}
+          borderColor={Constants.backgroundDarkColors['Thirds']}
+          colorInput={Constants.backgroundDarkColors['Thirds']}
+          autoCapitalize='words'
+          value={nameFilter}
+          changed={(val=>setNameFilter(val))}
+          placeholder='Pesquisa por nome, placa, empresa, bloco ou número'
+        />
+      </View>
+      <FlatList
+        data={generateInfoUnits()}
+        keyExtractor={item=>item.id}
+        style={{marginBottom: 80, paddingRight:10}}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={()=> onRefreshHandler()}
+          />
+        }
+        renderItem={(obj)=>{
+          //don't show if there is not visitors and vehicles
+          if(obj.item.residents.length === 0 && obj.item.vehicles.length === 0)
+            return null
 
-            return (
-              <View 
-                style={styles.menuItem} 
-              >
-                <Text style={styles.listText}>Bloco {obj.item.bloco_name} Unidade {obj.item.number}</Text>
-                <View>
-                  {
-                    user.user_kind === Constants.USER_KIND['SUPERINTENDENT'] && 
-                    <ActionButtons
-                      flexDirection='row'
-                      action1={()=> editHandler(obj.item)}
-                      action2={()=> delUnitModal(obj.item)}
-                      action3={()=> modalQRCodeHandler(obj.item.id)}
-                      qrCodeButton={true}
-                    />
-                  }
-                  </View>
-                <View style={{justifyContent: 'space-between', flexDirection: 'column'}}>
-                  <View style={{maxWidth: 300}}>
-                    <View>
-                      {(!obj.item.residents || obj.item.residents.length === 0) && <Text style={{marginTop: 10, textDecorationLine: 'underline'}}>Unidade sem terceirizados</Text>}
-                      { obj.item.residents.length > 0 && <Text style={styles.subTitle}>Terceirizados:</Text>}
-                      {
-                        obj.item.residents.map((res)=>{
-                          return (
-                            <View key={res.id} style={{flexDirection: 'row', paddingBottom:3, marginBottom: 5, borderBottomWidth: 1, borderColor: Constants.backgroundDarkColors["Visitors"]}}>
-                              <View>
-                                <PicUser user={res}/>
-                              </View>
-                              <View style={{maxWidth: 250}}>
-                                <Text style={{fontSize: 16, marginLeft: 7, fontWeight: 'bold'}}>{res.name}</Text>
-                                {!!res.email && <Text style={{fontSize: 16, marginLeft: 7}}>Email: {res.email}</Text>}
-                                {!!res.company && <Text style={{fontSize: 16, marginLeft: 7}}>Empresa: {res.company}</Text>}
-                                {!!res.initial_date && <Text style={{fontSize: 16, marginLeft: 7}}>Início: {Utils.printDate(new Date(res.initial_date))}</Text>}
-                                {!!res.final_date && <Text style={{fontSize: 16, marginLeft: 7}}>Fim: {Utils.printDate(new Date(res.final_date))}</Text>}
-                                {
-                                  new Date(res.final_date) >= beginOfDay ?
-                                    <Text style={{fontSize: 16, marginLeft: 7}}>
-                                      Status: Válido
-                                    </Text>
-                                    :
-                                    <Text style={{fontSize: 16, marginLeft: 7, fontWeight: 'bold', color: 'red'}}>
-                                      Status: Expirado
-                                    </Text>
-                                }
-                              </View>
+          return (
+            <View 
+              style={styles.menuItem} 
+            >
+              <Text style={styles.listText}>Bloco {obj.item.bloco_name} Unidade {obj.item.number}</Text>
+              <View>
+                {
+                  user.user_kind === Constants.USER_KIND['SUPERINTENDENT'] && 
+                  <ActionButtons
+                    flexDirection='row'
+                    action1={()=> editHandler(obj.item)}
+                    action2={()=> delUnitModal(obj.item)}
+                    action3={()=> modalQRCodeHandler(obj.item.id)}
+                    qrCodeButton={true}
+                  />
+                }
+                </View>
+              <View style={{justifyContent: 'space-between', flexDirection: 'column'}}>
+                <View style={{maxWidth: 300}}>
+                  <View>
+                    {(!obj.item.residents || obj.item.residents.length === 0) && <Text style={{marginTop: 10, textDecorationLine: 'underline'}}>Unidade sem terceirizados</Text>}
+                    { obj.item.residents.length > 0 && <Text style={styles.subTitle}>Terceirizados:</Text>}
+                    {
+                      obj.item.residents.map((res)=>{
+                        return (
+                          <View key={res.id} style={{flexDirection: 'row', paddingBottom:3, marginBottom: 5, borderBottomWidth: 1, borderColor: Constants.backgroundDarkColors["Visitors"]}}>
+                            <View>
+                              <PicUser user={res}/>
                             </View>
-                          )
-                        })
-                      }
-                    </View>
-                    <View>
-                      {obj.item.vehicles?.length > 0 && <Text style={styles.subTitle}>Veículos:</Text>}
-                      {(!obj.item.vehicles || obj.item.vehicles.length === 0) && <Text style={{marginTop: 10, textDecorationLine: 'underline'}}>Sem veículos cadastrados</Text>}
-                      {
-                        obj.item.vehicles?.map((car, ind)=>{
-                          return (
-                            <Text key={ind}>-{`${car.maker} ${car.model} ${car.color} - ${car.plate}`}</Text>
-                          )
-                        })
-                      }
-                    </View>
+                            <View style={{maxWidth: 250}}>
+                              <Text style={{fontSize: 16, marginLeft: 7, fontWeight: 'bold'}}>{res.name}</Text>
+                              {!!res.email && <Text style={{fontSize: 16, marginLeft: 7}}>Email: {res.email}</Text>}
+                              {!!res.company && <Text style={{fontSize: 16, marginLeft: 7}}>Empresa: {res.company}</Text>}
+                              {!!res.initial_date && <Text style={{fontSize: 16, marginLeft: 7}}>Início: {Utils.printDate(new Date(res.initial_date))}</Text>}
+                              {!!res.final_date && <Text style={{fontSize: 16, marginLeft: 7}}>Fim: {Utils.printDate(new Date(res.final_date))}</Text>}
+                              {
+                                new Date(res.final_date) >= beginOfDay ?
+                                  <Text style={{fontSize: 16, marginLeft: 7}}>
+                                    Status: Válido
+                                  </Text>
+                                  :
+                                  <Text style={{fontSize: 16, marginLeft: 7, fontWeight: 'bold', color: 'red'}}>
+                                    Status: Expirado
+                                  </Text>
+                              }
+                            </View>
+                          </View>
+                        )
+                      })
+                    }
+                  </View>
+                  <View>
+                    {obj.item.vehicles?.length > 0 && <Text style={styles.subTitle}>Veículos:</Text>}
+                    {(!obj.item.vehicles || obj.item.vehicles.length === 0) && <Text style={{marginTop: 10, textDecorationLine: 'underline'}}>Sem veículos cadastrados</Text>}
+                    {
+                      obj.item.vehicles?.map((car, ind)=>{
+                        return (
+                          <Text key={ind}>-{`${car.maker} ${car.model} ${car.color} - ${car.plate}`}</Text>
+                        )
+                      })
+                    }
                   </View>
                 </View>
               </View>
-            )
-          }}
-        />
-        <ModalMessage
-          message={message}
-          title="Confirme"
-          btn1Pressed={deleteUnitConfirmed}
-          btn2Text='Cancelar'
-          btn1Text='Apagar'
-          modalVisible={modal}
-          setModalVisible={setModal}
-        />
-        <ModalQRCode
-          modalVisible={showModalQRCode}
-          setModalVisible={setShowModalQRCode}
-          value={unitIdModalQRCode}
-        />
+            </View>
+          )
+        }}
+      />
+      <ModalMessage
+        message={message}
+        title="Confirme"
+        btn1Pressed={deleteUnitConfirmed}
+        btn2Text='Cancelar'
+        btn1Text='Apagar'
+        modalVisible={modal}
+        setModalVisible={setModal}
+      />
+      <ModalQRCode
+        modalVisible={showModalQRCode}
+        setModalVisible={setShowModalQRCode}
+        value={unitIdModalQRCode}
+      />
     </SafeAreaView>
   );
 }
