@@ -20,12 +20,23 @@ const ModalMessage = (props) => {
                       >
                       <Text style={styles.textStyle}>{props.btn1Text}</Text>
                       </Pressable>}
-                      <Pressable
-                        style={[styles.button, { backgroundColor: props.btn2BgColor || '#FF2323' }]}
-                        onPress={() => props.setModalVisible(false)}
-                      >
-                      <Text style={styles.textStyle}>{props.btn2Text || 'Entendi!'}</Text>
-                      </Pressable>
+                      {
+                        props.btn2Pressed ?
+                        <Pressable
+                          style={[styles.button, { backgroundColor: props.btn2BgColor || '#FF2323' }]}
+                          onPress={() => props.btn2Pressed()}
+                        >
+                          <Text style={styles.textStyle}>{props.btn2Text || 'Entendi!'}</Text>
+                        </Pressable>
+                        :
+                        <Pressable
+                          style={[styles.button, { backgroundColor: props.btn2BgColor || '#FF2323' }]}
+                          onPress={() => props.setModalVisible(false)}
+                        >
+                          <Text style={styles.textStyle}>{props.btn2Text || 'Entendi!'}</Text>
+                        </Pressable>
+                      }
+                      
                     </View>
                 </View>
             </View>

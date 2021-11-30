@@ -12,11 +12,14 @@ import ActionButtons from '../../components/ActionButtons';
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage';
+import ModalInfo from '../../components/ModalInfo'
 import api from '../../services/api'
 import Toast from 'react-native-root-toast';
 import PicUser from '../../components/PicUser';
 import InputBox from '../../components/InputBox';
 import ModalQRCode from '../../components/ModalQRCode';
+import ModalGeneric from '../../components/ModalGeneric'
+import Spinner from '../../components/Spinner';
 import { useAuth } from '../../contexts/auth';
 
 const ThirdList = props => {
@@ -30,6 +33,14 @@ const ThirdList = props => {
   const [showModalQRCode, setShowModalQRCode] = useState(false)
   const [nameFilter, setNameFilter] = useState('')
   const [unitIdModalQRCode, setUnitIdModalQRCode] = useState('')
+  const [entranceExitModal, setEntranceExitModal] = useState(false)
+  const [modalEntrance, setModalEntrance] = useState(false)
+  const [modalExit, setModalExit] = useState(false)
+  const [modalMessage, setModalMessage] = useState(false)
+  const [messageInfoModal, setMessageInfoModal] = useState('')
+  const [messageErrorModal, setMessageErrorModal] = useState('')
+  const [modalGeneric, setModalGeneric] = useState(false)
+  const [loadingMessage, setLoadingMessage] = useState(false)
 
   useEffect(()=>{
     fetchUsers()
@@ -142,6 +153,110 @@ const ThirdList = props => {
     setRefreshing(false)
   }
 
+  const carIconHandler = unit => {
+    setUnitSelected(unit)
+    //valid user?
+    if(!(new Date(unit.residents[0].final_date) >= beginOfDay && new Date(unit.residents[0].initial_date) <= beginOfDay)){
+        return Toast.show('Terceirizados fora da data de autorização.', Constants.configToast)
+    }
+    setEntranceExitModal(true)
+  }
+
+  const exitHandler = _ => {
+    setMessageInfoModal('')
+    setMessageErrorModal('')
+    setLoading(true)
+    api.get(`api/reading/${unitSelected.id}/0`)
+    .then(res=>{
+        setLoading(false)
+        let message = 'Confirmado. Terceirizados vão LIBERAR uma vaga de estacionamento? '
+        setMessageInfoModal(message)
+        setModalExit(true)
+        setEntranceExitModal(false)
+    })
+    .catch(err=> {
+        setLoading(false)
+        setEntranceExitModal(false)
+        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VS3)', Constants.configToast)
+    })
+  }
+
+  const entranceHandler = _ => {
+    setMessageInfoModal('')
+    setMessageErrorModal('')
+    setLoading(true)
+    api.get(`api/reading/${unitSelected.id}/1`)
+    .then(res=>{
+        setLoading(false)
+        let message = 'Confirmado. '
+        if(res.data.freeslots ===0){
+            //there are not free slots
+            message+='Mas não há vagas de estacionamento disponíveis.'
+            setMessageErrorModal(message)
+            setModalMessage(true)
+        }
+        else{
+            //there are free slots
+            message+= res.data.freeslots > 1 ? `Há ${res.data.freeslots} vagas livres. Terceirizados vão OCUPAR uma vaga?` : 'Há uma vaga livre. Terceirizados vão ocupar esta vaga?'
+            setMessageInfoModal(message)
+            setModalEntrance(true)
+        }
+        setEntranceExitModal(false)
+    })
+    .catch(err=> {
+        setLoading(false)
+        setEntranceExitModal(false)
+        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VS2)', Constants.configToast)
+    })
+  }
+
+  const confirmSlotEntrance = _ => {
+    setMessageInfoModal('')
+    setMessageErrorModal('')
+    setModalEntrance(false)
+    setModalGeneric(true)
+    setLoadingMessage(true)
+    api.get(`api/condo/occupyslot`)
+    .then(resp=>{
+        const freeslots = resp.data.freeslots
+        let message = resp.data.message + ' '
+        if(freeslots > 0){
+            message+= `Ainda ${freeslots > 1 ? `restam ${freeslots} vagas` : 'resta 1 vaga'}.`
+        }
+        else{
+            message+= 'Não restam mais novas vagas.'
+        }
+
+        setMessageInfoModal(message)
+    })
+    .catch(err=>{
+        setMessageErrorModal(err.response?.data?.message)
+    })
+    .finally(()=>{
+        setLoadingMessage(false)
+    })
+  }
+
+  const confirmSlotExit = _ => {
+    setMessageInfoModal('')
+    setMessageErrorModal('')
+    setModalExit(false)
+    setModalGeneric(true)
+    setLoadingMessage(true)
+    api.get(`api/condo/freeslot`)
+    .then(resp=>{
+        const freeslots = resp.data.freeslots
+        const message = resp.data.message + ` Ainda ${freeslots > 1 ? `restam ${freeslots} vagas` : 'resta 1 vaga'}.`
+        setMessageInfoModal(message)
+    })
+    .catch(err=>{
+        setMessageErrorModal(err.response?.data?.message)
+    })
+    .finally(()=>{
+        setLoadingMessage(false)
+    })
+  }
+
   if(loading)
     return <SafeAreaView style={styles.body}>
       <ActivityIndicator size="large" color="white"/>
@@ -191,6 +306,15 @@ const ThirdList = props => {
                     action2={()=> delUnitModal(obj.item)}
                     action3={()=> modalQRCodeHandler(obj.item.id)}
                     qrCodeButton={true}
+                  />
+                }
+                {
+                  user.user_kind===Constants.USER_KIND['GUARD'] &&
+                  <ActionButtons
+                    flexDirection='row'
+                    noDeleteButton
+                    editIcon='car-side'
+                    action1={()=> carIconHandler(obj.item)}
                   />
                 }
                 </View>
@@ -259,6 +383,64 @@ const ThirdList = props => {
         setModalVisible={setShowModalQRCode}
         value={unitIdModalQRCode}
       />
+      <ModalMessage
+        message={'Deseja registrar entrada ou saída de terceirizados?'}
+        modalVisible={entranceExitModal}
+        setModalVisible={setEntranceExitModal}
+        title='Entrada/Saída'
+        btn1Text='ENTRADA'
+        btn2Text='SAÍDA'
+        btn1Pressed={()=>entranceHandler()}
+        btn2Pressed={()=>exitHandler()}
+      />
+      <ModalMessage
+        message={messageInfoModal}
+        modalVisible={modalEntrance}
+        setModalVisible={setModalEntrance}
+        btn1Text='Sim'
+        btn2Text='Não'
+        btn1Pressed={()=>confirmSlotEntrance()}
+      />
+      <ModalMessage
+        message={messageInfoModal}
+        modalVisible={modalExit}
+        setModalVisible={setModalExit}
+        btn1Text='Sim'
+        btn2Text='Não'
+        btn1Pressed={()=>confirmSlotExit()}
+      />
+      <ModalInfo
+        modalVisible={modalMessage}
+        setModalVisible={setModalMessage}
+        message={messageErrorModal}
+        btn1Text='Entendido'
+      />
+      <ModalGeneric
+        modalVisible={modalGeneric}
+        setModalVisible={setModalGeneric}
+      >
+        {
+        loadingMessage &&
+          <View>
+            <Spinner/>
+          </View>
+        ||
+          <View>
+            {
+              !!messageInfoModal &&
+              <Text style={styles.infoMessageModal}>
+                  {messageInfoModal}
+              </Text>
+            }
+            {
+              !!messageErrorModal &&
+              <Text style={styles.errorMessageModal}>
+                  {messageErrorModal}
+              </Text>
+            }
+          </View>
+        }
+      </ModalGeneric>
     </SafeAreaView>
   );
 }

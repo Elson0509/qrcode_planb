@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Modal, Pressable } from 'react-native';
 
-const ModalGeneric = (props) => {
+const ModalInfo = (props) => {
     return (
         <Modal
             visible={props.modalVisible}
@@ -9,28 +9,20 @@ const ModalGeneric = (props) => {
             animationType="slide"
             onRequestClose={()=> props.setModalVisible(false)}
         >
-            <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    {props.title && <Text style={styles.modalTitle}>{props.title}</Text>}
-                    <View>
-                      {props.children}
-                    </View>
-                    <View style={[styles.buttonGroup]}>
-                      {!!props.btn1Text && <Pressable
-                        style={[styles.button, { backgroundColor: props.btn1BgColor || '#2323FF' }]}
-                        onPress={props.btn1Pressed}
-                      >
-                      <Text style={styles.textStyle}>{props.btn1Text}</Text>
-                      </Pressable>}
-                      <Pressable
-                        style={[styles.button, { backgroundColor: props.btn2BgColor || '#FF2323' }]}
-                        onPress={() => props.setModalVisible(false)}
-                      >
-                      <Text style={styles.textStyle}>{props.btn2Text || 'Entendi!'}</Text>
-                      </Pressable>
-                    </View>
-                </View>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              {props.title && <Text style={styles.modalTitle}>{props.title}</Text>}
+              <Text style={styles.modalText}>{props.message}</Text>
+              <View style={[styles.buttonGroup]}>
+                <Pressable
+                  style={[styles.button, { backgroundColor: props.btn1BgColor || '#2323FF' }]}
+                  onPress={()=>props.setModalVisible(false)}
+                >
+                  <Text style={styles.textStyle}>{props.btn1Text || 'OK'}</Text>
+                </Pressable>
+              </View>
             </View>
+          </View>
         </Modal>
     );
 };
@@ -45,7 +37,7 @@ const styles = StyleSheet.create({
     modalTitle:{
       marginBottom: 10,
       textAlign: "center",
-      fontSize: 20,
+      fontSize: 23,
     },
     modalView: {
       margin: 20,
@@ -63,8 +55,7 @@ const styles = StyleSheet.create({
       elevation: 5
     },
     buttonGroup:{
-      flexDirection: 'row',
-      marginTop: 15
+      flexDirection: 'row'
     },
     button: {
       borderRadius: 20,
@@ -88,4 +79,4 @@ const styles = StyleSheet.create({
     }
   });
 
-export default ModalGeneric;
+export default ModalInfo;

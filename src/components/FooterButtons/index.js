@@ -6,16 +6,15 @@ const FooterButtons = (props) => {
         <View>
             {!!props.errorMessage && <Text style={styles.errorMessage}>{props.errorMessage}</Text>}
             <View style={[styles.groupButtons, {backgroundColor: props.backgroundColor || '#fff'}]}>
-                
                 {!!props.title1 && 
-                <TouchableOpacity style={[styles.button, {backgroundColor: props.bgcolor1 || '#006DE3', padding: props.buttonPadding || 25}]} 
+                <TouchableOpacity disabled={props.disabled || false} style={[styles.button, {backgroundColor: props.bgcolor1 || '#006DE3', padding: props.buttonPadding || 25, borderRadius: props.borderRadius || 28,}]} 
                     onPress={()=> props.action1()}>
-                    <Text style={[styles.text, {fontSize: props.fontSize || 20}]}>{props.title1}</Text>
+                    <Text style={[styles.text, {fontSize: props.fontSize || 20, color: props.color1 || 'white'}]}>{props.title1}</Text>
                 </TouchableOpacity>}
                 {!!props.title2 && 
-                <TouchableOpacity style={[styles.button, {backgroundColor: props.bgcolor2 || '#CF142B', padding: props.buttonPadding || 25}]} 
+                <TouchableOpacity disabled={props.disabled || false} style={[styles.button, {backgroundColor: props.bgcolor2 || '#CF142B', padding: props.buttonPadding || 25, borderRadius: props.borderRadius || 28,}]} 
                     onPress={()=> props.action2()}>
-                    <Text style={[styles.text, {fontSize: props.fontSize || 20}]}>{props.title2}</Text>
+                    <Text style={[styles.text, {fontSize: props.fontSize || 20, color: props.color2 || 'white'}]}>{props.title2}</Text>
                 </TouchableOpacity>}
             </View>
         </View>
@@ -40,7 +39,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
     },
     button:{
-        borderRadius: 28,
         margin: 10,
     },
     text:{
