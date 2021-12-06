@@ -18,6 +18,7 @@ const InputBox = (props) => {
                     backgroundColor: props.backgroundColor || 'white', 
                     borderColor: props.borderColor || 'black',
                     color: props.colorInput || 'black',
+                    borderRadius: props.borderRadius || 20,
                   }
                 ]}
                 placeholder={props.placeholder || ''}
@@ -25,10 +26,10 @@ const InputBox = (props) => {
                 //characters || words || sentences || none
                 autoFocus={ props.autoFocus || false}
                 keyboardType={props.keyboard || "default"}
-                secureTextEntry={props.secureTextEntry || false}
                 //default || number-pad || decimal-pad || numeric || email-address || phone-pad
+                secureTextEntry={props.secureTextEntry || false}
                 value={props.value.toString()}
-                autoCorrect={props.autoCorrect || true}
+                autoCorrect={props.autoCorrect || false}
                 onChangeText={props.changed}
                 editable={props.editable === "0" ? false : true}
             />
@@ -43,7 +44,6 @@ const styles = StyleSheet.create({
     txtInput:{
       width:'100%',
       borderWidth:Constants.borderTextInputWidth,
-      borderRadius:20,
       fontWeight:'bold',
       fontSize:12,
       textAlign:'left',

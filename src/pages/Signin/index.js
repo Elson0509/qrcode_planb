@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import ModalForgetPassword from '../../components/ModalForgetPassword';
+import ModalGeneric from '../../components/ModalGeneric'
 import { useAuth } from '../../contexts/auth';
 import { StyleSheet,
    TextInput,
@@ -17,7 +19,8 @@ export default function Signin() {
   const [opacity] = useState(new Animated.Value(0))
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const { signed, signIn, errorMessage } = useAuth()
+  const [forgetPasswordModal, setForgetPasswordModal] = useState(false)
+  const { signIn, errorMessage } = useAuth()
 
   const handleSignIn = async _ =>{
     Keyboard.dismiss()
@@ -80,11 +83,17 @@ export default function Signin() {
         <TouchableOpacity style={styles.btnSubmit} onPress={handleSignIn}>
           <Text  style={styles.txtSubmit}>Acessar</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.btnForgetPassword}>
-          <Text  style={styles.txtForgetPassword}>Esqueci minha senha</Text>
+        <TouchableOpacity style={styles.btnForgetPassword} onPress={()=>setForgetPasswordModal(true)}>
+          <Text style={styles.txtForgetPassword}>Esqueci minha senha</Text>
         </TouchableOpacity>
         {!!errorMessage && <Text style={styles.txtErrorMessage}>{errorMessage}</Text>}
       </Animated.View>
+      <ModalForgetPassword
+        modalVisible={forgetPasswordModal}
+        setModalVisible={setForgetPasswordModal}
+      >
+        <Text>Teste</Text>
+      </ModalForgetPassword>
     </KeyboardAvoidingView>
   );
 }
