@@ -36,6 +36,8 @@ const ResidentAdd = props => {
     const [vehicleBeingAdded, setVehicleBeingAdded] = useState({id: "0", maker:'', model:'', color:'', plate:''})
     const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {id: "0", name: '', identification: '', email: '', pic: ''})
     const [screen, setScreen]= useState(props.route?.params?.screen || 'ResidentAdd')
+    const [addingUser, setAddingUser] = useState(false)
+    const [addingVehicle, setAddingVehicle] = useState(false)
 
     //fetching blocos
     useEffect(()=>{
@@ -290,6 +292,8 @@ const ResidentAdd = props => {
                 addResidentHandler={addResidentHandler}
                 cancelAddResidentHandler={cancelAddResidentHandler}
                 removeResident={removeResident}
+                addingUser={addingUser}
+                setAddingUser={setAddingUser}
               />
               <AddCarsGroup 
                 data={vehicles} 
@@ -299,16 +303,21 @@ const ResidentAdd = props => {
                 addVehicleHandler={addVehicleHandler}
                 cancelVehicleHandler={cancelVehicleHandler}
                 removeVehicle={removeVehicle}
+                addingVehicle={addingVehicle}
+                setAddingVehicle={setAddingVehicle}
               />
-              <FooterButtons
-                backgroundColor={Constants.backgroundColors['Residents']}
-                title1="Confirmar"
-                title2="Cancelar"
-                buttonPadding={15}
-                fontSize={17}
-                action1={confirmHandler}
-                action2={props.navigation.goBack}
-              />
+              {
+                !addingUser && !addingVehicle && 
+                <FooterButtons
+                  backgroundColor={Constants.backgroundColors['Residents']}
+                  title1="Confirmar"
+                  title2="Cancelar"
+                  buttonPadding={15}
+                  fontSize={17}
+                  action1={confirmHandler}
+                  action2={props.navigation.goBack}
+                />
+              }
             </View>
           }
         </ScrollView>

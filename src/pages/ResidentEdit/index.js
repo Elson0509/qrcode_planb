@@ -32,6 +32,8 @@ const ResidentEdit = props => {
     const [vehicles, setVehicles] = useState(props.route?.params?.vehicles || [])
     const [vehicleBeingAdded, setVehicleBeingAdded] = useState({maker:'', model:'', color:'', plate:''})
     const [userBeingAdded, setUserBeingAdded]= useState(props.route?.params?.userBeingAdded || {name: '', identification: '', email: '', pic: ''})
+    const [addingUser, setAddingUser] = useState(false)
+    const [addingVehicle, setAddingVehicle] = useState(false)
 
     //fetching data from the unit
     useEffect(()=>{
@@ -64,17 +66,6 @@ const ResidentEdit = props => {
         }
       })();
     }, []);
-
-    //updating info according to unit
-    // useEffect(()=>{
-    //   if(selectedUnit){
-    //     //updating info
-    //   }
-    //   else{
-    //     setResidents([])
-    //     setVehicles([])
-    //   }
-    // }, [selectedUnit])
 
     const removeResident = index => {
       const residentsCopy = [...residents]
@@ -210,6 +201,8 @@ const ResidentEdit = props => {
                 addResidentHandler={addResidentHandler}
                 cancelAddResidentHandler={cancelAddResidentHandler}
                 removeResident={removeResident}
+                addingUser={addingUser}
+                setAddingUser={setAddingUser}
               />
               <AddCarsGroup 
                 data={vehicles} 
@@ -219,9 +212,11 @@ const ResidentEdit = props => {
                 addVehicleHandler={addVehicleHandler}
                 cancelVehicleHandler={cancelVehicleHandler}
                 removeVehicle={removeVehicle}
+                addingVehicle={addingVehicle}
+                setAddingVehicle={setAddingVehicle}
               />
               {
-                !!selectedUnit && residents.length > 0 &&
+                !addingUser && !addingVehicle && residents.length > 0 &&
                   <FooterButtons
                     backgroundColor={Constants.backgroundColors['Residents']}
                     title1="Confirmar"

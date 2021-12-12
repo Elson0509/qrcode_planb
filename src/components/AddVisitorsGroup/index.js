@@ -20,22 +20,20 @@ import { StyleSheet,
 } from 'react-native';
 
 const AddVisitorsGroup = (props) => {
-    const [addingUser, setAddingUser] = useState(false)
-
     const addHandler = _ => {
         if(props.addResidentHandler()){
-            setAddingUser(false)
+            props.setAddingUser(false)
         }
     }
 
     const cancelHandler = _ => {
         props.cancelAddResidentHandler();
-        setAddingUser(false)
+        props.setAddingUser(false)
     }
 
     return (
         <View style={[styles.container, {backgroundColor: props.backgroundColor || '#44FFAF'}]}>
-            <TouchableOpacity style={[styles.button, {backgroundColor: props.backgroundColorButtons || '#00FF7F'}]} onPress={()=> {setAddingUser(true)}}>
+            <TouchableOpacity style={[styles.button, {backgroundColor: props.backgroundColorButtons || '#00FF7F'}]} onPress={()=> {props.setAddingUser(true)}}>
                 <Icon name='user' size={40}/>
                 <Text>Adicionar Visitante</Text>
             </TouchableOpacity>
@@ -58,7 +56,7 @@ const AddVisitorsGroup = (props) => {
                 )))
             }
             {
-                addingUser &&
+                props.addingUser &&
                 <View style={{marginTop: 15}}>
                     <Text style={{textAlign:'center'}}>Dados do novo visitante</Text>
                     <InputBox

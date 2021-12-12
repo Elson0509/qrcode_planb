@@ -46,6 +46,9 @@ const ThirdAdd = props => {
     const [screen, setScreen]= useState(props.route?.params?.screen || 'ThirdAdd')
     const [showModalQRCode, setShowModalQRCode] = useState(false)
     const [unitIdModalQRCode, setUnitIdModalQRCode] = useState('')
+    const [addingUser, setAddingUser] = useState(false)
+    const [addingDates, setAddingDates] = useState(false)
+    const [addingVehicle, setAddingVehicle] = useState(false)
 
     //fetching blocos
     useEffect(()=>{
@@ -96,7 +99,7 @@ const ThirdAdd = props => {
       if (!result.cancelled) {
         setUserBeingAdded(prev=> {return {...prev, pic:compressed.uri}})
       }
-    };
+    }
 
     const addResidentHandler = _ =>{
       if(!userBeingAdded.name){
@@ -324,6 +327,8 @@ const ThirdAdd = props => {
                 addResidentHandler={addResidentHandler}
                 cancelAddResidentHandler={cancelAddResidentHandler}
                 removeResident={removeResident}
+                addingUser={addingUser}
+                setAddingUser={setAddingUser}
               />
               <SelectDatesVisitorsGroup
                 selectedDateInit={Utils.printDate(selectedDateInit)}
@@ -340,6 +345,8 @@ const ThirdAdd = props => {
                 dateEnd={dateEnd}
                 setDateEnd={setDateEnd}
                 errorMessage={errorSetDateMessage}
+                addingDates={addingDates}
+                setAddingDates={setAddingDates}
               />
               <AddCarsGroup 
                 backgroundColor={backgroundColorBoxes}
@@ -353,17 +360,22 @@ const ThirdAdd = props => {
                 removeVehicle={removeVehicle}
                 backgroundLightColor={Constants.backgroundLightColors['Thirds']}
                 backgroundDarkColor={Constants.backgroundDarkColors['Thirds']}
+                addingVehicle={addingVehicle}
+                setAddingVehicle={setAddingVehicle}
               />
-              <FooterButtons
-                backgroundColor={Constants.backgroundColors['Thirds']}
-                title1="Confirmar"
-                title2="Cancelar"
-                errorMessage={errorMessage}
-                buttonPadding={15}
-                fontSize={17}
-                action1={confirmHandler}
-                action2={cancelHandler}
-              />
+              {
+                !addingDates && !addingUser && !addingVehicle &&
+                <FooterButtons
+                  backgroundColor={Constants.backgroundColors['Thirds']}
+                  title1="Confirmar"
+                  title2="Cancelar"
+                  errorMessage={errorMessage}
+                  buttonPadding={15}
+                  fontSize={17}
+                  action1={confirmHandler}
+                  action2={cancelHandler}
+                />
+              }
             </View>
           }
         </ScrollView>

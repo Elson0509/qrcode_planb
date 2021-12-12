@@ -5,35 +5,26 @@ import FooterButtons from '../FooterButtons';
 import * as Constants from '../../services/constants'
 import DateInputBox from '../DateInputBox'
 import { StyleSheet,
-    TextInput,
     View,
-    KeyboardAvoidingView,
-    Image,
     TouchableOpacity,
     Text,
-    FlatList,
-    Animated,
-    Keyboard,
-    Button,
 } from 'react-native';
 
 const SelectDatesVisitorsGroup = (props) => {
-    const [addingDates, setAddingDates] = useState(false)
-
     const addHandler = _ => {
         if(props.selectDatesHandler()){
-            setAddingDates(false)
+            props.setAddingDates(false)
         }
     }
 
     const cancelHandler = _ => {
         props.cancelDatesHandler();
-        setAddingDates(false)
+        props.setAddingDates(false)
     }
 
     return (
         <View style={[styles.container, {backgroundColor: props.backgroundColor || '#44FFAF'}]}>
-            <TouchableOpacity style={[styles.button, {backgroundColor: props.backgroundColorButtons || '#00FF7F'}]} onPress={()=> {setAddingDates(true)}}>
+            <TouchableOpacity style={[styles.button, {backgroundColor: props.backgroundColorButtons || '#00FF7F'}]} onPress={()=> {props.setAddingDates(true)}}>
                 <Icon name='calendar-alt' size={40}/>
                 <Text>Selecionar Prazo</Text>
             </TouchableOpacity>
@@ -50,7 +41,7 @@ const SelectDatesVisitorsGroup = (props) => {
                 </View>
             }
             {
-                addingDates &&
+                props.addingDates &&
                 <View>
                    <DateInputBox
                         changed1={(value)=>props.setDateInit({...props.dateInit, day: value})}

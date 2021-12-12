@@ -1,40 +1,31 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Icon from '../Icon';
 import InputBox from '../InputBox';
 import FooterButtons from '../FooterButtons';
 import * as Constants from '../../services/constants'
-import * as Utils from '../../services/util'
-import DateInputBox from '../DateInputBox'
 import PicUser from '../PicUser';
 import { StyleSheet,
-    TextInput,
     View,
     Image,
     TouchableOpacity,
     Text,
-    FlatList,
-    Animated,
-    Keyboard,
-    Button,
 } from 'react-native';
 
 const AddThirdsGroup = (props) => {
-    const [addingUser, setAddingUser] = useState(false)
-
     const addHandler = _ => {
         if(props.addResidentHandler()){
-            setAddingUser(false)
+            props.setAddingUser(false)
         }
     }
 
     const cancelHandler = _ => {
         props.cancelAddResidentHandler();
-        setAddingUser(false)
+        props.setAddingUser(false)
     }
 
     return (
         <View style={[styles.container, {backgroundColor: props.backgroundColor || '#44FFAF'}]}>
-            <TouchableOpacity style={[styles.button, {backgroundColor: props.backgroundColorButtons || '#00FF7F'}]} onPress={()=> {setAddingUser(true)}}>
+            <TouchableOpacity style={[styles.button, {backgroundColor: props.backgroundColorButtons || '#00FF7F'}]} onPress={()=> {props.setAddingUser(true)}}>
                 <Icon name='tools' size={40}/>
                 <Text>Adicionar Terceirizados</Text>
             </TouchableOpacity>
@@ -58,7 +49,7 @@ const AddThirdsGroup = (props) => {
                 )))
             }
             {
-                addingUser &&
+                props.addingUser &&
                 <View>
                     <InputBox
                         text="Nome*:"

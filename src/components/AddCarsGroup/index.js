@@ -1,32 +1,24 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Icon from '../Icon';
 import InputBox from '../InputBox';
 import FooterButtons from '../FooterButtons';
 import * as Constants from '../../services/constants'
 import { StyleSheet,
-    TextInput,
     View,
-    KeyboardAvoidingView,
-    Image,
     TouchableOpacity,
     Text,
-    FlatList,
-    Animated,
-    Keyboard,
 } from 'react-native';
 
 const AddCarsGroup = (props) => {
-    const [addingVehicle, setAddingVehicle] = useState(false)
-
     const addHandler = _ => {
         if(props.addVehicleHandler()){
-            setAddingVehicle(false)
+            props.setAddingVehicle(false)
         }
     }
 
     const cancelHandler = _ => {
         props.cancelVehicleHandler();
-        setAddingVehicle(false)
+        props.setAddingVehicle(false)
     }
 
     const changePlate = val =>{
@@ -38,7 +30,7 @@ const AddCarsGroup = (props) => {
 
     return (
         <View style={[styles.container, {backgroundColor: props.backgroundColor || '#44FFAF'}]}>
-            <TouchableOpacity style={[styles.button, {backgroundColor: props.backgroundColorButtons || '#00FF7F'}]} onPress={()=> {setAddingVehicle(true)}}>
+            <TouchableOpacity style={[styles.button, {backgroundColor: props.backgroundColorButtons || '#00FF7F'}]} onPress={()=> {props.setAddingVehicle(true)}}>
                 <Icon name='car' size={40}/>
                 <Text>Adicionar Veículo</Text>
             </TouchableOpacity>
@@ -56,7 +48,7 @@ const AddCarsGroup = (props) => {
                 ))
             }
             {
-                addingVehicle && 
+                props.addingVehicle && 
                 <View>
                     <InputBox
                         text="Fabricante*:"
