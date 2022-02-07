@@ -115,6 +115,7 @@ const ResidentList = props => {
         unitsInfo.push(unitInfo)
       })
     })
+    
     return unitsInfo
   }
 

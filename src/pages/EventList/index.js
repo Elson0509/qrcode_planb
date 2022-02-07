@@ -148,7 +148,7 @@ const EventList = props => {
                             <TouchableOpacity onPress={()=> onClickPhotoHandler(obj.item)}>
                               <Image
                                 style={{width: 60, height: 80, marginRight: 5}}
-                                source={{uri: `${Constants.apiurlPrefix}${Constants.apiurl}/img/${obj.item.id}.jpg`}}
+                                source={{uri: `${Constants.PREFIX_IMG_GOOGLE_CLOUD}${obj.item.photo_id}`}}
                               />
                             </TouchableOpacity>
                             <View style={{width: 245}}>

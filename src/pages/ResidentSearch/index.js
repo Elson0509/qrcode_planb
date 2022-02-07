@@ -121,7 +121,6 @@ const ResidentSearch = props => {
             el.number.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1 
         })
     }
-
     return unitsInfo
   }
 

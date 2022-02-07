@@ -7,7 +7,7 @@ const SindicoRoutes = [
         name: 'Sindico',
         component: Sindico,
         backgroundDarkColor: 'Visitors',
-        headerTitle: 'Síndicos'
+        headerTitle: 'Administradores'
     },
     {
         name: 'SindicoList',

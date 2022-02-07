@@ -14,7 +14,7 @@ import FooterButtons from '../../components/FooterButtons';
 
 const CondoAdd = props => {
   const [loading, setLoading] = useState(false)
-  const [condoBeingAdded, setCondoBeingAdded] = useState(props.route?.params?.condoBeingAdded || {id: "0", name: '', address: '', city: '', state: ''})
+  const [condoBeingAdded, setCondoBeingAdded] = useState(props.route?.params?.condoBeingAdded || {id: "0", name: '', address: '', city: '', state: '', slots: ''})
   const [errorMessage, setErrorMessage] = useState('')
 
   const addHandler = _ => {
@@ -30,17 +30,21 @@ const CondoAdd = props => {
     if(!condoBeingAdded.state){
       return setErrorMessage('Estado não pode estar vazio.')
     }
+    if(isNaN(condoBeingAdded.slots) || !condoBeingAdded.slots || Number(condoBeingAdded.slots) < 0){
+      return setErrorMessage('Quantidade de vagas inválida.')
+    }
     setLoading(true)
     api.post('api/condo', {
       name: condoBeingAdded.name,
       address: condoBeingAdded.address,
       city: condoBeingAdded.city,
       state: condoBeingAdded.state,
+      slots: condoBeingAdded.slots,
     })
     .then((res)=>{
       setErrorMessage('')
       Toast.show('Cadastro realizado', Constants.configToast)
-      setCondoBeingAdded({id: "0", name: '', address: '', city: '', state: ''})
+      setCondoBeingAdded({id: "0", name: '', address: '', city: '', state: '', slots: ''})
     })
     .catch((err)=> {
       Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CoA1)', Constants.configToast)
@@ -89,6 +93,16 @@ const CondoAdd = props => {
           text="Estado*:" 
           value={condoBeingAdded.state} 
           changed={value=>setCondoBeingAdded({...condoBeingAdded, state:value})}
+          autoCapitalize='characters'
+          backgroundColor={Constants.backgroundLightColors['Residents']}
+          borderColor={Constants.backgroundDarkColors['Residents']}
+          colorInput={Constants.backgroundDarkColors['Residents']}
+        />
+        <InputBox 
+          text="Vagas de estacionamento*:" 
+          keyboard='numeric'
+          value={condoBeingAdded.slots} 
+          changed={value=>setCondoBeingAdded({...condoBeingAdded, slots:value})}
           autoCapitalize='characters'
           backgroundColor={Constants.backgroundLightColors['Residents']}
           borderColor={Constants.backgroundDarkColors['Residents']}

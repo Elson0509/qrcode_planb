@@ -4,7 +4,7 @@ import Constants from 'expo-constants';
 const { manifest } = Constants
 
 export const apiurlPrefix = 'http://'
-//export const apiurl = `nice-husky-49.loca.lt`
+//export const apiurl = `fuzzy-penguin-74.loca.lt`
 //lt --port 3333
 
 export const apiurl = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts.dev
@@ -21,6 +21,8 @@ export const is_autorized_backgroundColor = '#00B924'
 export const is_not_autorized_backgroundColor = '#FF726F'
 
 export const MIN_PASSWORD_SIZE = 6
+
+export const PREFIX_IMG_GOOGLE_CLOUD = 'https://drive.google.com/uc?export=view&id='
 
 export const genericProfilePic = require('../../assets/pics/generic-profile.png')
 

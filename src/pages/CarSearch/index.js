@@ -99,7 +99,7 @@ const CarSearch = props => {
           type: 'image/jpg',
           name:newId+'.jpg'
         })
-        api.post(`api/user/image/${newId}`, formData, {
+        api.post(`api/overnight/image/${newId}`, formData, {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'multipart/form-data',

@@ -29,7 +29,7 @@ const Dashboard = (props) => {
     const menuOptionsSurvey = { menuName: "Avaliação", icon: 'smile', key: 'pesquisa', screen: 'Survey', backgroundColor: Constants.backgroundColors['Survey'] }
     const menuOptionsInfo = { menuName: "Informações", icon: 'info-circle', key: 'info', screen: 'Info', backgroundColor: Constants.backgroundColors['Info'] }
     const menuOptionsCondo = { menuName: "Condomínios", icon: 'city', key: 'condo', screen: 'Condo', backgroundColor: Constants.backgroundColors['Residents'] }
-    const menuOptionsSindico = { menuName: "Síndicos", icon: 'users-cog', key: 'sindico', screen: 'Sindico', backgroundColor: Constants.backgroundColors['Visitors'] }
+    const menuOptionsSindico = { menuName: "Administradores", icon: 'users-cog', key: 'sindico', screen: 'Sindico', backgroundColor: Constants.backgroundColors['Visitors'] }
     const menuOptionsSlot = { menuName: "Estacionamento", icon: 'car-side', key: 'slot', screen: 'Slot', backgroundColor: Constants.backgroundColors['Slot']}
 
     const profiles = []
