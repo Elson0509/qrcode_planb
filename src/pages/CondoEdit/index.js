@@ -14,7 +14,7 @@ import FooterButtons from '../../components/FooterButtons';
 
 const CondoEdit = props => {
   const [loading, setLoading] = useState(false)
-  const [condoBeingAdded, setCondoBeingAdded] = useState(props.route?.params?.condoBeingAdded || {id: "0", name: '', address: '', city: '', state: ''})
+  const [condoBeingAdded, setCondoBeingAdded] = useState(props.route?.params?.condoBeingAdded || {id: "0", name: '', address: '', city: '', state: '', slots: ''})
   const [errorMessage, setErrorMessage] = useState('')
 
   const addHandler = _ => {
@@ -29,6 +29,9 @@ const CondoEdit = props => {
     }
     if(!condoBeingAdded.state){
       return setErrorMessage('Estado não pode estar vazio.')
+    }
+    if(isNaN(condoBeingAdded.slots) || !condoBeingAdded.slots || Number(condoBeingAdded.slots) < 0){
+      return setErrorMessage('Quantidade de vagas inválida.')
     }
     setLoading(true)
     api.put(`api/condo/${condoBeingAdded.id}`, {
@@ -88,6 +91,16 @@ const CondoEdit = props => {
           text="Estado*:" 
           value={condoBeingAdded.state} 
           changed={value=>setCondoBeingAdded({...condoBeingAdded, state:value})}
+          autoCapitalize='characters'
+          backgroundColor={Constants.backgroundLightColors['Residents']}
+          borderColor={Constants.backgroundDarkColors['Residents']}
+          colorInput={Constants.backgroundDarkColors['Residents']}
+        />
+        <InputBox 
+          text="Vagas de estacionamento*:" 
+          keyboard='numeric'
+          value={condoBeingAdded.slots} 
+          changed={value=>setCondoBeingAdded({...condoBeingAdded, slots:value})}
           autoCapitalize='characters'
           backgroundColor={Constants.backgroundLightColors['Residents']}
           borderColor={Constants.backgroundDarkColors['Residents']}

@@ -80,12 +80,12 @@ const CondoList = props => {
             address: condo.address,
             city: condo.city,
             state: condo.state,
+            slots: condo.slots
           },
           screen: 'CondoEdit'
         }
       )
     }
-
 
     if(loading)
       return <SafeAreaView style={styles.body}>
@@ -117,12 +117,13 @@ const CondoList = props => {
                       />
                     </View>
                     <View style={{justifyContent: 'space-between', flexDirection: 'column'}}>
-                      <View style={{maxWidth: 300}}>
+                      <View>
                         <View>
                             <View style={{flexDirection: 'row', paddingBottom:3, marginBottom: 5, borderColor: Constants.backgroundDarkColors["Residents"]}}>
-                              <View style={{width: 250}}>
+                              <View>
                                 <Text style={{fontSize: 12, marginLeft: 7}}><Text style={{fontWeight:'bold'}}>Nome:</Text> {obj.item.name}</Text>
                                 <Text style={{fontSize: 12, marginLeft: 7}}><Text style={{fontWeight:'bold'}}>Endereço:</Text> {obj.item.address}, {obj.item.city} - {obj.item.state}</Text>
+                                <Text style={{fontSize: 12, marginLeft: 7}}><Text style={{fontWeight:'bold'}}>Vagas de estacionamento:</Text> {obj.item.slots}</Text>
                                 <Text style={{fontSize: 12, marginLeft: 7}}><Text style={{fontWeight:'bold'}}>Ativo desde </Text> {Utils.printDate(new Date(obj.item.createdAt))}</Text>
                               </View>
                             </View>
