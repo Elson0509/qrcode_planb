@@ -138,10 +138,6 @@ const CarSearch = props => {
       })
     }
 
-    const cancelHandler = _ => {
-      console.log('cancel')
-    }
-
     if(loading)
       return <SafeAreaView style={styles.body}>
         <ActivityIndicator size="large" color="white"/>
