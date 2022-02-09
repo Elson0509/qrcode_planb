@@ -252,7 +252,6 @@ const styles = StyleSheet.create({
     minHeight:'100%'
   },
   menuItem:{
-    borderWidth: 1,
     padding: 10,
     backgroundColor: Constants.backgroundLightColors['Cars'],
     borderRadius: 20,

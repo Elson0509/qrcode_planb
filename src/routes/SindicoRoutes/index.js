@@ -6,19 +6,19 @@ const SindicoRoutes = [
     {
         name: 'Sindico',
         component: Sindico,
-        backgroundDarkColor: 'Visitors',
+        backgroundDarkColor: 'Dashboard',
         headerTitle: 'Administradores'
     },
     {
         name: 'SindicoList',
         component: SindicoList,
-        backgroundDarkColor: 'Visitors',
+        backgroundDarkColor: 'Dashboard',
         headerTitle: 'Listar'
     },
     {
         name: 'SindicoAdd',
         component: SindicoAdd,
-        backgroundDarkColor: 'Visitors',
+        backgroundDarkColor: 'Dashboard',
         headerTitle: 'Adicionar'
     },
 ]

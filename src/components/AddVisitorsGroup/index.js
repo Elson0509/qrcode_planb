@@ -62,7 +62,6 @@ const AddVisitorsGroup = (props) => {
                     <InputBox
                         text="Nome*:"
                         value={props.userBeingAdded.name}
-                        width={295}
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, name: val})}
                         autoCapitalize='words'
                         backgroundColor={Constants.backgroundLightColors['Visitors']}
@@ -72,7 +71,6 @@ const AddVisitorsGroup = (props) => {
                     <InputBox
                         text="Documento*:"
                         value={props.userBeingAdded.identification}
-                        width={295}
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, identification: val})}
                         autoCapitalize='characters'
                         backgroundColor={Constants.backgroundLightColors['Visitors']}
@@ -148,7 +146,7 @@ const styles = StyleSheet.create({
     },
     listItem:{
         padding: 3,
-        borderBottomWidth: 1,
+        marginBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'

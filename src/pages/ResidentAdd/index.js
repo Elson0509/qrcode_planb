@@ -220,7 +220,6 @@ const ResidentAdd = props => {
           headers: {
             Accept: 'application/json',
             'Content-Type': 'multipart/form-data',
-            
           }
         })
         .then(res=>{

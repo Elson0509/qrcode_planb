@@ -110,8 +110,6 @@ const CarList = props => {
       })
   }
 
-  console.log(overnights)
-
   if (loading)
     return <SafeAreaView style={styles.body}>
       <ActivityIndicator size="large" color="white" />
@@ -124,7 +122,6 @@ const CarList = props => {
           <FlatList
             data={overnights}
             keyExtractor={item => item.id}
-            style={{ marginBottom: 80, paddingRight: 10 }}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
@@ -133,9 +130,7 @@ const CarList = props => {
             }
             renderItem={(obj) => {
               return (
-                <View
-                  style={styles.menuItem}
-                >
+                <View style={styles.menuItem}>
                   <View>
                     <ActionButtons
                       flexDirection='row'
@@ -159,11 +154,9 @@ const CarList = props => {
                             <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Veículo registrado:</Text> {obj.item.is_registered_vehicle ? 'Sim' : 'Não'}</Text>
                             <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Quem registrou:</Text> {obj.item.userRegistering.name}</Text>
                             {!obj.item.description && <Text style={{ fontSize: 12, marginLeft: 7, }}>Sem descrição</Text>}
-                            {!!obj.item.description && (
-                              <View style={{ width: 245, padding: 5, borderWidth: 1, backgroundColor: 'white', borderRadius: 10, marginTop: 5 }}>
-                                <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Descrição:</Text> {obj.item.description}</Text>
-                              </View>
-                            )}
+                            {!!obj.item.description &&
+                              <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Descrição:</Text> {obj.item.description}</Text>
+                            }
                           </View>
                         </View>
                       </View>
@@ -188,7 +181,7 @@ const CarList = props => {
       <ModalPhoto
         modalVisible={isModalPhotoActive}
         setModalVisible={setIsModalPhotoActive}
-        id={selectedOvernight?.id}
+        id={selectedOvernight?.photo_id}
       />
       <ModalReply
         modal={modalGeneric}
@@ -205,16 +198,14 @@ const CarList = props => {
 
 const styles = StyleSheet.create({
   body: {
-    padding: 10,
     backgroundColor: Constants.backgroundColors['Cars'],
-    minHeight: '100%'
+    flex: 1
   },
   menuItem: {
-    borderWidth: 1,
+    borderBottomWidth: 2,
+    borderBottomColor: Constants.backgroundDarkColors['Cars'],
     padding: 10,
     backgroundColor: Constants.backgroundLightColors['Cars'],
-    borderRadius: 20,
-    marginBottom: 10,
   },
   listText: {
     color: 'black',

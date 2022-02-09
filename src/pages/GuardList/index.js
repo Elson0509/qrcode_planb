@@ -84,7 +84,6 @@ const GuardList = props => {
           <FlatList
             data={residents}
             keyExtractor={item => item.id}
-            style={{ marginBottom: 80, paddingRight: 10 }}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
@@ -93,9 +92,7 @@ const GuardList = props => {
             }
             renderItem={(obj) => {
               return (
-                <View
-                  style={styles.menuItem}
-                >
+                <View style={styles.menuItem}>
                   <View>
                     <ActionButtons
                       flexDirection='row'
@@ -107,7 +104,7 @@ const GuardList = props => {
                     <View style={{ maxWidth: 300 }}>
                       <View>
                         {
-                          <View style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 5, borderBottomWidth: 1, borderColor: Constants.backgroundDarkColors["Guards"] }}>
+                          <View style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 5}}>
                             <View>
                               <PicUser user={obj.item} />
                             </View>
@@ -126,7 +123,7 @@ const GuardList = props => {
             }}
           />
           :
-          <Text style={{textAlign: 'center', padding: 10}}>Sem colaboradores cadastrados.</Text>
+          <Text style={{ textAlign: 'center', padding: 10 }}>Sem colaboradores cadastrados.</Text>
       }
       <ModalMessage
         message={message}
@@ -143,16 +140,14 @@ const GuardList = props => {
 
 const styles = StyleSheet.create({
   body: {
-    padding: 10,
     backgroundColor: Constants.backgroundColors['Guards'],
-    minHeight: '100%'
+    flex:1
   },
   menuItem: {
-    borderWidth: 1,
+    borderBottomWidth: 1,
+    borderColor: Constants.backgroundDarkColors['Guards'],
     padding: 10,
     backgroundColor: Constants.backgroundLightColors['Guards'],
-    borderRadius: 20,
-    marginBottom: 10,
   },
   listText: {
     color: 'black',

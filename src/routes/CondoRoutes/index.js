@@ -7,25 +7,25 @@ const CondoRoutes = [
     {
         name: 'Condo',
         component: Condo,
-        backgroundDarkColor: 'Residents',
+        backgroundDarkColor: 'Dashboard',
         headerTitle: 'Condomínios'
     },
     {
         name: 'CondoList',
         component: CondoList,
-        backgroundDarkColor: 'Residents',
+        backgroundDarkColor: 'Dashboard',
         headerTitle: 'Listar'
     },
     {
         name: 'CondoAdd',
         component: CondoAdd,
-        backgroundDarkColor: 'Residents',
+        backgroundDarkColor: 'Dashboard',
         headerTitle: 'Adicionar'
     },
     {
         name: 'CondoEdit',
         component: CondoEdit,
-        backgroundDarkColor: 'Residents',
+        backgroundDarkColor: 'Dashboard',
         headerTitle: 'Editar'
     },
 ]

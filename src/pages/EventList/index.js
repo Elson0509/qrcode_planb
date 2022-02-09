@@ -86,7 +86,6 @@ const EventList = props => {
   }
 
   const replyHandler = item => {
-    console.log(item)
     setSelectedEvent(item)
     setModalGeneric(true)
     setSubject('Re: ' + item.title)
@@ -123,7 +122,6 @@ const EventList = props => {
           <FlatList
             data={events}
             keyExtractor={item => item.id}
-            style={{ marginBottom: 80, paddingRight: 10 }}
             refreshControl={
               <RefreshControl
                 refreshing={refreshing}
@@ -154,14 +152,12 @@ const EventList = props => {
                             />
                           </TouchableOpacity>
                           <View style={{ width: 245 }}>
-                            <Text style={{ fontSize: 12, marginLeft: 7 }}>Data: {Utils.printDateAndHour(new Date(obj.item.created_at))}</Text>
-                            <Text style={{ fontSize: 12, marginLeft: 7, }}>Quem registrou: {obj.item.userRegistering.name} ({Constants.USER_KIND_NAME[obj.item.userRegistering.user_kind_id]})</Text>
-                            {!!obj.item.userRegistering?.Unit && <Text style={{ fontSize: 12, marginLeft: 7, }}>Unidade: Bloco {obj.item.userRegistering.Unit.Bloco.name} - unidade {obj.item.userRegistering.Unit.number}</Text>}
-                            <View style={{ width: 245, padding: 5, borderWidth: 1, backgroundColor: 'white', borderRadius: 10, marginTop: 5 }}>
-                              {!!obj.item.title && <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Título:</Text> {obj.item.title}</Text>}
-                              {!!obj.item.place && <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Local:</Text> {obj.item.place}</Text>}
-                              {!!obj.item.description && <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Descrição:</Text> {obj.item.description}</Text>}
-                            </View>
+                            <Text style={{ fontSize: 12, marginLeft: 7 }}><Text style={{ fontWeight: 'bold' }}>Data:</Text> {Utils.printDateAndHour(new Date(obj.item.created_at))}</Text>
+                            <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Quem registrou:</Text> {obj.item.userRegistering.name} ({Constants.USER_KIND_NAME[obj.item.userRegistering.user_kind_id]})</Text>
+                            {!!obj.item.userRegistering?.Unit && <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Unidade:</Text> Bloco {obj.item.userRegistering.Unit.Bloco.name} - unidade {obj.item.userRegistering.Unit.number}</Text>}
+                            {!!obj.item.title && <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Título:</Text> {obj.item.title}</Text>}
+                            {!!obj.item.place && <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Local:</Text> {obj.item.place}</Text>}
+                            {!!obj.item.description && <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Descrição:</Text> {obj.item.description}</Text>}
                           </View>
                         </View>
                       </View>
@@ -203,16 +199,14 @@ const EventList = props => {
 
 const styles = StyleSheet.create({
   body: {
-    padding: 10,
     backgroundColor: Constants.backgroundColors['Events'],
-    minHeight: '100%'
+    flex: 1
   },
   menuItem: {
-    borderWidth: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: Constants.backgroundDarkColors['Events'],
     padding: 10,
     backgroundColor: Constants.backgroundLightColors['Events'],
-    borderRadius: 20,
-    marginBottom: 10,
   },
   listText: {
     color: 'black',

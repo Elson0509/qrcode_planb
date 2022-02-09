@@ -6,7 +6,7 @@ const EventRoutes = [
     {
         name: 'EventsGuard',
         component: Events,
-        backgroundDarkColor: 'Events',
+        backgroundDarkColor: 'Dashboard',
         headerTitle: 'Ronda'
     },
     {

@@ -38,7 +38,7 @@ const SindicoAdd = props => {
       api.get(`api/condo`)
       .then(resp=>{
         setCondos(resp.data)
-        console.log(resp.data)
+        (resp.data)
       })
       .catch(err=>{
         Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (SA1)', Constants.configToast)

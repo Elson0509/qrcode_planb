@@ -11,7 +11,7 @@ export const apiurl = (typeof manifest.packagerOpts === `object`) && manifest.pa
   ? manifest.debuggerHost.split(`:`).shift().concat(`:3333`)
   : `api.example.com`;//*/
 
-export const borderTextInputWidth = 3
+export const borderTextInputWidth = 2
 
 //scan qr code
 export const QR_CODE_PREFIX = 'epw:'
@@ -58,7 +58,7 @@ export const USER_KIND = {
 export const backgroundColors = {
     "Cars":'#00CCEE',
     "Dashboard":'#00AAEE',
-    "Events":'#FF69B4',
+    "Events":'#FF7AC5',
     "Guards":'#CCCC00',
     "Info":'#F699CD',
     "MyQRCode":'#C1C1C1',
@@ -73,7 +73,7 @@ export const backgroundColors = {
 
 export const backgroundLightColors = {
     "Cars":'#8AFFFF',
-    "Events":'#FFB6C1',
+    "Events":'#FF9CE7',
     "Guards":'#FFFF99',
     "Info":'#FEC5E5',
     "MyQRCode":'#EEEEEE',
@@ -89,7 +89,7 @@ export const backgroundLightColors = {
 export const backgroundDarkColors = {
     "Cars":'#00A2A2',
     "Dashboard":'#0088CC',
-    "Events":'#FF1493',
+    "Events":'#DD58A3',
     "Guards":'#999900',
     "Info":'#FD5DA8',
     "MyQRCode":'#AAAAAA',

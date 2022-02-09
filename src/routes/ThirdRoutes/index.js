@@ -7,7 +7,7 @@ const ThirdRoutes = [
     {
         name: 'Thirds',
         component: Thirds,
-        backgroundDarkColor: 'Thirds',
+        backgroundDarkColor: 'Dashboard',
         headerTitle: 'Terceirizados'
     },
     {

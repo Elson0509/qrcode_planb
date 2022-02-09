@@ -6,7 +6,7 @@ const ResidentRoutes = [
     {
         name: 'Residents',
         component: Residents,
-        backgroundDarkColor: 'Residents',
+        backgroundDarkColor: 'Dashboard',
         headerTitle: 'Moradores'
     },
     {

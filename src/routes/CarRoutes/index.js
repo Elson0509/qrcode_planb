@@ -6,7 +6,7 @@ const CarRoutes = [
     {
         name: 'Car',
         component: Car,
-        backgroundDarkColor: 'Cars',
+        backgroundDarkColor: 'Dashboard',
         headerTitle: 'Pernoite'
     },
     {

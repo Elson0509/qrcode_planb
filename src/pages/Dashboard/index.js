@@ -1,17 +1,18 @@
 import React from 'react';
-import { StyleSheet,
+import {
+    StyleSheet,
     View,
     TouchableOpacity,
     Text,
     FlatList,
-    } from 'react-native';
+} from 'react-native';
 import * as Constants from '../../services/constants'
 import { useAuth } from '../../contexts/auth';
 import Icon from '../../components/Icon';
 import Greeting from '../../components/Greeting/Greeting';
 
 const Dashboard = (props) => {
-    const {user} = useAuth()
+    const { user } = useAuth()
 
     const menuOptionsQRCode = { menuName: "Meu QR Code", icon: 'qrcode', key: 'QRCode', screen: 'MyQRCode', backgroundColor: Constants.backgroundColors['MyQRCode'] }
     const menuOptionsScan = { menuName: "Escanear", icon: 'camera', key: 'Scan', screen: 'Scan', backgroundColor: Constants.backgroundColors['Scan'] }
@@ -30,13 +31,13 @@ const Dashboard = (props) => {
     const menuOptionsInfo = { menuName: "Informações", icon: 'info-circle', key: 'info', screen: 'Info', backgroundColor: Constants.backgroundColors['Info'] }
     const menuOptionsCondo = { menuName: "Condomínios", icon: 'city', key: 'condo', screen: 'Condo', backgroundColor: Constants.backgroundColors['Residents'] }
     const menuOptionsSindico = { menuName: "Administradores", icon: 'users-cog', key: 'sindico', screen: 'Sindico', backgroundColor: Constants.backgroundColors['Visitors'] }
-    const menuOptionsSlot = { menuName: "Estacionamento", icon: 'car-side', key: 'slot', screen: 'Slot', backgroundColor: Constants.backgroundColors['Slot']}
+    const menuOptionsSlot = { menuName: "Estacionamento", icon: 'car-side', key: 'slot', screen: 'Slot', backgroundColor: Constants.backgroundColors['Slot'] }
 
     const profiles = []
-    profiles[Constants.USER_KIND['RESIDENT']]=[menuOptionsQRCode, menuOptionsEventResident, menuOptionsSurvey]
-    profiles[Constants.USER_KIND['GUARD']]=[menuOptionsQRCode, menuOptionsScan, menuOptionsResidentsToGuard, menuOptionsVisitor, menuOptionsService, menuOptionsCarGuard, menuOptionsEventGuard, menuOptionsSlot]
-    profiles[Constants.USER_KIND['SUPERINTENDENT']]=[menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsGuard, menuOptionsCarSuperIntendent, menuOptionsEventSuperintendent, menuOptionsSlot]
-    profiles[Constants.USER_KIND['ADM']]=[menuOptionsCondo, menuOptionsSindico]
+    profiles[Constants.USER_KIND['RESIDENT']] = [menuOptionsQRCode, menuOptionsEventResident, menuOptionsSurvey]
+    profiles[Constants.USER_KIND['GUARD']] = [menuOptionsQRCode, menuOptionsScan, menuOptionsResidentsToGuard, menuOptionsVisitor, menuOptionsService, menuOptionsCarGuard, menuOptionsEventGuard, menuOptionsSlot]
+    profiles[Constants.USER_KIND['SUPERINTENDENT']] = [menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsGuard, menuOptionsCarSuperIntendent, menuOptionsEventSuperintendent, menuOptionsSlot]
+    profiles[Constants.USER_KIND['ADM']] = [menuOptionsCondo, menuOptionsSindico]
 
     return (
         <View style={styles.container}>
@@ -45,11 +46,13 @@ const Dashboard = (props) => {
             />
             <FlatList
                 data={profiles[user.user_kind]}
-                numColumns={2}
-                renderItem={(obj)=>{
+                numColumns={3}
+                renderItem={(obj) => {
                     return (
-                        <TouchableOpacity style={[styles.menuItem, {backgroundColor: obj.item.backgroundColor }]} onPress={()=> {props.navigation.navigate(obj.item.screen, {user: user, backgroundColor: obj.item.backgroundColor})}}>
-                            <Icon name={obj.item.icon} size={55}/>
+                        <TouchableOpacity style={styles.menuItem} onPress={() => { props.navigation.navigate(obj.item.screen, { user: user, backgroundColor: obj.item.backgroundColor }) }}>
+                            <View style={[styles.menuIcon, { backgroundColor: obj.item.backgroundColor }]}>
+                                <Icon name={obj.item.icon} size={55} color='white' />
+                            </View>
                             <Text style={styles.menuItemText}>{obj.item.menuName}</Text>
                         </TouchableOpacity>
                     )
@@ -66,22 +69,26 @@ const styles = StyleSheet.create({
         backgroundColor: Constants.backgroundColors['Dashboard'],
         paddingBottom: 10
     },
-    menuItem:{
-        width: '45%',
+    menuItem: {
+        width: '30%',
         height: 140,
-        marginLeft: 12,
-        marginTop: 12,
-        borderRadius: 20,
-        borderColor: 'black',
-        borderWidth: 1,
-        padding: 20,
-        backgroundColor: 'white',
+        marginLeft: 10,
+        marginBottom: 30,
         alignItems: 'center',
     },
-    menuItemText:{
-        marginTop: 15,
+    menuIcon: {
+        width: '100%',
+        height: '80%',
+        borderRadius: 10,
+        borderColor: 'white',
+        borderWidth: 6,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    menuItemText: {
+        marginTop: 5,
         fontWeight: '700',
-        fontSize: 14
+        fontSize: 13
     }
 })
 

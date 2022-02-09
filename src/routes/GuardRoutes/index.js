@@ -6,7 +6,7 @@ const GuardRoutes = [
     {
         name: 'Guards',
         component: Guards,
-        backgroundDarkColor: 'Guards',
+        backgroundDarkColor: 'Dashboard',
         headerTitle: 'Colaboradores'
     },
     {

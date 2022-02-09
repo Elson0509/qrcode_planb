@@ -135,7 +135,6 @@ const UnitList = props => {
               data={unitList()}
               keyboardShouldPersistTaps="handled"
               keyExtractor={item => item.unit_id}
-
               refreshControl={
                 <RefreshControl
                   enabled={true}
@@ -160,7 +159,7 @@ const UnitList = props => {
           )
             :
             (
-              <Text style={{textAlign: 'center', padding: 10}}>Sem unidades cadastradas.</Text>
+              <Text style={{ textAlign: 'center', padding: 10 }}>Sem unidades cadastradas.</Text>
             )
       }
       <ModalMessage
@@ -190,23 +189,20 @@ const UnitList = props => {
 
 const styles = StyleSheet.create({
   body: {
-    paddingRight: 10,
-    paddingLeft: 10,
     paddingBottom: 90,
     backgroundColor: Constants.backgroundColors['Units'],
     minHeight: '100%',
-
   },
+  
   menuItem: {
     flex: 1,
-    borderWidth: 1,
+    borderBottomWidth: 1,
+    borderColor:  Constants.backgroundDarkColors['Units'],
     padding: 10,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     backgroundColor: Constants.backgroundLightColors['Units'],
-    borderRadius: 20,
-    marginBottom: 3,
   },
   listText: {
     color: 'black',

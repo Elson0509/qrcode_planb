@@ -38,7 +38,7 @@ const AddThirdsGroup = (props) => {
                                 <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Nome:</Text> {el.name}</Text>
                                 {!!el.email && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Email:</Text> {el.email}</Text>}
                                 {!!el.identification && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Id:</Text> {el.identification}</Text>}
-                                {!!el.empresa && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Empresa:</Text> {el.empresa}</Text>}
+                                {!!el.company && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Empresa:</Text> {el.company}</Text>}
                             </View>
                         </View>
                         
@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
     },
     listItem:{
         padding: 3,
-        borderBottomWidth: 1,
+        marginBottom: 5,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'

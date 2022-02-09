@@ -4,7 +4,7 @@ const CarRoutes = [
     {
         name: 'Slot',
         component: Slot,
-        backgroundDarkColor: 'Slot',
+        backgroundDarkColor: 'Dashboard',
         headerTitle: 'Vagas'
     }
 ]

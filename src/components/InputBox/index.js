@@ -18,7 +18,7 @@ const InputBox = (props) => {
                     backgroundColor: props.backgroundColor || 'white', 
                     borderColor: props.borderColor || 'black',
                     color: props.colorInput || 'black',
-                    borderRadius: props.borderRadius || 20,
+                    borderRadius: props.borderRadius || 10,
                   }
                 ]}
                 placeholder={props.placeholder || ''}
@@ -45,12 +45,14 @@ const styles = StyleSheet.create({
       width:'100%',
       borderWidth:Constants.borderTextInputWidth,
       fontWeight:'bold',
-      fontSize:12,
+      fontSize: 14,
       textAlign:'left',
-      paddingLeft: 10
+      paddingLeft: 10,
+      height: 45,
+      letterSpacing: 1
     },
     labelStyle:{
-      fontSize:11,
+      fontSize:15,
       fontWeight:'bold',
       marginBottom:5,
       marginLeft:5,

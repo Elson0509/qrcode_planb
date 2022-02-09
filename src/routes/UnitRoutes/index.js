@@ -6,7 +6,7 @@ const UnitRoutes = [
     {
         name: 'Units',
         component: Units,
-        backgroundDarkColor: 'Units',
+        backgroundDarkColor: 'Dashboard',
         headerTitle: 'Unidades'
     },
     {

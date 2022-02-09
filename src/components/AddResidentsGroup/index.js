@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     },
     listItem:{
         padding: 3,
-        borderBottomWidth: 1,
+        marginBottom: 10,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'

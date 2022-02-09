@@ -90,15 +90,15 @@ const EventAdd = props => {
         return setErrorMessage('Descrição não pode estar vazio.')
       }
       const MIN_TITLE_CHARACTERS = 5
-      if(userBeingAdded.title.length <= MIN_TITLE_CHARACTERS){
+      if(userBeingAdded.title.length < MIN_TITLE_CHARACTERS){
         return setErrorMessage(`Título muito curto. Pelo menos ${MIN_TITLE_CHARACTERS} caracteres.`)
       }
       const MIN_PLACE_CHARACTERS = 3
-      if(userBeingAdded.place.length <= MIN_PLACE_CHARACTERS){
+      if(userBeingAdded.place.length < MIN_PLACE_CHARACTERS){
         return setErrorMessage(`Local muito curto. Pelo menos ${MIN_PLACE_CHARACTERS} caracteres.`)
       }
       const MIN_DESCRIPTION_CHARACTERS = 10
-      if(userBeingAdded.description.length <= MIN_DESCRIPTION_CHARACTERS){
+      if(userBeingAdded.description.length < MIN_DESCRIPTION_CHARACTERS){
         return setErrorMessage(`Descrição muito curta. Pelo menos ${MIN_DESCRIPTION_CHARACTERS} caracteres.`)
       }
       if(userBeingAdded.pic===''){
@@ -160,7 +160,7 @@ const EventAdd = props => {
               width={340}
             />
             <Text style={styles.title}>Foto:</Text>
-            {!userBeingAdded.pic &&
+            {!userBeingAdded.pic ?
             <View style={styles.buttonAddPhotoGroup}>
                 <TouchableOpacity
                   style={[styles.buttonAddphotoIsClicked]}
@@ -177,7 +177,7 @@ const EventAdd = props => {
                   <Text>Arquivo</Text>
                 </TouchableOpacity>
             </View>
-            ||
+            :
             <View style={styles.buttonAddPhotoGroup}>
               <Image
                 style={{width: 66, height: 79,}}

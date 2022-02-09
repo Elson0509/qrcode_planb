@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import {
-    SafeAreaView,
-    StyleSheet,
-    FlatList,
-    RefreshControl,
-    ActivityIndicator,
-    View,
-    Text,
-  } from 'react-native'
+  SafeAreaView,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  ActivityIndicator,
+  View,
+  Text,
+} from 'react-native'
 import ActionButtons from '../../components/ActionButtons'
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
@@ -18,12 +18,13 @@ import Toast from 'react-native-root-toast'
 import PicUser from '../../components/PicUser'
 import ModalQRCode from '../../components/ModalQRCode'
 import ModalGeneric from '../../components/ModalGeneric'
-import InputBox from '../../components/InputBox';
-import Spinner from '../../components/Spinner';
+import InputBox from '../../components/InputBox'
+import Placa from '../../components/Placa'
+import Spinner from '../../components/Spinner'
 import { useAuth } from '../../contexts/auth'
 
 const VisitorList = props => {
-  const {user} = useAuth()
+  const { user } = useAuth()
   const [units, setUnits] = useState([])
   const [loading, setLoading] = useState(true)
   const [modal, setModal] = useState(false)
@@ -42,9 +43,9 @@ const VisitorList = props => {
   const [modalGeneric, setModalGeneric] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState(false)
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchUsers()
-    const willFocusSubscription = props.navigation.addListener('focus', ()=> {
+    const willFocusSubscription = props.navigation.addListener('focus', () => {
       fetchUsers()
     })
     return willFocusSubscription
@@ -63,15 +64,15 @@ const VisitorList = props => {
 
   const fetchUsers = _ => {
     api.get(`api/user/condo/${props.route.params.user.condo_id}/${Constants.USER_KIND["VISITOR"]}`)
-    .then(resp=>{
-      setUnits(resp.data)
-    })
-    .catch(err=>{
-      Toast.show(err.response.data.message, Constants.configToast)
-    })
-    .finally(()=>{
-      setLoading(false)
-    })
+      .then(resp => {
+        setUnits(resp.data)
+      })
+      .catch(err => {
+        Toast.show(err.response.data.message, Constants.configToast)
+      })
+      .finally(() => {
+        setLoading(false)
+      })
   }
 
   const delUnitModal = unit => {
@@ -80,35 +81,35 @@ const VisitorList = props => {
     setModal(true)
   }
 
-  const deleteUnitConfirmed = _ =>{
+  const deleteUnitConfirmed = _ => {
     setModal(false)
     setLoading(true)
-    api.delete(`api/user/unit/${unitSelected.id}`,{
-      data:{
+    api.delete(`api/user/unit/${unitSelected.id}`, {
+      data: {
         user_id_last_modify: props.route.params.user.id,
       }
     })
-      .then(res=>{
+      .then(res => {
         Toast.show(res.data.message, Constants.configToast)
         fetchUsers()
       })
-      .catch((err)=>{
+      .catch((err) => {
         Toast.show(err.response.data.message, Constants.configToast)
       })
-      .finally(()=>{
+      .finally(() => {
         setLoading(false)
       })
   }
 
   const editHandler = unit => {
-    props.navigation.navigate('VisitorEdit', 
+    props.navigation.navigate('VisitorEdit',
       {
         user: props.route.params.user,
         selectedBloco: {
           id: unit.bloco_id,
           name: unit.bloco_name
         },
-        selectedUnit:{
+        selectedUnit: {
           id: unit.id,
           number: unit.number
         },
@@ -119,9 +120,9 @@ const VisitorList = props => {
     )
   }
 
-  const generateInfoUnits = _ =>{
+  const generateInfoUnits = _ => {
     let unitsInfo = []
-    units.forEach(bloco=>{
+    units.forEach(bloco => {
       bloco.Units.forEach(unit => {
         const unitInfo = {}
         unitInfo.bloco_id = bloco.id
@@ -134,19 +135,19 @@ const VisitorList = props => {
       })
     })
 
-    if(!!nameFilter){
-        unitsInfo = unitsInfo.filter(el=>{
-          return el.residents.some(res=>res.name.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
-            el.vehicles.some(vei=> vei.plate.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
-            el.bloco_name.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1 ||
-            el.number.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1 
-        })
+    if (!!nameFilter) {
+      unitsInfo = unitsInfo.filter(el => {
+        return el.residents.some(res => res.name.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
+          el.vehicles.some(vei => vei.plate.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
+          el.bloco_name.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1 ||
+          el.number.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1
+      })
     }
 
     return unitsInfo
   }
 
-  const onRefreshHandler = _ =>{
+  const onRefreshHandler = _ => {
     setRefreshing(true)
     fetchUsers()
     setRefreshing(false)
@@ -155,8 +156,8 @@ const VisitorList = props => {
   const carIconHandler = unit => {
     setUnitSelected(unit)
     //valid user?
-    if(!(new Date(unit.residents[0].final_date) >= beginOfDay && new Date(unit.residents[0].initial_date) <= beginOfDay)){
-        return Toast.show('Visitantes fora da data de autorização.', Constants.configToast)
+    if (!(new Date(unit.residents[0].final_date) >= beginOfDay && new Date(unit.residents[0].initial_date) <= beginOfDay)) {
+      return Toast.show('Visitantes fora da data de autorização.', Constants.configToast)
     }
     setEntranceExitModal(true)
   }
@@ -166,18 +167,18 @@ const VisitorList = props => {
     setMessageErrorModal('')
     setLoading(true)
     api.get(`api/reading/${unitSelected.id}/0`)
-    .then(res=>{
+      .then(res => {
         setLoading(false)
         let message = 'Confirmado. Visitantes vão LIBERAR uma vaga de estacionamento? '
         setMessageInfoModal(message)
         setModalExit(true)
         setEntranceExitModal(false)
-    })
-    .catch(err=> {
+      })
+      .catch(err => {
         setLoading(false)
         setEntranceExitModal(false)
         Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VS3)', Constants.configToast)
-    })
+      })
   }
 
   const entranceHandler = _ => {
@@ -185,28 +186,28 @@ const VisitorList = props => {
     setMessageErrorModal('')
     setLoading(true)
     api.get(`api/reading/${unitSelected.id}/1`)
-    .then(res=>{
+      .then(res => {
         setLoading(false)
         let message = 'Confirmado. '
-        if(res.data.freeslots ===0){
-            //there are not free slots
-            message+='Mas não há vagas de estacionamento disponíveis.'
-            setMessageErrorModal(message)
-            setModalMessage(true)
+        if (res.data.freeslots === 0) {
+          //there are not free slots
+          message += 'Mas não há vagas de estacionamento disponíveis.'
+          setMessageErrorModal(message)
+          setModalMessage(true)
         }
-        else{
-            //there are free slots
-            message+= res.data.freeslots > 1 ? `Há ${res.data.freeslots} vagas livres. Visitantes vão OCUPAR uma vaga?` : 'Há uma vaga livre. Visitantes vão ocupar esta vaga?'
-            setMessageInfoModal(message)
-            setModalEntrance(true)
+        else {
+          //there are free slots
+          message += res.data.freeslots > 1 ? `Há ${res.data.freeslots} vagas livres. Visitantes vão OCUPAR uma vaga?` : 'Há uma vaga livre. Visitantes vão ocupar esta vaga?'
+          setMessageInfoModal(message)
+          setModalEntrance(true)
         }
         setEntranceExitModal(false)
-    })
-    .catch(err=> {
+      })
+      .catch(err => {
         setLoading(false)
         setEntranceExitModal(false)
         Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VS2)', Constants.configToast)
-    })
+      })
   }
 
   const confirmSlotEntrance = _ => {
@@ -216,24 +217,24 @@ const VisitorList = props => {
     setModalGeneric(true)
     setLoadingMessage(true)
     api.get(`api/condo/occupyslot`)
-    .then(resp=>{
+      .then(resp => {
         const freeslots = resp.data.freeslots
         let message = resp.data.message + ' '
-        if(freeslots > 0){
-            message+= `Ainda ${freeslots > 1 ? `restam ${freeslots} vagas` : 'resta 1 vaga'}.`
+        if (freeslots > 0) {
+          message += `Ainda ${freeslots > 1 ? `restam ${freeslots} vagas` : 'resta 1 vaga'}.`
         }
-        else{
-            message+= 'Não restam mais novas vagas.'
+        else {
+          message += 'Não restam mais novas vagas.'
         }
 
         setMessageInfoModal(message)
-    })
-    .catch(err=>{
+      })
+      .catch(err => {
         setMessageErrorModal(err.response?.data?.message)
-    })
-    .finally(()=>{
+      })
+      .finally(() => {
         setLoadingMessage(false)
-    })
+      })
   }
 
   const confirmSlotExit = _ => {
@@ -243,27 +244,27 @@ const VisitorList = props => {
     setModalGeneric(true)
     setLoadingMessage(true)
     api.get(`api/condo/freeslot`)
-    .then(resp=>{
+      .then(resp => {
         const freeslots = resp.data.freeslots
         const message = resp.data.message + ` Ainda ${freeslots > 1 ? `restam ${freeslots} vagas` : 'resta 1 vaga'}.`
         setMessageInfoModal(message)
-    })
-    .catch(err=>{
+      })
+      .catch(err => {
         setMessageErrorModal(err.response?.data?.message)
-    })
-    .finally(()=>{
+      })
+      .finally(() => {
         setLoadingMessage(false)
-    })
+      })
   }
 
-  if(loading)
+  if (loading)
     return <SafeAreaView style={styles.body}>
-      <ActivityIndicator size="large" color="white"/>
+      <ActivityIndicator size="large" color="white" />
     </SafeAreaView>
 
   return (
     <SafeAreaView style={styles.body}>
-      <View style={{paddingHorizontal: 10}}>
+      <View style={{ paddingHorizontal: 10 }}>
         <InputBox
           text=''
           colorLabel='black'
@@ -272,73 +273,70 @@ const VisitorList = props => {
           colorInput={Constants.backgroundDarkColors['Visitors']}
           autoCapitalize='words'
           value={nameFilter}
-          changed={(val=>setNameFilter(val))}
+          changed={(val => setNameFilter(val))}
           placeholder='Pesquisa por nome, placa, bloco ou número'
         />
       </View>
       <FlatList
         data={generateInfoUnits()}
-        keyExtractor={item=>item.id}
-        style={{marginBottom: 80, paddingRight:10}}
+        keyExtractor={item => item.id}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
-            onRefresh={()=> onRefreshHandler()}
+            onRefresh={() => onRefreshHandler()}
           />
         }
-        renderItem={(obj)=>{
+        renderItem={(obj) => {
           //don't show if there is not visitors and vehicles
-          if(obj.item.residents.length === 0 && obj.item.vehicles.length === 0)
+          if (obj.item.residents.length === 0 && obj.item.vehicles.length === 0)
             return null
 
           return (
-            <View 
-              style={styles.menuItem} 
-            >
+            <View style={styles.menuItem}>
               <Text style={styles.listText}>Bloco {obj.item.bloco_name} Unidade {obj.item.number}</Text>
               <View>
                 {
-                  user.user_kind === Constants.USER_KIND['SUPERINTENDENT'] && 
+                  user.user_kind === Constants.USER_KIND['SUPERINTENDENT'] &&
                   <ActionButtons
                     flexDirection='row'
-                    action1={()=> editHandler(obj.item)}
-                    action2={()=> delUnitModal(obj.item)}
-                    action3={()=> modalQRCodeHandler(obj.item.id)}
+                    action1={() => editHandler(obj.item)}
+                    action2={() => delUnitModal(obj.item)}
+                    action3={() => modalQRCodeHandler(obj.item.id)}
                     qrCodeButton={true}
                   />
                 }
                 {
-                  user.user_kind===Constants.USER_KIND['GUARD'] &&
+                  user.user_kind === Constants.USER_KIND['GUARD'] &&
                   <ActionButtons
                     flexDirection='row'
                     noDeleteButton
                     editIcon='car-side'
-                    action1={()=> carIconHandler(obj.item)}
+                    action1={() => carIconHandler(obj.item)}
                   />
                 }
-                </View>
-              <View style={{justifyContent: 'space-between', flexDirection: 'column'}}>
-                <View style={{maxWidth: 300}}>
+              </View>
+              <View style={{ justifyContent: 'space-between', flexDirection: 'column' }}>
+                <View style={{ maxWidth: 300 }}>
                   <View>
-                    {(!obj.item.residents || obj.item.residents.length === 0) && <Text style={{marginTop: 10, textDecorationLine: 'underline'}}>Unidade sem visitantes</Text>}
-                    { obj.item.residents.length > 0 && <Text style={styles.subTitle}>Visitantes:</Text>}
+                    {(!obj.item.residents || obj.item.residents.length === 0) && <Text style={{ marginTop: 10, textDecorationLine: 'underline' }}>Unidade sem visitantes</Text>}
+                    {obj.item.residents.length > 0 && <Text style={styles.subTitle}>Visitantes:</Text>}
                     {
-                      obj.item.residents.map((res)=>{
+                      obj.item.residents.map((res) => {
                         return (
-                          <View key={res.id} style={{flexDirection: 'row', paddingBottom:3, marginBottom: 5, borderBottomWidth: 1, borderColor: Constants.backgroundDarkColors["Visitors"]}}>
+                          <View key={res.id} style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 15, }}>
                             <View>
-                              <PicUser user={res}/>
+                              <PicUser user={res} />
                             </View>
-                            <View style={{maxWidth: 250}}>
-                              <Text style={{fontSize: 16, marginLeft: 7, fontWeight: 'bold'}}>{res.name}</Text>
-                              {!!res.email && <Text style={{fontSize: 16, marginLeft: 7}}>Email: {res.email}</Text>}
-                              {!!res.initial_date && <Text style={{fontSize: 16, marginLeft: 7}}>Início: {Utils.printDate(new Date(res.initial_date))}</Text>}
-                              {!!res.final_date && <Text style={{fontSize: 16, marginLeft: 7}}>Fim: {Utils.printDate(new Date(res.final_date))}</Text>}
+                            <View style={{ maxWidth: 250 }}>
+                              <Text style={{ fontSize: 16, marginLeft: 7, fontWeight: 'bold' }}>{res.name}</Text>
+                              {!!res.email && <Text style={{ fontSize: 16, marginLeft: 7 }}>Email: {res.email}</Text>}
+                              {!!res.initial_date && <Text style={{ fontSize: 16, marginLeft: 7 }}>Início: {Utils.printDate(new Date(res.initial_date))}</Text>}
+                              {!!res.final_date && <Text style={{ fontSize: 16, marginLeft: 7 }}>Fim: {Utils.printDate(new Date(res.final_date))}</Text>}
                               {
                                 new Date(res.final_date) >= beginOfDay && new Date(res.initial_date) <= beginOfDay ?
-                                  <Text style={{fontSize: 16, marginLeft: 7}}>Status: Válido</Text>
+                                  <Text style={{ fontSize: 16, marginLeft: 7 }}>Status: Válido</Text>
                                   :
-                                  <Text style={{fontSize: 16, marginLeft: 7, fontWeight: 'bold', color: 'red'}}>Status: Expirado</Text>
+                                  <Text style={{ fontSize: 16, marginLeft: 7, fontWeight: 'bold', color: 'red' }}>Status: Expirado</Text>
                               }
                             </View>
                           </View>
@@ -348,11 +346,14 @@ const VisitorList = props => {
                   </View>
                   <View>
                     {obj.item.vehicles?.length > 0 && <Text style={styles.subTitle}>Veículos:</Text>}
-                    {(!obj.item.vehicles || obj.item.vehicles.length === 0) && <Text style={{marginTop: 10, textDecorationLine: 'underline'}}>Sem veículos cadastrados</Text>}
+                    {(!obj.item.vehicles || obj.item.vehicles.length === 0) && <Text style={{ marginTop: 10, textDecorationLine: 'underline' }}>Sem veículos cadastrados</Text>}
                     {
-                      obj.item.vehicles?.map((car, ind)=>{
+                      obj.item.vehicles?.map((car, ind) => {
                         return (
-                          <Text key={ind}>-{`${car.maker} ${car.model} ${car.color} - ${car.plate}`}</Text>
+                          <View key={ind} style={styles.plateDiv}>
+                            <Text>{`${car.maker} ${car.model} ${car.color}`}</Text>
+                            <Placa placa={car.plate} />
+                          </View>
                         )
                       })
                     }
@@ -384,8 +385,8 @@ const VisitorList = props => {
         title='Entrada/Saída'
         btn1Text='ENTRADA'
         btn2Text='SAÍDA'
-        btn1Pressed={()=>entranceHandler()}
-        btn2Pressed={()=>exitHandler()}
+        btn1Pressed={() => entranceHandler()}
+        btn2Pressed={() => exitHandler()}
       />
       <ModalMessage
         message={messageInfoModal}
@@ -393,7 +394,7 @@ const VisitorList = props => {
         setModalVisible={setModalEntrance}
         btn1Text='Sim'
         btn2Text='Não'
-        btn1Pressed={()=>confirmSlotEntrance()}
+        btn1Pressed={() => confirmSlotEntrance()}
       />
       <ModalMessage
         message={messageInfoModal}
@@ -401,7 +402,7 @@ const VisitorList = props => {
         setModalVisible={setModalExit}
         btn1Text='Sim'
         btn2Text='Não'
-        btn1Pressed={()=>confirmSlotExit()}
+        btn1Pressed={() => confirmSlotExit()}
       />
       <ModalInfo
         modalVisible={modalMessage}
@@ -414,22 +415,22 @@ const VisitorList = props => {
         setModalVisible={setModalGeneric}
       >
         {
-        loadingMessage &&
+          loadingMessage &&
           <View>
-            <Spinner/>
+            <Spinner />
           </View>
-        ||
+          ||
           <View>
             {
               !!messageInfoModal &&
               <Text style={styles.infoMessageModal}>
-                  {messageInfoModal}
+                {messageInfoModal}
               </Text>
             }
             {
               !!messageErrorModal &&
               <Text style={styles.errorMessageModal}>
-                  {messageErrorModal}
+                {messageErrorModal}
               </Text>
             }
           </View>
@@ -440,51 +441,55 @@ const VisitorList = props => {
 }
 
 const styles = StyleSheet.create({
-    body:{
-      padding:10,
-      backgroundColor: Constants.backgroundColors['Visitors'],
-      minHeight:'100%'
-    },
-    menuItem:{
-      borderWidth: 1,
-      padding: 10,
-      backgroundColor: Constants.backgroundLightColors['Visitors'],
-      borderRadius: 20,
-      marginBottom: 10,
-    },
-    listText:{
-      color: 'black',
-      fontWeight: 'bold',
-      fontSize: 16,
-      textAlign:'center'
-    },
-    subTitle:{
-      fontWeight:'bold',
-      fontSize: 15,
-      textDecorationLine: 'underline',
-      marginTop: 5,
-    },
-  errorMessageModal:{
-      color: '#F77',
-      backgroundColor: 'white',
-      marginTop: 10,
-      textAlign: 'center',
-      fontWeight: 'bold',
-      fontSize: 12,
-      borderWidth: 1,
-      borderColor: '#F77',
-      padding: 5,
+  body: {
+    backgroundColor: Constants.backgroundColors['Visitors'],
+    flex: 1
   },
-  infoMessageModal:{
-      color: '#77F',
-      backgroundColor: 'white',
-      marginTop: 10,
-      textAlign: 'center',
-      fontWeight: 'bold',
-      fontSize: 12,
-      borderWidth: 1,
-      borderColor: '#77F',
-      padding: 5,
+  menuItem: {
+    borderBottomWidth: 8,
+    borderColor: Constants.backgroundDarkColors['Visitors'],
+    padding: 15,
+    backgroundColor: Constants.backgroundLightColors['Visitors'],
+  },
+  listText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center'
+  },
+  subTitle: {
+    fontWeight: 'bold',
+    fontSize: 18,
+    marginTop: 5,
+    textAlign: 'center'
+  },
+  errorMessageModal: {
+    color: '#F77',
+    backgroundColor: 'white',
+    marginTop: 10,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 12,
+    borderWidth: 1,
+    borderColor: '#F77',
+    padding: 5,
+  },
+  infoMessageModal: {
+    color: '#77F',
+    backgroundColor: 'white',
+    marginTop: 10,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 12,
+    borderWidth: 1,
+    borderColor: '#77F',
+    padding: 5,
+  },
+  plateDiv: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    marginTop: 10
   }
 });
 

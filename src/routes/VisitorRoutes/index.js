@@ -7,7 +7,7 @@ const VisitorRoutes = [
     {
         name: 'Visitors',
         component: Visitors,
-        backgroundDarkColor: 'Visitors',
+        backgroundDarkColor: 'Dashboard',
         headerTitle: 'Visitantes'
     },
     {
