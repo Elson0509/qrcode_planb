@@ -155,7 +155,7 @@ const GuardAdd = props => {
           colorInput={Constants.backgroundDarkColors['Guards']}
         />
         <Text style={styles.title}>Foto:</Text>
-        {!userBeingAdded.pic &&
+        {!userBeingAdded.pic ?
           <View style={styles.buttonAddPhotoGroup}>
             <TouchableOpacity
               style={[styles.buttonAddphotoIsClicked]}
@@ -172,7 +172,7 @@ const GuardAdd = props => {
               <Text>Arquivo</Text>
             </TouchableOpacity>
           </View>
-          ||
+          :
           <View style={styles.buttonAddPhotoGroup}>
             <Image
               style={{ width: 66, height: 79, }}

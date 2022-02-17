@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import { StyleSheet, Text, ActivityIndicator, Pressable, Modal, View } from 'react-native';
 import api from '../../services/api';
-import ModalGeneric from '../ModalGeneric';
 import InputBox from '../InputBox'
 import { validateEmail } from '../../services/util'
 

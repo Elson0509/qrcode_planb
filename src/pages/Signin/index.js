@@ -47,8 +47,9 @@ export default function Signin() {
     <KeyboardAvoidingView style={styles.background}>
       <View style={styles.containerLogo}>
         <Image style={styles.logo}
-          source={require('../../../assets/logo.png')}
+          source={require('../../../assets/logo.jpeg')}
           resizeMode='contain'
+          //height={200}
         />
       </View>
       <Animated.View style={[
@@ -91,9 +92,7 @@ export default function Signin() {
       <ModalForgetPassword
         modalVisible={forgetPasswordModal}
         setModalVisible={setForgetPasswordModal}
-      >
-        <Text>Teste</Text>
-      </ModalForgetPassword>
+      />
     </KeyboardAvoidingView>
   );
 }
@@ -111,8 +110,8 @@ const styles = StyleSheet.create({
 
   },
   logo:{
-    //width: 150
-    //height: 155,
+    width: 390,
+    height: 280,
   },
   container:{
     flex: 1,

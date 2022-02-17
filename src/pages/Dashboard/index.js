@@ -34,7 +34,7 @@ const Dashboard = (props) => {
     const menuOptionsSlot = { menuName: "Estacionamento", icon: 'car-side', key: 'slot', screen: 'Slot', backgroundColor: Constants.backgroundColors['Slot'] }
 
     const profiles = []
-    profiles[Constants.USER_KIND['RESIDENT']] = [menuOptionsQRCode, menuOptionsEventResident, menuOptionsSurvey]
+    profiles[Constants.USER_KIND['RESIDENT']] = [menuOptionsQRCode, menuOptionsEventResident,/* menuOptionsSurvey*/]
     profiles[Constants.USER_KIND['GUARD']] = [menuOptionsQRCode, menuOptionsScan, menuOptionsResidentsToGuard, menuOptionsVisitor, menuOptionsService, menuOptionsCarGuard, menuOptionsEventGuard, menuOptionsSlot]
     profiles[Constants.USER_KIND['SUPERINTENDENT']] = [menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsGuard, menuOptionsCarSuperIntendent, menuOptionsEventSuperintendent, menuOptionsSlot]
     profiles[Constants.USER_KIND['ADM']] = [menuOptionsCondo, menuOptionsSindico]
@@ -65,7 +65,6 @@ const Dashboard = (props) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
         backgroundColor: Constants.backgroundColors['Dashboard'],
         paddingBottom: 10
     },

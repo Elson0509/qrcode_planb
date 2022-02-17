@@ -6,7 +6,7 @@ import * as FileSystem from 'expo-file-system'
 import FooterButtons from '../FooterButtons';
 
 const ModalQRCode = (props) => {
-    const logo = require('../../../assets/logo.png')
+    const logo = require('../../../assets/logo.jpeg')
     let myQrCode = useRef()
     
     const shareQRCode = _ => {

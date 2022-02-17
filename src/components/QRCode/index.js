@@ -2,7 +2,7 @@ import React from 'react';
 import QRCode from 'react-native-qrcode-svg';
 
 const index = (props) => {
-    const logo = require('../../../assets/logo.png')
+    const logo = require('../../../assets/logo.jpeg')
 
     return (
         <QRCode

@@ -13,19 +13,19 @@ const CondoRoutes = [
     {
         name: 'CondoList',
         component: CondoList,
-        backgroundDarkColor: 'Dashboard',
+        backgroundDarkColor: 'Residents',
         headerTitle: 'Listar'
     },
     {
         name: 'CondoAdd',
         component: CondoAdd,
-        backgroundDarkColor: 'Dashboard',
+        backgroundDarkColor: 'Residents',
         headerTitle: 'Adicionar'
     },
     {
         name: 'CondoEdit',
         component: CondoEdit,
-        backgroundDarkColor: 'Dashboard',
+        backgroundDarkColor: 'Residents',
         headerTitle: 'Editar'
     },
 ]

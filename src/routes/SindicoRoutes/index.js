@@ -12,13 +12,13 @@ const SindicoRoutes = [
     {
         name: 'SindicoList',
         component: SindicoList,
-        backgroundDarkColor: 'Dashboard',
+        backgroundDarkColor: 'Visitors',
         headerTitle: 'Listar'
     },
     {
         name: 'SindicoAdd',
         component: SindicoAdd,
-        backgroundDarkColor: 'Dashboard',
+        backgroundDarkColor: 'Visitors',
         headerTitle: 'Adicionar'
     },
 ]
