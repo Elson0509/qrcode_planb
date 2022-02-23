@@ -12,13 +12,13 @@ const EventRoutes = [
     {
         name: 'EventAdd',
         component: EventAdd,
-        backgroundDarkColor: 'Events',
+        backgroundDarkColor: 'MyQRCode',
         headerTitle: 'Adicionar'
     },
     {
         name: 'EventList',
         component: EventList,
-        backgroundDarkColor: 'Events',
+        backgroundDarkColor: 'MyQRCode',
         headerTitle: 'Listar'
     },
 ]

@@ -101,20 +101,15 @@ const GuardList = props => {
                     />
                   </View>
                   <View style={{ justifyContent: 'space-between', flexDirection: 'column' }}>
-                    <View style={{ maxWidth: 300 }}>
+                    <View style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 5 }}>
                       <View>
-                        {
-                          <View style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 5}}>
-                            <View>
-                              <PicUser user={obj.item} />
-                            </View>
-                            <View>
-                              <Text style={{ fontSize: 16, marginLeft: 7, fontWeight: 'bold' }}>{obj.item.name}</Text>
-                              {!!obj.item.identification && <Text style={{ fontSize: 16, marginLeft: 7 }}>Id: {obj.item.identification}</Text>}
-                              {!!obj.item.email && <Text style={{ fontSize: 16, marginLeft: 7 }}>Email: {obj.item.email}</Text>}
-                            </View>
-                          </View>
-                        }
+                        <PicUser user={obj.item} />
+                      </View>
+                      <View>
+                        <Text style={{ fontSize: 16, marginLeft: 7, fontWeight: 'bold' }}>{obj.item.name}</Text>
+                        {!!obj.item.identification && <Text style={{ fontSize: 16, marginLeft: 7 }}>Id: {obj.item.identification}</Text>}
+                        {!!obj.item.company && <Text style={{ fontSize: 16, marginLeft: 7 }}>Empresa: {obj.item.company}</Text>}
+                        {!!obj.item.email && <Text style={{ fontSize: 16, marginLeft: 7 }}>Email: {obj.item.email}</Text>}
                       </View>
                     </View>
                   </View>
@@ -141,7 +136,7 @@ const GuardList = props => {
 const styles = StyleSheet.create({
   body: {
     backgroundColor: Constants.backgroundColors['Guards'],
-    flex:1
+    flex: 1
   },
   menuItem: {
     borderBottomWidth: 1,

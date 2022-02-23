@@ -54,7 +54,6 @@ const AddCarsGroup = (props) => {
           <InputBox
             text="Fabricante*:"
             value={props.vehicleBeingAdded.maker}
-            width={295}
             changed={val => props.setVehicleBeingAdded({ ...props.vehicleBeingAdded, maker: val })}
             autoCapitalize='words'
             backgroundColor={props.backgroundLightColor || Constants.backgroundLightColors['Residents']}
@@ -64,7 +63,6 @@ const AddCarsGroup = (props) => {
           <InputBox
             text="Modelo*:"
             value={props.vehicleBeingAdded.model}
-            width={295}
             changed={val => props.setVehicleBeingAdded({ ...props.vehicleBeingAdded, model: val })}
             autoCapitalize='words'
             backgroundColor={props.backgroundLightColor || Constants.backgroundLightColors['Residents']}
@@ -74,7 +72,6 @@ const AddCarsGroup = (props) => {
           <InputBox
             text="Cor*:"
             value={props.vehicleBeingAdded.color}
-            width={295}
             changed={val => props.setVehicleBeingAdded({ ...props.vehicleBeingAdded, color: val })}
             autoCapitalize='words'
             backgroundColor={props.backgroundLightColor || Constants.backgroundLightColors['Residents']}
@@ -84,7 +81,6 @@ const AddCarsGroup = (props) => {
           <InputBox
             text="Placa*:"
             value={props.vehicleBeingAdded.plate}
-            width={295}
             changed={changePlate}
             autoCapitalize='characters'
             autoCorrect={false}

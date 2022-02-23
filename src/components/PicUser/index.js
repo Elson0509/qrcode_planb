@@ -5,7 +5,6 @@ import {
 } from 'react-native';
 
 const PicUser = (props) => {
-
   if (!!props.user.photo_id) {
     return (
       <Image

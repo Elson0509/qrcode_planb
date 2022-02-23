@@ -22,10 +22,9 @@ const CommentBox = (props) => {
         style={{
           borderWidth: 2,
           backgroundColor: 'white',
-          padding: 10,
+          padding: 12,
           borderRadius: 10,
           maxHeight: 100,
-          width: props.width || 250,
           backgroundColor: props.backgroundColor || 'white',
           borderColor: props.borderColor || 'black',
           color: props.colorInput || 'black',

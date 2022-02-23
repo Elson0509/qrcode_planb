@@ -282,8 +282,8 @@ const VisitorEdit = props => {
       })
     }
 
-    const backgroundColorBoxes = '#8381EC'
-    const backgroundColorButtonBoxes = '#B6BFD8'
+    const backgroundColorBoxes = Constants.backgroundColors['Visitors']
+    const backgroundColorButtonBoxes = Constants.backgroundLightColors['Visitors']
 
     if(loading)
       return <SafeAreaView style={styles.body}>
@@ -351,7 +351,7 @@ const VisitorEdit = props => {
               {
                 !addingDates && !addingUser && !addingVehicle &&
                 <FooterButtons
-                  backgroundColor={Constants.backgroundColors['Visitors']}
+                  backgroundColor={Constants.backgroundLightColors['Visitors']}
                   title1="Confirmar"
                   title2="Cancelar"
                   errorMessage={errorMessage}
@@ -390,7 +390,7 @@ const VisitorEdit = props => {
 
 const styles = StyleSheet.create({
     body:{
-      backgroundColor: Constants.backgroundColors['Visitors'],
+      backgroundColor: Constants.backgroundLightColors['Visitors'],
       flex: 1
     },
     fontTitle:{

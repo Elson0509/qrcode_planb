@@ -81,6 +81,8 @@ const EventList = props => {
   }
 
   const onClickPhotoHandler = item => {
+    if(!item.photo_id)
+      return
     setSelectedEvent(item)
     setIsModalPhotoActive(true)
   }
@@ -144,12 +146,20 @@ const EventList = props => {
                   <View style={{ justifyContent: 'space-between', flexDirection: 'column' }}>
                     <View style={{ maxWidth: 300 }}>
                       <View>
-                        <View style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 5, borderColor: Constants.backgroundDarkColors["Events"] }}>
+                        <View style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 5, borderColor: Constants.backgroundDarkColors["MyQRCode"] }}>
                           <TouchableOpacity onPress={() => onClickPhotoHandler(obj.item)}>
-                            <Image
-                              style={{ width: 60, height: 80, marginRight: 5 }}
-                              source={{ uri: `${Constants.PREFIX_IMG_GOOGLE_CLOUD}${obj.item.photo_id}` }}
-                            />
+                            {
+                              obj.item.photo_id ?
+                                <Image
+                                  style={{ width: 60, height: 80, marginRight: 5 }}
+                                  source={{ uri: `${Constants.PREFIX_IMG_GOOGLE_CLOUD}${obj.item.photo_id}` }}
+                                />
+                                :
+                                <Image
+                                  style={{ width: 60, height: 80, marginRight: 5 }}
+                                  source={require('../../../assets/pics/generic-event.png')}
+                                />
+                            }
                           </TouchableOpacity>
                           <View style={{ width: 245 }}>
                             <Text style={{ fontSize: 12, marginLeft: 7 }}><Text style={{ fontWeight: 'bold' }}>Data:</Text> {Utils.printDateAndHour(new Date(obj.item.created_at))}</Text>
@@ -182,7 +192,7 @@ const EventList = props => {
       <ModalPhoto
         modalVisible={isModalPhotoActive}
         setModalVisible={setIsModalPhotoActive}
-        id={selectedEvent?.id}
+        id={selectedEvent?.photo_id}
       />
       <ModalReply
         modal={modalGeneric}
@@ -199,14 +209,14 @@ const EventList = props => {
 
 const styles = StyleSheet.create({
   body: {
-    backgroundColor: Constants.backgroundColors['Events'],
+    backgroundColor: Constants.backgroundColors['MyQRCode'],
     flex: 1
   },
   menuItem: {
     borderBottomWidth: 1,
-    borderBottomColor: Constants.backgroundDarkColors['Events'],
+    borderBottomColor: Constants.backgroundDarkColors['MyQRCode'],
     padding: 10,
-    backgroundColor: Constants.backgroundLightColors['Events'],
+    backgroundColor: Constants.backgroundLightColors['MyQRCode'],
   },
   listText: {
     color: 'black',

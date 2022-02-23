@@ -27,7 +27,7 @@ const Events = (props) => {
                 renderItem={(obj) => {
                     return (
                         <TouchableOpacity style={styles.menuItem} onPress={() => { props.navigation.navigate(`Event${obj.item.screen}`, { user: user }) }}>
-                            <View style={[styles.menuIcon, { backgroundColor: Constants.backgroundColors['Events'] }]}>
+                            <View style={[styles.menuIcon, { backgroundColor: Constants.backgroundColors['MyQRCode'] }]}>
                                 <Icon name={obj.item.icon} size={85} color='white' />
                             </View>
                             <Text style={styles.menuItemText}>{obj.item.menuName}</Text>

@@ -57,7 +57,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         padding: 2,
-        backgroundColor: '#0000AA'
+        backgroundColor: '#0000AA',
+        borderTopRightRadius: 7,
+        borderTopLeftRadius: 7
     },
     newPlateCountry:{
         color: 'white',

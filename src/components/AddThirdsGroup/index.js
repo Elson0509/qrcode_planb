@@ -54,7 +54,6 @@ const AddThirdsGroup = (props) => {
                     <InputBox
                         text="Nome*:"
                         value={props.userBeingAdded.name}
-                        width={295}
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, name: val})}
                         autoCapitalize='words'
                         backgroundColor={Constants.backgroundLightColors['Thirds']}
@@ -64,7 +63,6 @@ const AddThirdsGroup = (props) => {
                     <InputBox
                         text="Documento*:"
                         value={props.userBeingAdded.identification}
-                        width={295}
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, identification: val})}
                         autoCapitalize='characters'
                         backgroundColor={Constants.backgroundLightColors['Thirds']}
@@ -74,7 +72,6 @@ const AddThirdsGroup = (props) => {
                     <InputBox
                         text="Empresa*:"
                         value={props.userBeingAdded.company}
-                        width={295}
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, company: val})}
                         backgroundColor={Constants.backgroundLightColors['Thirds']}
                         borderColor={Constants.backgroundDarkColors['Thirds']}

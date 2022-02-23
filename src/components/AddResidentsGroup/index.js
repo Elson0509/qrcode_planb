@@ -60,7 +60,6 @@ const AddResidentsGroup = (props) => {
                     <InputBox
                         text="Nome*:"
                         value={props.userBeingAdded.name}
-                        width={295}
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, name: val})}
                         autoCapitalize='words'
                         backgroundColor={Constants.backgroundLightColors['Residents']}
@@ -70,7 +69,6 @@ const AddResidentsGroup = (props) => {
                     <InputBox
                         text="Identidade:"
                         value={props.userBeingAdded.identification}
-                        width={295}
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, identification: val})}
                         autoCapitalize='characters'
                         backgroundColor={Constants.backgroundLightColors['Residents']}
@@ -80,7 +78,6 @@ const AddResidentsGroup = (props) => {
                     <InputBox
                         text="Email*:"
                         value={props.userBeingAdded.email}
-                        width={295}
                         changed={val=>props.setUserBeingAdded({...props.userBeingAdded, email: val})}
                         keyboard={'email-address'}
                         autoCapitalize='none'

@@ -37,6 +37,8 @@ const EventAdd = props => {
     }, []);
 
     const uploadImg = newId =>{
+      if(!userBeingAdded.pic)
+        return
       const formData = new FormData()
       formData.append('img', {
         uri: userBeingAdded.pic,
@@ -101,9 +103,9 @@ const EventAdd = props => {
       if(userBeingAdded.description.length < MIN_DESCRIPTION_CHARACTERS){
         return setErrorMessage(`Descrição muito curta. Pelo menos ${MIN_DESCRIPTION_CHARACTERS} caracteres.`)
       }
-      if(userBeingAdded.pic===''){
-        return setErrorMessage('Uma foto é necessária.')
-      }
+      // if(userBeingAdded.pic===''){
+      //   return setErrorMessage('Uma foto é necessária.')
+      // }
       setLoading(true)
       api.post('api/occurrence', {
         title: userBeingAdded.title,
@@ -137,25 +139,25 @@ const EventAdd = props => {
               text="Título*:" 
               value={userBeingAdded.title} 
               changed={value=>setUserBeingAdded({...userBeingAdded, title:value})}
-              backgroundColor={Constants.backgroundLightColors['Events']}
-              borderColor={Constants.backgroundDarkColors['Events']}
-              colorInput={Constants.backgroundDarkColors['Events']}
+              backgroundColor={Constants.backgroundLightColors['MyQRCode']}
+              borderColor={Constants.backgroundDarkColors['MyQRCode']}
+              colorInput={Constants.backgroundDarkColors['MyQRCode']}
             />
             <InputBox 
               text="Local*:" 
               value={userBeingAdded.place} 
               changed={value=>setUserBeingAdded({...userBeingAdded, place:value})}
-              backgroundColor={Constants.backgroundLightColors['Events']}
-              borderColor={Constants.backgroundDarkColors['Events']}
-              colorInput={Constants.backgroundDarkColors['Events']}
+              backgroundColor={Constants.backgroundLightColors['MyQRCode']}
+              borderColor={Constants.backgroundDarkColors['MyQRCode']}
+              colorInput={Constants.backgroundDarkColors['MyQRCode']}
             />
             <CommentBox
               text="Descrição*:" 
               value={userBeingAdded.description} 
               setValue={value=>setUserBeingAdded({...userBeingAdded, description:value})}
-              backgroundColor={Constants.backgroundLightColors['Events']}
-              borderColor={Constants.backgroundDarkColors['Events']}
-              colorInput={Constants.backgroundDarkColors['Events']}
+              backgroundColor={Constants.backgroundLightColors['MyQRCode']}
+              borderColor={Constants.backgroundDarkColors['MyQRCode']}
+              colorInput={Constants.backgroundDarkColors['MyQRCode']}
               placeholder='Detalhes da ocorrência'
               width={340}
             />
@@ -190,7 +192,7 @@ const EventAdd = props => {
               title1="Adicionar"
               title2="Cancelar"
               buttonPadding={15}
-              backgroundColor={Constants.backgroundColors['Events']}
+              backgroundColor={Constants.backgroundColors['MyQRCode']}
               action1={addHandler}
               action2={props.navigation.goBack}
             />
@@ -202,7 +204,7 @@ const EventAdd = props => {
 const styles = StyleSheet.create({
     body:{
       padding:10,
-      backgroundColor: Constants.backgroundColors['Events'],
+      backgroundColor: Constants.backgroundColors['MyQRCode'],
       minHeight:'100%'
     },
     errorMessage:{
@@ -228,7 +230,7 @@ const styles = StyleSheet.create({
     },
     buttonAddphotoIsClicked:{
       borderRadius: 8,
-      backgroundColor: Constants.backgroundLightColors['Events'],
+      backgroundColor: Constants.backgroundLightColors['MyQRCode'],
       marginTop: 15,
       padding: 15,
       alignItems: 'center',

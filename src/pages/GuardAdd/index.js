@@ -20,7 +20,7 @@ import FooterButtons from '../../components/FooterButtons';
 
 const GuardAdd = props => {
   const [loading, setLoading] = useState(false)
-  const [userBeingAdded, setUserBeingAdded] = useState(props.route?.params?.userBeingAdded || { id: "0", name: '', identification: '', email: '', pic: '' })
+  const [userBeingAdded, setUserBeingAdded] = useState(props.route?.params?.userBeingAdded || { id: "0", name: '', identification: '', company: '', email: '', pic: '' })
   const [errorMessage, setErrorMessage] = useState('')
   const [screen, setScreen] = useState(props.route?.params?.screen || 'GuardAdd')
 
@@ -89,6 +89,9 @@ const GuardAdd = props => {
     if (!userBeingAdded.email) {
       return setErrorMessage('Email não pode estar vazio.')
     }
+    if (!userBeingAdded.company) {
+      return setErrorMessage('Empresa não pode estar vazio.')
+    }
     if (!Utils.validateEmail(userBeingAdded.email)) {
       return setErrorMessage('Email não válido.')
     }
@@ -102,13 +105,14 @@ const GuardAdd = props => {
       user_kind_id: Constants.USER_KIND["GUARD"],
       identification: userBeingAdded.identification,
       email: userBeingAdded.email,
+      company: userBeingAdded.company,
       userBeingAdded_id_last_modify: props.route.params.user.id,
     })
       .then((res) => {
         uploadImg(res.data.user.id)
         setErrorMessage('')
         Toast.show('Cadastro realizado', Constants.configToast)
-        setUserBeingAdded({ id: "0", name: '', identification: '', email: '', pic: '' })
+        setUserBeingAdded({ id: "0", name: '', identification: '', company: '', email: '', pic: '' })
       })
       .catch((err) => {
         Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (GA1)', Constants.configToast)
@@ -140,6 +144,15 @@ const GuardAdd = props => {
           value={userBeingAdded.identification}
           autoCapitalize="characters"
           changed={value => setUserBeingAdded({ ...userBeingAdded, identification: value })}
+          backgroundColor={Constants.backgroundLightColors['Guards']}
+          borderColor={Constants.backgroundDarkColors['Guards']}
+          colorInput={Constants.backgroundDarkColors['Guards']}
+        />
+        <InputBox
+          text="Empresa*:"
+          value={userBeingAdded.company}
+          autoCapitalize="sentences"
+          changed={value => setUserBeingAdded({ ...userBeingAdded, company: value })}
           backgroundColor={Constants.backgroundLightColors['Guards']}
           borderColor={Constants.backgroundDarkColors['Guards']}
           colorInput={Constants.backgroundDarkColors['Guards']}

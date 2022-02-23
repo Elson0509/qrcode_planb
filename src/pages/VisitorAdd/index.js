@@ -110,10 +110,10 @@ const VisitorAdd = props => {
         setErrorAddResidentMessage('Documento não pode estar vazio.')
         return false
       }
-      if(!userBeingAdded.pic){
-        setErrorAddResidentMessage('É necessário adicionar uma foto.')
-        return false
-      }
+      // if(!userBeingAdded.pic){
+      //   setErrorAddResidentMessage('É necessário adicionar uma foto.')
+      //   return false
+      // }
       setResidents(prev=> [...prev, userBeingAdded])
       setErrorAddResidentMessage('')
       setUserBeingAdded({id: "0", name: '', identification: '', pic: ''})
@@ -290,8 +290,8 @@ const VisitorAdd = props => {
       })
     }
 
-    const backgroundColorBoxes = '#8381EC'
-    const backgroundColorButtonBoxes = '#B6BFD8'
+    const backgroundColorBoxes = Constants.backgroundColors['Visitors']
+    const backgroundColorButtonBoxes = Constants.backgroundLightColors['Visitors']
 
     if(loading)
       return <SafeAreaView style={styles.body}>
@@ -300,7 +300,7 @@ const VisitorAdd = props => {
 
     return(
       <SafeAreaView style={styles.body}>
-        <ScrollView style={{flex: 1, padding:10,}} keyboardShouldPersistTaps="handled">
+        <ScrollView style={{padding:10,}} keyboardShouldPersistTaps="handled">
           <SelectBlocoGroup 
             backgroundColor={backgroundColorBoxes}
             backgroundColorButtons={backgroundColorButtonBoxes}
@@ -359,7 +359,7 @@ const VisitorAdd = props => {
               {
                 !addingDates && !addingUser && !addingVehicle &&
                 <FooterButtons
-                  backgroundColor={Constants.backgroundColors['Visitors']}
+                  backgroundColor={Constants.backgroundLightColors['Visitors']}
                   title1="Confirmar"
                   title2="Cancelar"
                   errorMessage={errorMessage}
@@ -404,7 +404,7 @@ const VisitorAdd = props => {
 
 const styles = StyleSheet.create({
     body:{
-      backgroundColor: Constants.backgroundColors['Visitors'],
+      backgroundColor: Constants.backgroundLightColors['Visitors'],
       flex: 1
     },
     fontTitle:{
