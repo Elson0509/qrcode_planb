@@ -5,6 +5,7 @@ import {
   FlatList,
   RefreshControl,
   ActivityIndicator,
+  TouchableOpacity,
   View,
   Text,
 } from 'react-native';
@@ -21,6 +22,7 @@ import ModalQRCode from '../../components/ModalQRCode'
 import ModalGeneric from '../../components/ModalGeneric'
 import Placa from '../../components/Placa';
 import Spinner from '../../components/Spinner'
+import ModalPhoto from '../../components/ModalPhoto';
 import { useAuth } from '../../contexts/auth'
 
 const ThirdList = props => {
@@ -42,6 +44,8 @@ const ThirdList = props => {
   const [messageErrorModal, setMessageErrorModal] = useState('')
   const [modalGeneric, setModalGeneric] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState(false)
+  const [selectedUser, setSelectedUser] = useState(null)
+  const [isModalPhotoActive, setIsModalPhotoActive] = useState(false)
 
   useEffect(() => {
     fetchUsers()
@@ -258,6 +262,13 @@ const ThirdList = props => {
       })
   }
 
+  const onClickPhotoHandler = item => {
+    if (!item.photo_id)
+      return
+    setSelectedUser(item)
+    setIsModalPhotoActive(true)
+  }
+
   if (loading)
     return <SafeAreaView style={styles.body}>
       <ActivityIndicator size="large" color="white" />
@@ -325,9 +336,9 @@ const ThirdList = props => {
                       obj.item.residents.map((res) => {
                         return (
                           <View key={res.id} style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 5 }}>
-                            <View>
+                            <TouchableOpacity onPress={() => onClickPhotoHandler(res)}>
                               <PicUser user={res} />
-                            </View>
+                            </TouchableOpacity>
                             <View style={{ maxWidth: 250 }}>
                               <Text style={{ fontSize: 16, marginLeft: 7, fontWeight: 'bold' }}>{res.name}</Text>
                               {!!res.email && <Text style={{ fontSize: 16, marginLeft: 7 }}>Email: {res.email}</Text>}
@@ -442,6 +453,11 @@ const ThirdList = props => {
           </View>
         }
       </ModalGeneric>
+      <ModalPhoto
+        modalVisible={isModalPhotoActive}
+        setModalVisible={setIsModalPhotoActive}
+        id={selectedUser?.photo_id}
+      />
     </SafeAreaView>
   );
 }

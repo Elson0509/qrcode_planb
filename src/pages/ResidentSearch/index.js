@@ -5,6 +5,7 @@ import {
   FlatList,
   RefreshControl,
   ActivityIndicator,
+  TouchableOpacity,
   View,
   Text,
 } from 'react-native';
@@ -16,6 +17,7 @@ import Toast from 'react-native-root-toast';
 import PicUser from '../../components/PicUser';
 import InputBox from '../../components/InputBox';
 import ModalConfirmPass from '../../components/ModalConfirmPass';
+import ModalPhoto from '../../components/ModalPhoto';
 import Placa from '../../components/Placa'
 import { useAuth } from '../../contexts/auth';
 
@@ -29,6 +31,8 @@ const ResidentSearch = props => {
   const [refreshing, setRefreshing] = useState(false)
   const [nameFilter, setNameFilter] = useState('')
   const [passModal, setPassModal] = useState(false)
+  const [selectedUser, setSelectedUser] = useState(null)
+  const [isModalPhotoActive, setIsModalPhotoActive] = useState(false)
 
   useEffect(() => {
     fetchUsers()
@@ -136,6 +140,13 @@ const ResidentSearch = props => {
     setRefreshing(false)
   }
 
+  const onClickPhotoHandler = item => {
+    if(!item.photo_id)
+      return
+    setSelectedUser(item)
+    setIsModalPhotoActive(true)
+  }
+
   if (loading)
     return <SafeAreaView style={styles.body}>
       <ActivityIndicator size="large" color="white" />
@@ -188,9 +199,9 @@ const ResidentSearch = props => {
                       obj.item.residents.map((res) => {
                         return (
                           <View key={res.id} style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 15 }}>
-                            <View>
+                            <TouchableOpacity onPress={() => onClickPhotoHandler(res)}>
                               <PicUser user={res} />
-                            </View>
+                            </TouchableOpacity>
                             <View>
                               <Text style={{ fontSize: 18, marginLeft: 7 }}>{res.name}</Text>
                               {!!res.email && <Text style={{ fontSize: 16, marginLeft: 7 }}>Email: {res.email}</Text>}
@@ -234,6 +245,11 @@ const ResidentSearch = props => {
         modal={passModal}
         setModal={setPassModal}
         action={deleteUnitConfirmed}
+      />
+      <ModalPhoto
+        modalVisible={isModalPhotoActive}
+        setModalVisible={setIsModalPhotoActive}
+        id={selectedUser?.photo_id}
       />
     </SafeAreaView>
   );

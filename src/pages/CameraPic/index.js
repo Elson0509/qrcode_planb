@@ -28,7 +28,7 @@ const CameraPic = (props) => {
 
     const takePicture = async _ => {
         if (camRef) {
-            const data = await camRef.current.takePictureAsync();
+            const data = await camRef.current.takePictureAsync({ skipProcessing: true });
             setImgPath(data.uri)
             setIsTakingPic(false)
         }
@@ -61,6 +61,8 @@ const CameraPic = (props) => {
                         style={{ flex: 5 }}
                         type={type}
                         ref={camRef}
+                        autoFocus="off"
+                        
                     >
                     </Camera>
                     <View style={{ flex: 1, backgroundColor: 'black', flexDirection: 'row', justifyContent: 'center', paddingTop: 15 }}>

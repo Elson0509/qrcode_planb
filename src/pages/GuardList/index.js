@@ -5,6 +5,7 @@ import {
   FlatList,
   RefreshControl,
   ActivityIndicator,
+  TouchableOpacity,
   View,
   Text,
 } from 'react-native';
@@ -14,6 +15,7 @@ import ModalMessage from '../../components/ModalMessage';
 import api from '../../services/api'
 import Toast from 'react-native-root-toast';
 import PicUser from '../../components/PicUser';
+import ModalPhoto from '../../components/ModalPhoto';
 
 const GuardList = props => {
   const [residents, setResidents] = useState([])
@@ -22,6 +24,8 @@ const GuardList = props => {
   const [message, setMessage] = useState('')
   const [userSelected, setUserSelected] = useState(null)
   const [refreshing, setRefreshing] = useState(false)
+  const [selectedUser, setSelectedUser] = useState(null)
+  const [isModalPhotoActive, setIsModalPhotoActive] = useState(false)
 
   useEffect(() => {
     fetchUsers()
@@ -72,6 +76,13 @@ const GuardList = props => {
     setRefreshing(false)
   }
 
+  const onClickPhotoHandler = item => {
+    if (!item.photo_id)
+      return
+    setSelectedUser(item)
+    setIsModalPhotoActive(true)
+  }
+
   if (loading)
     return <SafeAreaView style={styles.body}>
       <ActivityIndicator size="large" color="white" />
@@ -102,9 +113,9 @@ const GuardList = props => {
                   </View>
                   <View style={{ justifyContent: 'space-between', flexDirection: 'column' }}>
                     <View style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 5 }}>
-                      <View>
+                      <TouchableOpacity onPress={() => onClickPhotoHandler(obj.item)}>
                         <PicUser user={obj.item} />
-                      </View>
+                      </TouchableOpacity>
                       <View>
                         <Text style={{ fontSize: 16, marginLeft: 7, fontWeight: 'bold' }}>{obj.item.name}</Text>
                         {!!obj.item.identification && <Text style={{ fontSize: 16, marginLeft: 7 }}>Id: {obj.item.identification}</Text>}
@@ -128,6 +139,11 @@ const GuardList = props => {
         btn1Text='Apagar'
         modalVisible={modal}
         setModalVisible={setModal}
+      />
+      <ModalPhoto
+        modalVisible={isModalPhotoActive}
+        setModalVisible={setIsModalPhotoActive}
+        id={selectedUser?.photo_id}
       />
     </SafeAreaView>
   );

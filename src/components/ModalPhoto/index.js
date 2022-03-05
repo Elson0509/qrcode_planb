@@ -16,6 +16,7 @@ const ModalPhoto = (props) => {
           !!props.id && <Image
             style={{ width: '100%', height: '100%' }}
             source={{ uri: `${Constants.PREFIX_IMG_GOOGLE_CLOUD}${props.id}` }}
+            resizeMode='contain'
           />
         }
       </View>
@@ -24,11 +25,12 @@ const ModalPhoto = (props) => {
           position: 'absolute',
           bottom: 10,
           left: '42%',
-          padding: 10
+          padding: 10,
+          backgroundColor: 'white'
         }}
         onPress={() => props.setModalVisible(false)}
       >
-        <Icon name="window-close" color="white" size={40} />
+        <Icon name="window-close" color="red" size={40} />
       </TouchableOpacity>
     </Modal>
 

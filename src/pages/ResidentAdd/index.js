@@ -79,7 +79,7 @@ const ResidentAdd = props => {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        aspect: [3, 4],
+        //aspect: [3, 4],
         quality: 1,
       });
       const compressed = await Utils.compressImage(result.uri)

@@ -1,19 +1,13 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Icon from '../Icon';
 import InputBox from '../InputBox';
 import FooterButtons from '../FooterButtons';
 import * as Constants from '../../services/constants'
 import { StyleSheet,
-    TextInput,
     View,
-    KeyboardAvoidingView,
     Image,
     TouchableOpacity,
     Text,
-    FlatList,
-    Animated,
-    Keyboard,
-    Button,
 } from 'react-native';
 import PicUser from '../PicUser';
 
@@ -108,6 +102,7 @@ const AddResidentsGroup = (props) => {
                         <Image
                             style={{width: 66, height: 79,}}
                             source={{uri: props.userBeingAdded.pic}}
+                            resizeMode='contain'
                         />
                     </View>
                     }

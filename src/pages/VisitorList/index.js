@@ -5,6 +5,7 @@ import {
   FlatList,
   RefreshControl,
   ActivityIndicator,
+  TouchableOpacity,
   View,
   Text,
 } from 'react-native'
@@ -21,6 +22,7 @@ import ModalGeneric from '../../components/ModalGeneric'
 import InputBox from '../../components/InputBox'
 import Placa from '../../components/Placa'
 import Spinner from '../../components/Spinner'
+import ModalPhoto from '../../components/ModalPhoto';
 import { useAuth } from '../../contexts/auth'
 
 const VisitorList = props => {
@@ -42,6 +44,8 @@ const VisitorList = props => {
   const [messageErrorModal, setMessageErrorModal] = useState('')
   const [modalGeneric, setModalGeneric] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState(false)
+  const [selectedUser, setSelectedUser] = useState(null)
+  const [isModalPhotoActive, setIsModalPhotoActive] = useState(false)
 
   useEffect(() => {
     fetchUsers()
@@ -146,6 +150,14 @@ const VisitorList = props => {
 
     return unitsInfo
   }
+
+  const onClickPhotoHandler = item => {
+    if(!item.photo_id)
+      return
+    setSelectedUser(item)
+    setIsModalPhotoActive(true)
+  }
+
 
   const onRefreshHandler = _ => {
     setRefreshing(true)
@@ -324,9 +336,9 @@ const VisitorList = props => {
                       obj.item.residents.map((res) => {
                         return (
                           <View key={res.id} style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 15, }}>
-                            <View>
+                            <TouchableOpacity onPress={() => onClickPhotoHandler(res)}>
                               <PicUser user={res} />
-                            </View>
+                            </TouchableOpacity>
                             <View style={{ maxWidth: 250 }}>
                               <Text style={{ fontSize: 16, marginLeft: 7, fontWeight: 'bold' }}>{res.name}</Text>
                               {!!res.email && <Text style={{ fontSize: 16, marginLeft: 7 }}>Email: {res.email}</Text>}
@@ -436,6 +448,11 @@ const VisitorList = props => {
           </View>
         }
       </ModalGeneric>
+      <ModalPhoto
+        modalVisible={isModalPhotoActive}
+        setModalVisible={setIsModalPhotoActive}
+        id={selectedUser?.photo_id}
+      />
     </SafeAreaView>
   );
 }
