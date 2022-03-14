@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import ActionButtons from '../../components/ActionButtons';
-import ModalPhoto from '../../components/ModalPhoto';
+import ModalCarousel from '../../components/ModalCarousel';
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage';
@@ -26,10 +26,11 @@ const CarList = props => {
   const [message, setMessage] = useState('')
   const [refreshing, setRefreshing] = useState(false)
   const [selectedOvernight, setSelectedOvernight] = useState(null)
-  const [isModalPhotoActive, setIsModalPhotoActive] = useState(false)
   const [modalGeneric, setModalGeneric] = useState(false)
   const [replyMessage, setReplyMessage] = useState('')
   const [subject, setSubject] = useState('')
+  const [modalCarousel, setModalCarousel] = useState(false)
+  const [carouselImages, setCarouselImages] = useState([])
 
   useEffect(() => {
     fetchOvernights()
@@ -81,9 +82,9 @@ const CarList = props => {
   }
 
   const onClickPhotoHandler = item => {
-    if (item.photo_id) {
-      setSelectedOvernight(item)
-      setIsModalPhotoActive(true)
+    if (item.OvernightImages?.length) {
+      setCarouselImages(item.OvernightImages)
+      setModalCarousel(true)
     }
   }
 
@@ -147,16 +148,22 @@ const CarList = props => {
                         <View style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 5, borderColor: Constants.backgroundDarkColors["Cars"] }}>
                           <TouchableOpacity onPress={() => onClickPhotoHandler(obj.item)}>
                             {
-                              obj.item.photo_id ?
+                              obj.item.OvernightImages.length ?
                                 <Image
                                   style={{ width: 60, height: 80, marginRight: 5 }}
-                                  source={{ uri: `${Constants.PREFIX_IMG_GOOGLE_CLOUD}${obj.item.photo_id}` }}
+                                  source={{ uri: `${Constants.PREFIX_IMG_GOOGLE_CLOUD}${obj.item.OvernightImages[0].photo_id}` }}
                                 />
                                 :
                                 <Image
                                   style={{ width: 60, height: 80, marginRight: 5 }}
                                   source={require('../../../assets/pics/generic-event.png')}
                                 />
+                            }
+                            {
+                              obj.item.OvernightImages.length ? 
+                                <Text style={{textAlign: 'center'}}>{obj.item.OvernightImages.length } foto{obj.item.OvernightImages.length > 1 ? 's' : ''}</Text>
+                                :
+                                null
                             }
                           </TouchableOpacity>
                           <View style={{ width: 250 }}>
@@ -188,11 +195,6 @@ const CarList = props => {
         modalVisible={modal}
         setModalVisible={setModal}
       />
-      <ModalPhoto
-        modalVisible={isModalPhotoActive}
-        setModalVisible={setIsModalPhotoActive}
-        id={selectedOvernight?.photo_id}
-      />
       <ModalReply
         modal={modalGeneric}
         setModal={setModalGeneric}
@@ -201,6 +203,11 @@ const CarList = props => {
         subject={subject}
         setSubject={setSubject}
         sendHandler={sendHandler}
+      />
+      <ModalCarousel
+        modalVisible={modalCarousel}
+        setModalVisible={setModalCarousel}
+        carouselImages={carouselImages}
       />
     </SafeAreaView>
   );

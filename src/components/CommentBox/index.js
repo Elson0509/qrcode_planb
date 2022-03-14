@@ -19,16 +19,19 @@ const CommentBox = (props) => {
     <View>
       {props.text && <Text style={[styles.labelStyle, { color: props.colorLabel || 'black' }]}>{props.text}</Text>}
       <TextInput
-        style={{
-          borderWidth: 2,
-          backgroundColor: 'white',
-          padding: 12,
-          borderRadius: 10,
-          maxHeight: 100,
-          backgroundColor: props.backgroundColor || 'white',
-          borderColor: props.borderColor || 'black',
-          color: props.colorInput || 'black',
-        }}
+        style={[
+          styles.txtInput,
+          {
+            borderWidth: 2,
+            backgroundColor: 'white',
+            padding: 12,
+            borderRadius: 10,
+            maxHeight: 100,
+            backgroundColor: props.backgroundColor || 'white',
+            borderColor: props.borderColor || 'black',
+            color: props.colorInput || 'black',
+          }
+        ]}
         value={props.value}
         onChangeText={text => changeHandler(text)}
         multiline={true}

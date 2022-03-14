@@ -6,9 +6,9 @@ import {
   KeyboardAvoidingView,
   TouchableOpacity,
   FlatList,
-  Image,
   RefreshControl,
   ActivityIndicator,
+  ScrollView,
   View,
   Text,
 } from 'react-native';
@@ -21,6 +21,9 @@ import CommentBox from '../../components/CommentBox';
 import InputBox from '../../components/InputBox';
 import FooterButtons from '../../components/FooterButtons';
 import * as ImagePicker from 'expo-image-picker'
+import * as Utils from '../../services/util'
+import TakePic from '../../components/TakePic';
+import Carousel from '../../components/Carousel';
 
 const CarSearch = props => {
   const [cars, setCars] = useState([])
@@ -31,6 +34,8 @@ const CarSearch = props => {
   const [refreshing, setRefreshing] = useState(false)
   const [plateFilter, setPlateFilter] = useState('')
   const [errorMessage, setErrorMessage] = useState('')
+  const [isTakingPic, setIsTakingPic] = useState(false)
+  const [images, setImages] = useState([])
 
   useEffect(() => {
     fetchUsers()
@@ -50,6 +55,25 @@ const CarSearch = props => {
       }
     })();
   }, []);
+
+  const photoTaken = photoUri => {
+    setIsTakingPic(false)
+    if (images.length < 5) {
+      setImages(prev => [...prev, photoUri])
+    }
+  }
+
+  const pickImage = async () => {
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      quality: 1,
+    });
+    const compressed = await Utils.compressImage(result.uri)
+    if (!result.cancelled) {
+      setImages(prev => [...prev, compressed.uri])
+    }
+  };
 
   const fetchUsers = _ => {
     api.get(`api/vehicle/condo/${props.route.params.user.condo_id}`)
@@ -84,33 +108,35 @@ const CarSearch = props => {
   }
 
   const photoClickHandler = _ => {
-    props.navigation.navigate('CameraPic', {
-      user: props.route.params.user,
-      screen: 'CarSearch',
-      userBeingAdded: {}
-    })
+    if (images.length < 5) {
+      setIsTakingPic(true)
+    }
+  }
+
+  const removePhoto = index => {
+    const newListImages = [...images]
+    newListImages.splice(index, 1)
+    setImages(newListImages)
   }
 
   const uploadImg = newId => {
-    if (props.route?.params?.pic) {
-      const formData = new FormData()
-      formData.append('img', {
-        uri: props.route.params.pic,
-        type: 'image/jpg',
-        name: newId + '.jpg'
-      })
-      api.post(`api/overnight/image/${newId}`, formData, {
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
-        }
-      })
-        .then(res => {
-          console.log('success', res.data)
+    if (images.length && images.length <= 5) {
+      images.forEach((image, index) =>
+        Utils.jpgToBase64(image, dataUrl => {
+          api.post(`api/upload`, {
+            base64Image: dataUrl,
+            fileName: newId,
+            type: 'overnight',
+            index
+          })
+            .then(res => {
+              console.log('success', res.data)
+            })
+            .catch(err => {
+              console.log('error', err.response)
+            })
         })
-        .catch(err => {
-          console.log('error', err.response)
-        })
+      )
     }
   }
 
@@ -147,103 +173,122 @@ const CarSearch = props => {
     </SafeAreaView>
 
   return (
-    <KeyboardAvoidingView style={styles.body}>
-      <View style={{ paddingHorizontal: 10 }}>
-        <InputBox
-          text='Placa:'
-          colorLabel='black'
-          backgroundColor={Constants.backgroundLightColors['Cars']}
-          borderColor={Constants.backgroundDarkColors['Cars']}
-          colorInput={Constants.backgroundDarkColors['Cars']}
-          autoCapitalize='characters'
-          value={plateFilter}
-          changed={(val => setPlateFilter(val))}
-        />
-      </View>
-      {
-        (filterData().length == 0 && !!plateFilter.trim()) || (
-          <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: "center", justifyContent: "center" }}>
-            <CheckBox
-              value={checked}
-              onValueChange={setChecked}
+    isTakingPic ?
+      <TakePic
+        clicked={photoTaken}
+      />
+      :
+      <KeyboardAvoidingView style={styles.body}>
+        <ScrollView>
+          <View style={{ paddingHorizontal: 10 }}>
+            <InputBox
+              text='Placa:'
+              colorLabel='black'
+              backgroundColor={Constants.backgroundLightColors['Cars']}
+              borderColor={Constants.backgroundDarkColors['Cars']}
+              colorInput={Constants.backgroundDarkColors['Cars']}
+              autoCapitalize='characters'
+              value={plateFilter}
+              changed={(val => setPlateFilter(val))}
             />
-            <Text style={{ color: 'white' }}>Registrar ocorrência?</Text>
           </View>
-        )
-      }
-      {filterData().length > 0 && !checked &&
-        <FlatList
-          data={filterData()}
-          keyExtractor={item => item.id}
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={() => onRefreshHandler()}
-            />
-          }
-          renderItem={(obj) => {
-            return (
-              <View
-                style={styles.menuItem}
-              >
-                <Text style={styles.listText}>Bloco {obj.item.Unit.Bloco.name} Unidade {obj.item.Unit.number}</Text>
-                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                  <View style={{ maxWidth: 500 }}>
-                    <Text>{`${obj.item.maker} ${obj.item.model} ${obj.item.color}`}</Text>
-                  </View>
-                  <Placa placa={`${obj.item.plate}`} />
-                </View>
+          {
+            (filterData().length == 0 && !!plateFilter.trim()) || (
+              <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: "center", justifyContent: "center" }}>
+                <CheckBox
+                  value={checked}
+                  onValueChange={setChecked}
+                />
+                <Text style={{ color: 'white' }}>Registrar ocorrência?</Text>
               </View>
             )
-          }}
-        />
-      }
-      {((filterData().length == 0 && !!plateFilter.trim()) || checked) && (
-        <View style={{ padding: 10 }}>
-          <Text style={{ textAlign: 'center', marginBottom: 8, marginTop: 15, fontWeight: 'bold' }}>Reportar veículo</Text>
-          <CommentBox value={comment} setValue={setComment} placeholder='Detalhes da ocorrência' width={340} />
-          <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: "center", justifyContent: "center", borderWidth: 1, padding: 12, backgroundColor: Constants.backgroundLightColors['Cars'] }}>
-            <Text style={{ color: 'black', fontWeight: 'bold' }}>Veículo está cadastrado?</Text>
-            <TouchableOpacity onPress={() => setIs_registered_vehicle(prev => !prev)} style={{ padding: 8, borderColor: 'black', borderWidth: 1, borderRadius: 5, marginLeft: 12, backgroundColor: is_registered_vehicle ? '#8F8' : '#F88' }}>
-              <Text>{is_registered_vehicle ? 'Sim' : 'Não'}</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{ alignItems: 'center' }}>
-            {
-              !props.route?.params?.pic && <TouchableOpacity
-                style={[styles.buttonAddphotoIsClicked, { borderColor: Constants.backgroundDarkColors['Cars'], borderWidth: 1 }]}
-                onPress={() => { photoClickHandler() }}
-              >
-                <Icon name="camera" size={20} color={Constants.backgroundDarkColors['Cars']} />
-                <Text style={{ color: Constants.backgroundDarkColors['Cars'] }}>Câmera</Text>
-              </TouchableOpacity>
-              ||
-              <View style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'center',
-                marginTop: 10,
-              }}>
-                <Image
-                  style={{ width: 107, height: 127 }}
-                  source={{ uri: props.route.params.pic }}
+          }
+          {filterData().length > 0 && !checked &&
+            <FlatList
+              data={filterData()}
+              keyExtractor={item => item.id}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={() => onRefreshHandler()}
                 />
+              }
+              renderItem={(obj) => {
+                return (
+                  <View
+                    style={styles.menuItem}
+                  >
+                    <Text style={styles.listText}>Bloco {obj.item.Unit.Bloco.name} Unidade {obj.item.Unit.number}</Text>
+                    <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                      <View style={{ maxWidth: 500 }}>
+                        <Text>{`${obj.item.maker} ${obj.item.model} ${obj.item.color}`}</Text>
+                      </View>
+                      <Placa placa={`${obj.item.plate}`} />
+                    </View>
+                  </View>
+                )
+              }}
+            />
+          }
+          {((filterData().length == 0 && !!plateFilter.trim()) || checked) && (
+            <View style={{ padding: 10 }}>
+              <Text style={{ textAlign: 'center', marginBottom: 8, marginTop: 15, fontWeight: 'bold' }}>Reportar veículo</Text>
+              <CommentBox value={comment} setValue={setComment} placeholder='Detalhes da ocorrência' width={340} />
+              <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: "center", justifyContent: "center", borderWidth: 1, padding: 12, backgroundColor: Constants.backgroundLightColors['Cars'] }}>
+                <Text style={{ color: 'black', fontWeight: 'bold' }}>Veículo está cadastrado?</Text>
+                <TouchableOpacity onPress={() => setIs_registered_vehicle(prev => !prev)} style={{ padding: 8, borderColor: 'black', borderWidth: 1, borderRadius: 5, marginLeft: 12, backgroundColor: is_registered_vehicle ? '#8F8' : '#F88' }}>
+                  <Text>{is_registered_vehicle ? 'Sim' : 'Não'}</Text>
+                </TouchableOpacity>
               </View>
-            }
-            {!!errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
-          </View>
-          <FooterButtons
-            title1='Enviar'
-            title2='Cancelar'
-            action1={confirmHandler}
-            action2={() => props.navigation.navigate('Dashboard')}
-            backgroundColor={Constants.backgroundColors['Cars']}
-            buttonPadding={15}
-            fontSize={18}
-          />
-        </View>
-      )}
-    </KeyboardAvoidingView>
+              <View style={{ alignItems: 'center' }}>
+                <Text style={styles.title}>Fotos:</Text>
+                {
+                  images.length < 5 &&
+                  <View style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}>
+                    <TouchableOpacity
+                      style={[styles.buttonAddphotoIsClicked, { borderColor: Constants.backgroundDarkColors['Cars'], borderWidth: 1 }]}
+                      onPress={() => { photoClickHandler() }}
+                    >
+                      <Icon name="camera" size={20} color={Constants.backgroundDarkColors['Cars']} />
+                      <Text style={{ color: Constants.backgroundDarkColors['Cars'] }}>Câmera</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={[styles.buttonAddphotoIsClicked, { marginLeft: 40, borderColor: Constants.backgroundDarkColors['Cars'], borderWidth: 1 }]}
+                      onPress={() => { pickImage() }}
+                    >
+                      <Icon name="paperclip" size={20} color={Constants.backgroundDarkColors['Cars']} />
+                      <Text style={{ color: Constants.backgroundDarkColors['Cars'] }}>Arquivo</Text>
+                    </TouchableOpacity>
+                  </View>
+                }
+                {
+                  images.length ?
+                    <Carousel
+                      images={images}
+                      removePhoto={removePhoto}
+                    />
+                    :
+                    null
+                }
+                {!!errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
+              </View>
+              <FooterButtons
+                title1='Enviar'
+                title2='Cancelar'
+                action1={confirmHandler}
+                action2={() => props.navigation.navigate('Dashboard')}
+                backgroundColor={Constants.backgroundColors['Cars']}
+                buttonPadding={15}
+                fontSize={18}
+              />
+            </View>
+          )}
+        </ScrollView>
+      </KeyboardAvoidingView>
   );
 }
 
@@ -272,6 +317,12 @@ const styles = StyleSheet.create({
     padding: 15,
     width: 100,
     alignItems: 'center',
+  },
+  title: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+    fontSize: 18,
+    marginTop: 15,
   },
   errorMessage: {
     color: 'red',

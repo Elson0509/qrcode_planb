@@ -1,22 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Icon from '../Icon';
 import InputBox from '../InputBox';
 import FooterButtons from '../FooterButtons';
 import * as Constants from '../../services/constants'
-import * as Utils from '../../services/util'
-import DateInputBox from '../DateInputBox'
 import PicUser from '../PicUser'
 import { StyleSheet,
-    TextInput,
     View,
-    KeyboardAvoidingView,
     Image,
     TouchableOpacity,
     Text,
-    FlatList,
-    Animated,
-    Keyboard,
-    Button,
 } from 'react-native';
 
 const AddVisitorsGroup = (props) => {
@@ -108,7 +100,7 @@ const AddVisitorsGroup = (props) => {
                         <FooterButtons
                             action1={addHandler}
                             action2={cancelHandler}
-                            title1="Adicionar"
+                            title1={props.buttonText || 'Adicionar'}
                             title2="Cancelar"
                             buttonPadding={10}
                             backgroundColor={props.backgroundColor}

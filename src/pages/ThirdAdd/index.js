@@ -329,6 +329,7 @@ const ThirdAdd = props => {
               removeResident={removeResident}
               addingUser={addingUser}
               setAddingUser={setAddingUser}
+              buttonText='Incluir Terc.'
             />
             <SelectDatesVisitorsGroup
               selectedDateInit={Utils.printDate(selectedDateInit)}

@@ -292,6 +292,7 @@ const ResidentAdd = props => {
                 removeResident={removeResident}
                 addingUser={addingUser}
                 setAddingUser={setAddingUser}
+                buttonText='Incluir morador'
               />
               <AddCarsGroup 
                 data={vehicles} 

@@ -93,7 +93,7 @@ const AddCarsGroup = (props) => {
             <FooterButtons
               action1={addHandler}
               action2={cancelHandler}
-              title1="Adicionar"
+              title1="Incluir veículo"
               title2="Cancelar"
               buttonPadding={10}
               backgroundColor={props.backgroundColor || '#44FFAF'}

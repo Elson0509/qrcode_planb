@@ -72,7 +72,7 @@ const SelectDatesVisitorsGroup = (props) => {
                         <FooterButtons
                             action1={addHandler}
                             action2={cancelHandler}
-                            title1="Confirmar"
+                            title1="Incluir prazo"
                             title2="Cancelar"
                             buttonPadding={10}
                             backgroundColor={props.backgroundColor}

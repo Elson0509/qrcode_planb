@@ -111,7 +111,7 @@ const AddResidentsGroup = (props) => {
                         <FooterButtons
                             action1={addHandler}
                             action2={cancelHandler}
-                            title1="Adicionar"
+                            title1={props.buttonText || "Adicionar"}
                             title2="Cancelar"
                             buttonPadding={10}
                             backgroundColor='#44FFAF'

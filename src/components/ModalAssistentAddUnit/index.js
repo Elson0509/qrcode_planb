@@ -1,21 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { StyleSheet, Text, View, Modal, Button, Image, ScrollView, TouchableHighlight, Pressable } from 'react-native';
 import InputBox from '../InputBox';
 import * as Constants from '../../services/constants'
 
-const ModalEditUnit = (props) => {
-  const [message, setMessage] = useState('')
-
-  const confirmHandler = _ => {
-    if (!props.unitWillUpdate.bloco_name.trim())
-      setMessage('Bloco não pode estar em branco.')
-    if (!props.unitWillUpdate.unit_number.trim())
-      setMessage('Unidade não pode estar em branco.')
-    else {
-      setMessage('')
-      props.btn1Pressed()
-    }
-  }
+const ModalAssistentAddUnit = (props) => {
 
   return (
     <Modal
@@ -25,44 +13,39 @@ const ModalEditUnit = (props) => {
       onRequestClose={() => props.setModalVisible(false)}
     >
       <View style={styles.centeredView}>
-
         <View style={styles.modalView}>
-          <Text style={styles.modalTitle}>Editar unidade:</Text>
-          <View>
+          <Text style={styles.modalTitle}>Assistente</Text>
+          <Text>Este é o assistente de unidades. Digite o primeiro e o último apartamento do bloco para que sejam adicionados automaticamente.</Text>
+          <View style={{marginTop: 10}}>
             <InputBox
-              text="Bloco:"
-              value={props.unitWillUpdate.bloco_name}
-              changed={value => props.setUnitWillUpdate({ ...props.unitWillUpdate, bloco_name: value })}
+              text="Primeiro Apartamento:"
+              value={props.first}
+              changed={value => props.setfirst(value)}
               backgroundColor={Constants.backgroundLightColors['Units']}
               borderColor={Constants.backgroundDarkColors['Units']}
               colorInput={Constants.backgroundDarkColors['Units']}
             />
           </View>
-          <View>
+          <View style={{marginTop: 10}}>
             <InputBox
-              text="Apartamento:"
-              value={props.unitWillUpdate.unit_number}
-              changed={value => props.setUnitWillUpdate({ ...props.unitWillUpdate, unit_number: value })}
+              text="Último Apartamento:"
+              value={props.last}
+              changed={value => props.setlast(value)}
               backgroundColor={Constants.backgroundLightColors['Units']}
               borderColor={Constants.backgroundDarkColors['Units']}
               colorInput={Constants.backgroundDarkColors['Units']}
             />
           </View>
+          {!!props.errorAptMessage && <Text style={styles.modalMessage}>{props.errorAptMessage}</Text>}
           <View style={[styles.buttonGroup]}>
             <Pressable
-              style={[styles.button, { backgroundColor: props.btn2BgColor || '#FF2323' }]}
-              onPress={() => props.setModalVisible(false)}
-            >
-              <Text style={styles.textStyle}>Cancelar</Text>
-            </Pressable>
-            <Pressable
               style={[styles.button, { backgroundColor: props.btn1BgColor || '#2323FF' }]}
-              onPress={confirmHandler}
+              onPress={props.confirmHandler}
             >
               <Text style={styles.textStyle}>Confirmar</Text>
             </Pressable>
           </View>
-          {!!message && <Text style={styles.modalMessage}>{message}</Text>}
+
         </View>
       </View>
     </Modal>
@@ -74,7 +57,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22
+    marginTop: 22,
+
   },
   modalTitle: {
     marginBottom: 10,
@@ -85,8 +69,7 @@ const styles = StyleSheet.create({
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
-    padding: 35,
-    //alignItems: "center",
+    padding: 10,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -97,7 +80,8 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   buttonGroup: {
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   button: {
     borderRadius: 20,
@@ -123,8 +107,9 @@ const styles = StyleSheet.create({
   modalMessage: {
     color: 'red',
     textAlign: 'center',
-    marginTop: 12
+    marginTop: 12,
+    paddingBottom: 10,
   }
 });
 
-export default ModalEditUnit;
+export default ModalAssistentAddUnit;

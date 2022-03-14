@@ -325,6 +325,7 @@ const VisitorAdd = props => {
                 removeResident={removeResident}
                 addingUser={addingUser}
                 setAddingUser={setAddingUser}
+                buttonText='Incluir visitante'
               />
               <SelectDatesVisitorsGroup
                 selectedDateInit={Utils.printDate(selectedDateInit)}
