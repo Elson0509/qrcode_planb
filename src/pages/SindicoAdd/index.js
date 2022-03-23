@@ -16,7 +16,6 @@ import Icon from '../../components/Icon';
 import InputBox from '../../components/InputBox';
 import ModalSelectCondo from '../../components/ModalSelectCondo';
 import FooterButtons from '../../components/FooterButtons';
-import Toast from 'react-native-root-toast';
 import api from '../../services/api';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
@@ -34,14 +33,14 @@ const SindicoAdd = props => {
       fetchCondos()
     },[])
 
-    const fetchCondos = _ => {
+    const fetchCondos = async _ => {
+      if(await Utils.handleNoConnection(setLoading)) return
       api.get(`api/condo`)
       .then(resp=>{
         setCondos(resp.data)
-        (resp.data)
       })
       .catch(err=>{
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (SA1)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (SA1)')
       })
       .finally(()=>{
         setLoading(false)
@@ -100,7 +99,8 @@ const SindicoAdd = props => {
       }
     }
 
-    const confirmHandler = _ =>{
+    const confirmHandler = async _ =>{
+      if(await Utils.handleNoConnection(setLoading)) return
       if(!userBeingAdded.name){
         return setErrorMessage('Nome não pode estar vazio.')
       }
@@ -126,11 +126,11 @@ const SindicoAdd = props => {
       .then((res)=>{
         uploadImg(res.data.userId)
         setErrorMessage('')
-        Toast.show('Cadastro realizado', Constants.configToast)
+        Utils.toast('Cadastro realizado')
         setUserBeingAdded({id: "0", name: '', identification: '', email: '', pic: ''})
       })
       .catch((err)=> {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (GA1)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (GA1)')
       })
       .finally(()=>{
         setLoading(false)
@@ -141,7 +141,8 @@ const SindicoAdd = props => {
       setUserBeingAdded({id: '0', name: '', identification: '', email: '', pic: ''})
     }
 
-    const photoClickHandler = _ => {
+    const photoClickHandler = async _ => {
+      if(await Utils.handleNoConnection(setLoading)) return
       props.navigation.navigate('CameraPic', {
         userBeingAdded, 
         selectedBloco: null, 

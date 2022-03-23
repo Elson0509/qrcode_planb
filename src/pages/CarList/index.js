@@ -16,7 +16,6 @@ import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage';
 import api from '../../services/api'
-import Toast from 'react-native-root-toast';
 import ModalReply from '../../components/ModalReply'
 
 const CarList = props => {
@@ -40,13 +39,15 @@ const CarList = props => {
     return willFocusSubscription
   }, [])
 
-  const fetchOvernights = _ => {
+  const fetchOvernights = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
+    
     api.get(`api/overnight`)
       .then(resp => {
         setOvernights(resp.data.overnights)
       })
       .catch(err => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CL1)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CL1)')
       })
       .finally(() => {
         setLoading(false)
@@ -59,16 +60,17 @@ const CarList = props => {
     setModal(true)
   }
 
-  const deleteOvernightConfirmed = _ => {
+  const deleteOvernightConfirmed = async _ => {
     setModal(false)
+    if(await Utils.handleNoConnection(setLoading)) return
     setLoading(true)
     api.delete(`api/overnight/${selectedOvernight.id}`)
       .then(res => {
-        Toast.show(res.data.message, Constants.configToast)
+        Utils.toast(res.data.message)
         fetchOvernights()
       })
       .catch((err) => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CL2)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CL2)')
       })
       .finally(() => {
         setLoading(false)
@@ -88,7 +90,8 @@ const CarList = props => {
     }
   }
 
-  const replyHandler = item => {
+  const replyHandler = async item => {
+    if(await Utils.handleNoConnection(setLoading)) return
     setSelectedOvernight(item)
     setModalGeneric(true)
     setSubject('')
@@ -103,10 +106,10 @@ const CarList = props => {
     })
       .then(resp => {
         setModalGeneric(false)
-        Toast.show(resp.data.message, Constants.configToast)
+        Utils.toast(resp.data.message)
       })
       .catch(err => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CL3)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CL3)')
       })
       .finally(() => {
         setLoading(false)

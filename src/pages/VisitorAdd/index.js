@@ -18,7 +18,6 @@ import ModalSelectUnit from '../../components/ModalSelectUnit';
 import FooterButtons from '../../components/FooterButtons';
 import SelectDatesVisitorsGroup from '../../components/SelectDatesVisitorsGroup';
 import ModalQRCode from '../../components/ModalQRCode';
-import Toast from 'react-native-root-toast';
 import api from '../../services/api';
 
 const VisitorAdd = props => {
@@ -57,7 +56,7 @@ const VisitorAdd = props => {
           setBlocos(res.data)
         })
         .catch(err=>{
-          Toast.show(err.response.data.message, Constants.configToast)
+          Utils.toastTimeoutOrErrorMessage(err, err.response.data.message)
         })
         .finally(()=>{
           setLoading(false)
@@ -76,13 +75,15 @@ const VisitorAdd = props => {
       })();
     }, []);
 
-    const removeResident = index => {
+    const removeResident = async index => {
+      if(await Utils.handleNoConnection(setLoading)) return
       const residentsCopy = [...residents]
       residentsCopy.splice(index, 1)
       setResidents(residentsCopy)
     }
 
-    const removeVehicle = index => {
+    const removeVehicle = async index => {
+      if(await Utils.handleNoConnection(setLoading)) return
       const vehiclesCopy = [...vehicles]
       vehiclesCopy.splice(index, 1)
       setVehicles(vehiclesCopy)
@@ -101,7 +102,8 @@ const VisitorAdd = props => {
       }
     }
 
-    const addResidentHandler = _ =>{
+    const addResidentHandler = async _ =>{
+      if(await Utils.handleNoConnection(setLoading)) return
       if(!userBeingAdded.name){
         setErrorAddResidentMessage('Nome não pode estar vazio.')
         return false
@@ -120,7 +122,8 @@ const VisitorAdd = props => {
       return true
     }
 
-    const selectDatesHandler = _ =>{
+    const selectDatesHandler = async _ =>{
+      if(await Utils.handleNoConnection(setLoading)) return
       if(!Utils.isValidDate(dateInit.day, dateInit.month, dateInit.year) ){
         setErrorSetDateMessage('Data inicial não é válida.')
         return false
@@ -149,7 +152,8 @@ const VisitorAdd = props => {
       setUserBeingAdded({name: '', identification: '', email: '', pic: ''})
     }
 
-    const addVehicleHandler = _ =>{
+    const addVehicleHandler = async _ =>{
+      if(await Utils.handleNoConnection(setLoading)) return
       if(!vehicleBeingAdded.maker){
         setErrorAddVehicleMessage('Fabricante não pode estar vazio.')
         return false
@@ -180,7 +184,8 @@ const VisitorAdd = props => {
       setVehicleBeingAdded({maker:'', model:'', color:'', plate:''})
     }
 
-    const photoClickHandler = _ => {
+    const photoClickHandler = async _ => {
+      if(await Utils.handleNoConnection(setLoading)) return
       props.navigation.navigate('CameraPic', {
         userBeingAdded, 
         selectedBloco, 
@@ -216,7 +221,8 @@ const VisitorAdd = props => {
     }
 
     //saving...
-    const confirmHandler = _ =>{
+    const confirmHandler = async _ =>{
+      if(await Utils.handleNoConnection(setLoading)) return
       //checking if there is date selected and at least one visitor
       if(!selectedDateInit || !selectedDateEnd){
         return setErrorMessage('É preciso selecionar um prazo.')
@@ -238,7 +244,7 @@ const VisitorAdd = props => {
       })
       .then(res=>{
         uploadImgs(res.data.personsAdded)
-        Toast.show(res.data.message, Constants.configToast)
+        Utils.toast(res.data.message)
         setDateEnd({day: '', month: '', year: ''})
         setSelectedUnit(null)
         setSelectedBloco(null)
@@ -250,7 +256,7 @@ const VisitorAdd = props => {
         setShowModalQRCode(true)
       })
       .catch(err=>{
-        Toast.show(err.response.data.message, Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response.data.message)
       })
       .finally(()=>{
         setLoading(false)

@@ -13,7 +13,6 @@ import * as Constants from '../../services/constants'
 import * as ImagePicker from 'expo-image-picker'
 import * as Utils from '../../services/util'
 import api from '../../services/api'
-import Toast from 'react-native-root-toast';
 import Icon from '../../components/Icon';
 import CommentBox from '../../components/CommentBox';
 import FooterButtons from '../../components/FooterButtons';
@@ -66,7 +65,8 @@ const EventAdd = props => {
     }
   }
 
-  const photoClickHandler = _ => {
+  const photoClickHandler = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
     if (images.length < 5) {
       setIsTakingPic(true)
     }
@@ -90,7 +90,8 @@ const EventAdd = props => {
     }
   };
 
-  const addHandler = _ => {
+  const addHandler = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
     if (!userBeingAdded.title) {
       return setErrorMessage('Título não pode estar vazio.')
     }
@@ -125,11 +126,11 @@ const EventAdd = props => {
         uploadImg(res.data.occurrenceRegistered.id)
         setErrorMessage('')
         props.navigation.navigate('Dashboard')
-        Toast.show('Cadastro realizado', Constants.configToast)
+        Utils.toast('Cadastro realizado')
         setUserBeingAdded({ title: '', place: '', description: '', pic: '' })
       })
       .catch((err) => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (EA1)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (EA1)')
       })
       .finally(() => {
         setLoading(false)
@@ -198,7 +199,6 @@ const EventAdd = props => {
             }
             {
               images.length ?
-
                 <Carousel
                   images={images}
                   removePhoto={removePhoto}

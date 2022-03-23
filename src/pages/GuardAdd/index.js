@@ -14,7 +14,6 @@ import * as Constants from '../../services/constants'
 import * as ImagePicker from 'expo-image-picker'
 import * as Utils from '../../services/util'
 import api from '../../services/api'
-import Toast from 'react-native-root-toast';
 import Icon from '../../components/Icon';
 import FooterButtons from '../../components/FooterButtons';
 
@@ -35,7 +34,8 @@ const GuardAdd = props => {
     })();
   }, []);
 
-  const uploadImg = newId => {
+  const uploadImg = async newId => {
+    if(await Utils.handleNoConnection(setLoading)) return
     if (userBeingAdded.pic != '') {
       const formData = new FormData()
       formData.append('img', {
@@ -58,7 +58,8 @@ const GuardAdd = props => {
     }
   }
 
-  const photoClickHandler = _ => {
+  const photoClickHandler = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
     props.navigation.navigate('CameraPic', {
       userBeingAdded,
       user: props.route.params.user,
@@ -79,7 +80,8 @@ const GuardAdd = props => {
     }
   };
 
-  const addHandler = _ => {
+  const addHandler = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
     if (!userBeingAdded.name) {
       return setErrorMessage('Nome não pode estar vazio.')
     }
@@ -111,11 +113,11 @@ const GuardAdd = props => {
       .then((res) => {
         uploadImg(res.data.user.id)
         setErrorMessage('')
-        Toast.show('Cadastro realizado', Constants.configToast)
+        Utils.toast('Cadastro realizado')
         setUserBeingAdded({ id: "0", name: '', identification: '', company: '', email: '', pic: '' })
       })
       .catch((err) => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (GA1)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (GA1)')
       })
       .finally(() => {
         setLoading(false)

@@ -30,13 +30,14 @@ const CondoList = props => {
       return willFocusSubscription
     }, [])
 
-    const fetchCondos = _ => {
+    const fetchCondos = async _ => {
+      if(await Utils.handleNoConnection(setLoading)) return
       api.get(`api/condo`)
       .then(resp=>{
         setCondos(resp.data)
       })
       .catch(err=>{
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CoL1)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CoL1)')
       })
       .finally(()=>{
         setLoading(false)
@@ -48,16 +49,17 @@ const CondoList = props => {
       setModal(true)
     }
 
-    const deleteCondoConfirmed = _ =>{
+    const deleteCondoConfirmed = async _ =>{
+      if(await Utils.handleNoConnection(setLoading)) return
       setModal(false)
       setLoading(true)
       api.delete(`api/condo/${selectedCondo.id}`)
         .then(res=>{
-          Toast.show(res.data.message || 'Condomínio apagado com sucesso.', Constants.configToast)
+          Utils.toast(res.data.message || 'Condomínio apagado com sucesso.')
           fetchCondos()
         })
         .catch((err)=>{
-          Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CoL2)', Constants.configToast)
+          Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CoL2)')
         })
         .finally(()=>{
           setLoading(false)
@@ -70,7 +72,8 @@ const CondoList = props => {
       setRefreshing(false)
     }
 
-    const editHandler = condo => {
+    const editHandler = async condo => {
+      if(await Utils.handleNoConnection(setLoading)) return
       props.navigation.navigate('CondoEdit', 
         {
           user: props.route.params.user,

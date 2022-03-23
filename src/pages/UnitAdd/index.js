@@ -3,17 +3,15 @@ import {
   SafeAreaView,
   StyleSheet,
   ScrollView,
-  View,
-  Text,
   ActivityIndicator,
 } from 'react-native';
 import InputBox from '../../components/InputBox';
 import * as Constants from '../../services/constants'
+import * as Utils from '../../services/util'
 import FooterButtons from '../../components/FooterButtons';
 import ModalMessage from '../../components/ModalMessage';
 import ModalSelectBlocoNewUnit from '../../components/ModalSelectBlocoNewUnit';
 import api from '../../services/api'
-import Toast from 'react-native-root-toast';
 import ModalAssistentAddUnit from '../../components/ModalAssistentAddUnit';
 import ModalUnitsFound from '../../components/ModalUnitsFound';
 import ModalNewSmartBloco from '../../components/ModalNewSmartBloco';
@@ -47,7 +45,7 @@ const UnitAdd = props => {
         setBlocosApi(newBloco.concat(res.data))
       })
       .catch((err) => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (UA1)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (UA1)')
       })
       .finally(() => {
         setLoading(false)
@@ -67,7 +65,8 @@ const UnitAdd = props => {
     }
   }
 
-  const confirmAptHandler = _ => {
+  const confirmAptHandler = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
     if (!firstApt || !lastApt) {
       return setErrorAptMessage('Por favor, complete os campos.')
     }
@@ -80,7 +79,7 @@ const UnitAdd = props => {
     }
     else {
       //fail
-      Toast.show('Desculpe. Não foi possível sugerir unidades com a informação fornecida.', Constants.configToast)
+      Utils.toast('Desculpe. Não foi possível sugerir unidades com a informação fornecida.')
     }
   }
 
@@ -89,7 +88,8 @@ const UnitAdd = props => {
     setModalNewBlockAnalysed(true)
   }
 
-  const addHandler = _ => {
+  const addHandler = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
     const errors = []
     if (!block) {
       errors.push('Bloco não pode estar vazio.')
@@ -113,10 +113,10 @@ const UnitAdd = props => {
       })
         .then((res) => {
           setApt('')
-          Toast.show(res.data.message, Constants.configToast)
+          Utils.toast(res.data.message)
         })
         .catch((err) => {
-          Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (UA2)', Constants.configToast)
+          Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (UA2)')
         })
         .finally(() => {
           setLoading(false)
@@ -134,7 +134,7 @@ const UnitAdd = props => {
       units: aptsAnalysed
     })
       .then(res => {
-        Toast.show(res.data.message, Constants.configToast)
+        Utils.toast(res.data.message)
         setModalNewBlockAnalysed(false)
       })
       .catch(err => {

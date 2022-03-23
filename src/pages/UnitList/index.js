@@ -9,12 +9,12 @@ import {
   ActivityIndicator
 } from 'react-native';
 import * as Constants from '../../services/constants'
+import * as Utils from '../../services/util'
 import ActionButtons from '../../components/ActionButtons'
 import ModalMessage from '../../components/ModalMessage'
 import ModalEditUnit from '../../components/ModalEditUnit'
 import api from '../../services/api'
 import ModalConfirmPass from '../../components/ModalConfirmPass';
-import Toast from 'react-native-root-toast';
 
 const UnitList = props => {
   const [blocos, setBlocos] = useState([])
@@ -31,14 +31,15 @@ const UnitList = props => {
     listUnits()
   }, [])
 
-  const listUnits = _ => {
+  const listUnits = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
     api.get(`api/condo/${props.route.params.user.condo_id}`)
       .then(resp => {
         setBlocos(resp.data)
         setLoading(false)
       })
       .catch(err => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (UL1)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (UL1)')
         setLoading(false)
       })
   }
@@ -58,7 +59,8 @@ const UnitList = props => {
     return units
   }
 
-  const delUnitModal = unit => {
+  const delUnitModal = async unit => {
+    if(await Utils.handleNoConnection(setLoading)) return
     setUnitSelected(unit)
     setMessage(`Excluir unidade ${unit.unit_number} do bloco ${unit.bloco_name}, seus moradores e visitantes?`)
     setModal(true)
@@ -75,11 +77,11 @@ const UnitList = props => {
       }
     })
       .then((resp) => {
-        Toast.show(resp.data.message, Constants.configToast)
+        Utils.toast(resp.data.message)
         listUnits()
       })
       .catch((err) => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (UL2)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (UL2)')
       })
       .finally(() => {
         setLoading(false)
@@ -97,7 +99,8 @@ const UnitList = props => {
     setRefreshing(false)
   }
 
-  const editUnitModal = unit => {
+  const editUnitModal = async unit => {
+    if(await Utils.handleNoConnection(setLoading)) return
     setUnitSelected(unit)
     setUnitWillUpdate(unit)
     setModalEdit(true)
@@ -113,10 +116,10 @@ const UnitList = props => {
       user_id_last_modify: props.route.params.user.id
     })
       .then((resp) => {
-        Toast.show(resp.data.message, configToast)
+        Utils.toast(resp.da)
       })
       .catch((err) => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (UL3)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (UL3)')
       })
       .finally(() => {
         setLoading(false)

@@ -16,7 +16,6 @@ import * as Constants from '../../services/constants'
 import Placa from '../../components/Placa';
 import Icon from '../../components/Icon';
 import api from '../../services/api'
-import Toast from 'react-native-root-toast';
 import CommentBox from '../../components/CommentBox';
 import InputBox from '../../components/InputBox';
 import FooterButtons from '../../components/FooterButtons';
@@ -75,13 +74,14 @@ const CarSearch = props => {
     }
   };
 
-  const fetchUsers = _ => {
+  const fetchUsers = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
     api.get(`api/vehicle/condo/${props.route.params.user.condo_id}`)
       .then(resp => {
         setCars(resp.data)
       })
       .catch(err => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CS1)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CS1)')
       })
       .finally(() => {
         setLoading(false)
@@ -140,10 +140,11 @@ const CarSearch = props => {
     }
   }
 
-  const confirmHandler = _ => {
+  const confirmHandler = async _ => {
     // if(!props.route?.params?.pic){
     //   return setErrorMessage('É necessário tirar uma foto.')
     // }
+    if(await Utils.handleNoConnection(setLoading)) return
     if (!comment || comment.length < 5) {
       return setErrorMessage('Texto muito curto.')
     }
@@ -159,11 +160,11 @@ const CarSearch = props => {
         setPlateFilter('')
         setChecked(false)
         props.navigation.navigate('Dashboard')
-        Toast.show('Informação registrada.', Constants.configToast)
+        Utils.toast('Informação registrada.')
 
       })
       .catch((err) => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CS1)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CS1)')
       })
   }
 

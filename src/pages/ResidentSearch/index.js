@@ -11,14 +11,15 @@ import {
 } from 'react-native';
 import ActionButtons from '../../components/ActionButtons';
 import * as Constants from '../../services/constants'
+import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage';
 import api from '../../services/api'
-import Toast from 'react-native-root-toast';
 import PicUser from '../../components/PicUser';
 import InputBox from '../../components/InputBox';
 import ModalConfirmPass from '../../components/ModalConfirmPass';
 import ModalPhoto from '../../components/ModalPhoto';
 import Placa from '../../components/Placa'
+import { toast } from '../../services/util'
 import { useAuth } from '../../contexts/auth';
 
 const ResidentSearch = props => {
@@ -42,22 +43,24 @@ const ResidentSearch = props => {
     return willFocusSubscription
   }, [])
 
-  const fetchUsers = _ => {
+  const fetchUsers = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
     api.get(`api/user/condo/${props.route.params.user.condo_id}/${Constants.USER_KIND["RESIDENT"]}`)
       .then(resp => {
         setUnits(resp.data)
       })
       .catch(err => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RS1)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RS1)')
       })
       .finally(() => {
         setLoading(false)
       })
   }
 
-  const delUnitModal = unit => {
+  const delUnitModal = async unit => {
+    if(await Utils.handleNoConnection(setLoading)) return
     if (!unit.residents.length && !unit.vehicles.length) {
-      return Toast.show('Unidade sem moradores para apagar.', Constants.configToast)
+      return toast('Unidade sem moradores para apagar.')
     }
     setUnitSelected(unit)
     setMessage(`Excluir moradores e veículos do Bloco ${unit.bloco_name} unidade ${unit.number}?`)
@@ -73,18 +76,19 @@ const ResidentSearch = props => {
       }
     })
       .then(res => {
-        Toast.show(res.data.message, Constants.configToast)
+        Utils.toast(res.data.message)
         fetchUsers()
       })
       .catch((err) => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RL2)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RL2)')
       })
       .finally(() => {
         setLoading(false)
       })
   }
 
-  const editHandler = unit => {
+  const editHandler = async unit => {
+    if(await Utils.handleNoConnection(setLoading)) return
     props.navigation.navigate('ResidentEdit',
       {
         user: props.route.params.user,
@@ -140,7 +144,8 @@ const ResidentSearch = props => {
     setRefreshing(false)
   }
 
-  const onClickPhotoHandler = item => {
+  const onClickPhotoHandler = async item => {
+    if(await Utils.handleNoConnection(setLoading)) return
     if(!item.photo_id)
       return
     setSelectedUser(item)

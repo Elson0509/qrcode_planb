@@ -11,9 +11,9 @@ import {
 } from 'react-native';
 import ActionButtons from '../../components/ActionButtons';
 import * as Constants from '../../services/constants'
+import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage';
 import api from '../../services/api'
-import Toast from 'react-native-root-toast';
 import PicUser from '../../components/PicUser';
 import ModalPhoto from '../../components/ModalPhoto';
 
@@ -35,35 +35,38 @@ const GuardList = props => {
     return willFocusSubscription
   }, [])
 
-  const fetchUsers = _ => {
+  const fetchUsers = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
     api.get(`api/user/kind/${Constants.USER_KIND["GUARD"]}`)
       .then(resp => {
         setResidents(resp.data)
       })
       .catch(err => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (GL1)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (GL1)')
       })
       .finally(() => {
         setLoading(false)
       })
   }
 
-  const delUser = user => {
+  const delUser = async user => {
+    if(await Utils.handleNoConnection(setLoading)) return
     setMessage(`Excluir segurança ${user.name}?`)
     setUserSelected(user)
     setModal(true)
   }
 
-  const deleteUnitConfirmed = _ => {
+  const deleteUnitConfirmed = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
     setModal(false)
     setLoading(true)
     api.delete(`api/user/${userSelected.id}`)
       .then(res => {
-        Toast.show(res.data.message, Constants.configToast)
+        Utils.toast(res.data.message)
         fetchUsers()
       })
       .catch((err) => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (GL2)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (GL2)')
       })
       .finally(() => {
         setLoading(false)
@@ -76,7 +79,8 @@ const GuardList = props => {
     setRefreshing(false)
   }
 
-  const onClickPhotoHandler = item => {
+  const onClickPhotoHandler = async item => {
+    if(await Utils.handleNoConnection(setLoading)) return
     if (!item.photo_id)
       return
     setSelectedUser(item)

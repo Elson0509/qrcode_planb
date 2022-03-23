@@ -11,10 +11,9 @@ import {
 } from 'react-native';
 import ActionButtons from '../../components/ActionButtons';
 import * as Constants from '../../services/constants'
+import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage';
 import api from '../../services/api'
-import Toast from 'react-native-root-toast';
-import PicUser from '../../components/PicUser';
 
 const SindicoList = props => {
   const [sindicos, setSindicos] = useState([])
@@ -22,7 +21,6 @@ const SindicoList = props => {
   const [modal, setModal] = useState(false)
   const [message, setMessage] = useState('')
   const [sindicoSelected, setSindicoSelected] = useState(null)
-  const [userSelected, setUserSelected] = useState(null)
   const [refreshing, setRefreshing] = useState(false)
 
   useEffect(() => {
@@ -33,20 +31,22 @@ const SindicoList = props => {
     return willFocusSubscription
   }, [])
 
-  const fetchUsers = _ => {
+  const fetchUsers = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
     api.get(`api/user/adms`)
       .then(resp => {
         setSindicos(resp.data)
       })
       .catch(err => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (SL1)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (SL1)')
       })
       .finally(() => {
         setLoading(false)
       })
   }
 
-  const delSindicoModal = user => {
+  const delSindicoModal = async user => {
+    if(await Utils.handleNoConnection(setLoading)) return
     setSindicoSelected(user)
     setMessage(`Excluir síndico ${user.name}?`)
     setModal(true)
@@ -57,11 +57,11 @@ const SindicoList = props => {
     setLoading(true)
     api.delete(`api/user/${sindicoSelected.id}`)
       .then(res => {
-        Toast.show(res.data.message, Constants.configToast)
+        Utils.toast(res.data.message)
         fetchUsers()
       })
       .catch((err) => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (SL2)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (SL2)')
       })
       .finally(() => {
         setLoading(false)
@@ -99,7 +99,7 @@ const SindicoList = props => {
               <View>
                 <ActionButtons
                   flexDirection='row'
-                  action1={() => console.log(obj.item)}
+                  noEditButton
                   action2={() => delSindicoModal(obj.item)}
                 />
               </View>
@@ -161,18 +161,6 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     marginBottom: 10,
   },
-  listText: {
-    color: 'black',
-    fontWeight: 'bold',
-    fontSize: 16,
-    textAlign: 'center'
-  },
-  subTitle: {
-    fontWeight: 'bold',
-    fontSize: 15,
-    textDecorationLine: 'underline',
-    marginTop: 5,
-  }
 });
 
 export default SindicoList

@@ -33,7 +33,7 @@ const Slot = props => {
       setTotalSlots(resp.data.totalslots)
     })
     .catch(err=>{
-      Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (S1)', Constants.configToast)
+      Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (S1)')
     })
     .finally(()=>{
       setLoading(false)
@@ -42,7 +42,7 @@ const Slot = props => {
 
   const freeSlotHandler = _ => {
     if(freeSlots===totalSlots){
-      Toast.show('Todas as vagas já estão livres.', Constants.configToast)
+      Utils.toast('Todas as vagas já estão livres.')
     }
     else{
       setLoading(true)
@@ -50,10 +50,10 @@ const Slot = props => {
       .then(resp=>{
         setFreeSlots(resp.data.freeslots)
         setTotalSlots(resp.data.totalslots)
-        Toast.show('Vaga liberada.', Constants.configToast)
+        Utils.toast('Vaga liberada.')
       })
       .catch(err=>{
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (S2)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (S2)')
       })
       .finally(()=>{
         setLoading(false)
@@ -63,7 +63,7 @@ const Slot = props => {
 
   const occupySlotHandler = _ => {
     if(freeSlots===0){
-      Toast.show('Não há mais vagas.', Constants.configToast)
+      Utils.toast('Não há mais vagas.')
     }
     else{
       setLoading(true)
@@ -71,10 +71,10 @@ const Slot = props => {
       .then(resp=>{
         setFreeSlots(resp.data.freeslots)
         setTotalSlots(resp.data.totalslots)
-        Toast.show('Vaga preenchida.', Constants.configToast)
+        Utils.toast('Vaga preenchida.')
       })
       .catch(err=>{
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (S3)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (S3)')
       })
       .finally(()=>{
         setLoading(false)

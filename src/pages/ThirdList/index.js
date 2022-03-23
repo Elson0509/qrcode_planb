@@ -15,7 +15,6 @@ import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage'
 import ModalInfo from '../../components/ModalInfo'
 import api from '../../services/api'
-import Toast from 'react-native-root-toast'
 import PicUser from '../../components/PicUser'
 import InputBox from '../../components/InputBox'
 import ModalQRCode from '../../components/ModalQRCode'
@@ -66,20 +65,22 @@ const ThirdList = props => {
     setShowModalQRCode(true)
   }
 
-  const fetchUsers = _ => {
+  const fetchUsers = async _ => {
+    if (await Utils.handleNoConnection(setLoading)) return
     api.get(`api/user/condo/${props.route.params.user.condo_id}/${Constants.USER_KIND["THIRD"]}`)
       .then(resp => {
         setUnits(resp.data)
       })
       .catch(err => {
-        Toast.show(err.response.data.message, Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response.data.message)
       })
       .finally(() => {
         setLoading(false)
       })
   }
 
-  const delUnitModal = unit => {
+  const delUnitModal = async unit => {
+    if (await Utils.handleNoConnection(setLoading)) return
     setUnitSelected(unit)
     setMessage(`Excluir terceirizados e seus veículos do Bloco ${unit.bloco_name} unidade ${unit.number}?`)
     setModal(true)
@@ -94,18 +95,19 @@ const ThirdList = props => {
       }
     })
       .then(res => {
-        Toast.show(res.data.message, Constants.configToast)
+        Utils.toast(res.data.message)
         fetchUsers()
       })
       .catch((err) => {
-        Toast.show(err.response.data.message, Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response.data.message)
       })
       .finally(() => {
         setLoading(false)
       })
   }
 
-  const editHandler = unit => {
+  const editHandler = async unit => {
+    if (await Utils.handleNoConnection(setLoading)) return
     props.navigation.navigate('ThirdEdit',
       {
         user: props.route.params.user,
@@ -158,11 +160,12 @@ const ThirdList = props => {
     setRefreshing(false)
   }
 
-  const carIconHandler = unit => {
+  const carIconHandler = async unit => {
+    if (await Utils.handleNoConnection(setLoading)) return
     setUnitSelected(unit)
     //valid user?
     if (!(new Date(unit.residents[0].final_date) >= beginOfDay && new Date(unit.residents[0].initial_date) <= beginOfDay)) {
-      return Toast.show('Terceirizados fora da data de autorização.', Constants.configToast)
+      return Utils.toast('Terceirizados fora da data de autorização.')
     }
     setEntranceExitModal(true)
   }
@@ -182,7 +185,7 @@ const ThirdList = props => {
       .catch(err => {
         setLoading(false)
         setEntranceExitModal(false)
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VS3)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VS3)')
       })
   }
 
@@ -211,7 +214,7 @@ const ThirdList = props => {
       .catch(err => {
         setLoading(false)
         setEntranceExitModal(false)
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VS2)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VS2)')
       })
   }
 
@@ -262,7 +265,8 @@ const ThirdList = props => {
       })
   }
 
-  const onClickPhotoHandler = item => {
+  const onClickPhotoHandler = async item => {
+    if (await Utils.handleNoConnection(setLoading)) return
     if (!item.photo_id)
       return
     setSelectedUser(item)

@@ -17,7 +17,6 @@ import ModalSelectBloco from '../../components/ModalSelectBloco';
 import ModalSelectUnit from '../../components/ModalSelectUnit';
 import FooterButtons from '../../components/FooterButtons';
 import SelectDatesVisitorsGroup from '../../components/SelectDatesVisitorsGroup';
-import Toast from 'react-native-root-toast';
 import api from '../../services/api';
 
 const VisitorEdit = props => {
@@ -54,7 +53,7 @@ const VisitorEdit = props => {
           setBlocos(res.data)
         })
         .catch(err=>{
-          Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VE1)', Constants.configToast)
+          Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VE1)')
         })
         .finally(()=>{
           setLoading(false)
@@ -73,13 +72,15 @@ const VisitorEdit = props => {
       })();
     }, []);
 
-    const removeResident = index => {
+    const removeResident = async index => {
+      if(await Utils.handleNoConnection(setLoading)) return
       const residentsCopy = [...residents]
       residentsCopy.splice(index, 1)
       setResidents(residentsCopy)
     }
 
-    const removeVehicle = index => {
+    const removeVehicle = async index => {
+      if(await Utils.handleNoConnection(setLoading)) return
       const vehiclesCopy = [...vehicles]
       vehiclesCopy.splice(index, 1)
       setVehicles(vehiclesCopy)
@@ -98,7 +99,8 @@ const VisitorEdit = props => {
       }
     };
 
-    const addResidentHandler = _ =>{
+    const addResidentHandler = async _ =>{
+      if(await Utils.handleNoConnection(setLoading)) return
       if(!userBeingAdded.name){
         setErrorAddResidentMessage('Nome não pode estar vazio.')
         return false
@@ -109,7 +111,8 @@ const VisitorEdit = props => {
       return true
     }
 
-    const selectDatesHandler = _ =>{
+    const selectDatesHandler = async _ =>{
+      if(await Utils.handleNoConnection(setLoading)) return
       if(!Utils.isValidDate(dateInit.day, dateInit.month, dateInit.year) ){
         setErrorSetDateMessage('Data inicial não é válida.')
         return false
@@ -138,7 +141,8 @@ const VisitorEdit = props => {
       setUserBeingAdded({id:'0', name: '', identification: '', email: '', pic: ''})
     }
 
-    const addVehicleHandler = _ =>{
+    const addVehicleHandler = async _ =>{
+      if(await Utils.handleNoConnection(setLoading)) return
       if(!vehicleBeingAdded.maker){
         setErrorAddVehicleMessage('Fabricante não pode estar vazio.')
         return false
@@ -169,7 +173,8 @@ const VisitorEdit = props => {
       setVehicleBeingAdded({id:'0', maker:'', model:'', color:'', plate:''})
     }
 
-    const photoClickHandler = _ => {
+    const photoClickHandler = async _ => {
+      if(await Utils.handleNoConnection(setLoading)) return
       props.navigation.navigate('CameraPic', {
         userBeingAdded, 
         selectedBloco, 
@@ -206,7 +211,8 @@ const VisitorEdit = props => {
     }
 
     //saving...
-    const confirmHandler = _ =>{
+    const confirmHandler = async _ =>{
+      if(await Utils.handleNoConnection(setLoading)) return
       //checking if there is date selected and at least one visitor
       if(!selectedDateInit || !selectedDateEnd){
         return setErrorMessage('É preciso selecionar um prazo.')
@@ -234,14 +240,14 @@ const VisitorEdit = props => {
           user_id_last_modify: props.route.params.user.id,
         })
         .then(res2=>{
-          Toast.show(res2.data.message, Constants.configToast)
+          Utils.toast(res2.data.message)
         })
         .catch(err2=>{
-          Toast.show(err2.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VE2)', Constants.configToast)
+          Utils.toastTimeoutOrErrorMessage(err2, err2.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VE2)')
         })
       })
       .catch(err=>{
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VE3)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VE3)')
       })
       .finally(()=>{
         setLoading(false)
@@ -317,6 +323,7 @@ const VisitorEdit = props => {
                 removeResident={removeResident}
                 addingUser={addingUser}
                 setAddingUser={setAddingUser}
+                buttonText='Incluir visitante'
               />
               <SelectDatesVisitorsGroup
                 selectedDateInit={Utils.printDate(selectedDateInit)}

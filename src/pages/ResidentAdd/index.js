@@ -16,7 +16,6 @@ import SelectBlocoGroup from '../../components/SelectBlocoGroup';
 import ModalSelectBloco from '../../components/ModalSelectBloco';
 import ModalSelectUnit from '../../components/ModalSelectUnit';
 import FooterButtons from '../../components/FooterButtons';
-import Toast from 'react-native-root-toast';
 import api from '../../services/api';
 
 const ResidentAdd = props => {
@@ -45,7 +44,7 @@ const ResidentAdd = props => {
           setBlocos(res.data)
         })
         .catch(err=>{
-          Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RA1)', Constants.configToast)
+          Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RA1)')
         })
         .finally(()=>{
           setLoading(false)
@@ -63,13 +62,15 @@ const ResidentAdd = props => {
       })();
     }, []);
 
-    const removeResident = index => {
+    const removeResident = async index => {
+      if(await Utils.handleNoConnection(setLoading)) return
       let residentsCopy = [...residents]
       residentsCopy.splice(index, 1)
       setResidents(residentsCopy)
     }
 
-    const removeVehicle = index => {
+    const removeVehicle = async index => {
+      if(await Utils.handleNoConnection(setLoading)) return
       const vehiclesCopy = [...vehicles]
       vehiclesCopy.splice(index, 1)
       setVehicles(vehiclesCopy)
@@ -88,7 +89,8 @@ const ResidentAdd = props => {
       }
     };
 
-    const addResidentHandler = _ =>{
+    const addResidentHandler = async _ =>{
+      if(await Utils.handleNoConnection(setLoading)) return
       if(!userBeingAdded.name){
         setErrorAddResidentMessage('Nome não pode estar vazio.')
         return false
@@ -111,7 +113,8 @@ const ResidentAdd = props => {
       setUserBeingAdded({id: '0', name: '', identification: '', email: '', pic: ''})
     }
 
-    const addVehicleHandler = _ =>{
+    const addVehicleHandler = async _ =>{
+      if(await Utils.handleNoConnection(setLoading)) return
       if(!vehicleBeingAdded.maker){
         setErrorAddVehicleMessage('Fabricante não pode estar vazio.')
         return false
@@ -142,7 +145,8 @@ const ResidentAdd = props => {
       setVehicleBeingAdded({id: '0', maker:'', model:'', color:'', plate:''})
     }
 
-    const photoClickHandler = _ => {
+    const photoClickHandler = async _ => {
+      if(await Utils.handleNoConnection(setLoading)) return
       props.navigation.navigate('CameraPic', {
         userBeingAdded, 
         selectedBloco, 
@@ -160,10 +164,11 @@ const ResidentAdd = props => {
       setModalSelectUnit(true)
     }
 
-    const selectUnitHandler = unit => {
+    const selectUnitHandler = async unit => {
       setSelectedUnit(unit)
       setModalSelectUnit(false)
       setLoading(true)
+      if(await Utils.handleNoConnection(setLoading)) return
       api.get(`api/user/unit/${unit.id}/${Constants.USER_KIND.RESIDENT}`)
         .then(res=>{
           setResidents(res.data)
@@ -172,13 +177,13 @@ const ResidentAdd = props => {
               setVehicles(res2.data)
             })
             .catch(err2=>{
-              Toast.show(err2.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RA2)', Constants.configToast)
+              Utils.toastTimeoutOrErrorMessage(err, err2.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RA2)')
               setSelectedUnit(null)
               setSelectedBloco(null)
             })
         })
         .catch(err=>{
-          Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RA3)', Constants.configToast)
+          Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RA3)')
           setSelectedUnit(null)
           setSelectedBloco(null)
         })
@@ -232,8 +237,9 @@ const ResidentAdd = props => {
     }
 
     //saving...
-    const confirmHandler = _ =>{
+    const confirmHandler = async _ =>{
       setLoading(true)
+      if(await Utils.handleNoConnection(setLoading)) return
       api.post('api/vehicle/unit', {
         unit_id: selectedUnit.id,
         vehicles,
@@ -248,16 +254,16 @@ const ResidentAdd = props => {
         })
           .then(res2=>{
             uploadImgs(res2.data.addedResidents)
-            Toast.show(res2.data.message, Constants.configToast)
+            Utils.toast(res2.data.message)
             setSelectedUnit(null)
             setModalSelectBloco(null)
           })
           .catch(err2=>{
-            Toast.show(err2.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RA4)', Constants.configToast)
+            Utils.toastTimeoutOrErrorMessage(err, err2.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RA4)')
           })
         })
         .catch((err)=>{
-          Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RA5)', Constants.configToast)
+          Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (RA5)')
         })
         .finally(()=>{
           setLoading(false)

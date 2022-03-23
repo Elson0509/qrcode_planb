@@ -8,6 +8,7 @@ import {
   } from 'react-native';
 import InputBox from '../../components/InputBox';
 import * as Constants from '../../services/constants'
+import * as Utils from '../../services/util'
 import api from '../../services/api'
 import Toast from 'react-native-root-toast';
 import FooterButtons from '../../components/FooterButtons';
@@ -42,11 +43,11 @@ const CondoEdit = props => {
     })
     .then((res)=>{
       setErrorMessage('')
-      Toast.show('Cadastro realizado', Constants.configToast)
+      Utils.toast('Cadastro realizado')
       props.navigation.goBack()
     })
     .catch((err)=> {
-      Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CoA1)', Constants.configToast)
+      Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CoA1)')
     })
     .finally(()=>{
       setLoading(false)

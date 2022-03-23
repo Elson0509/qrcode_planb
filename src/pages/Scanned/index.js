@@ -66,7 +66,7 @@ const Scanned = (props) => {
         }
         if (fetchedDataApi.user_kind_id == Constants.USER_KIND['GUARD']) {
           setbackgroundColorScreen(Constants.backgroundColors['Guards'])
-          setUserType('Vigilante')
+          setUserType('Colaborador')
         }
         if (fetchedDataApi.unit_kind_id && fetchedDataApi.unit_kind_id === Constants.USER_KIND['VISITOR']) {
           setbackgroundColorScreen(Constants.backgroundColors['Visitors'])

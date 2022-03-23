@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import ModalForgetPassword from '../../components/ModalForgetPassword';
-import ModalGeneric from '../../components/ModalGeneric'
+import * as Utils from '../../services/util'
 import { useAuth } from '../../contexts/auth';
 import { StyleSheet,
    TextInput,
@@ -23,6 +23,7 @@ export default function Signin() {
   const { signIn, errorMessage } = useAuth()
 
   const handleSignIn = async _ =>{
+    if(await Utils.handleNoConnection(setLoading)) return
     Keyboard.dismiss()
     signIn(email, password)
   }

@@ -10,13 +10,12 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
-import ActionButtons from '../../components/ActionButtons';
-import ModalCarousel from '../../components/ModalCarousel';
+import ActionButtons from '../../components/ActionButtons'
+import ModalCarousel from '../../components/ModalCarousel'
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
-import ModalMessage from '../../components/ModalMessage';
+import ModalMessage from '../../components/ModalMessage'
 import api from '../../services/api'
-import Toast from 'react-native-root-toast';
 import ModalReply from '../../components/ModalReply'
 
 const EventList = props => {
@@ -40,20 +39,22 @@ const EventList = props => {
     return willFocusSubscription
   }, [])
 
-  const fetchEvents = _ => {
+  const fetchEvents = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
     api.get(`api/occurrence`)
       .then(resp => {
         setEvents(resp.data.occurences)
       })
       .catch(err => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (EL1)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (EL1)')
       })
       .finally(() => {
         setLoading(false)
       })
   }
 
-  const delEvent = on => {
+  const delEvent = async on => {
+    if(await Utils.handleNoConnection(setLoading)) return
     setMessage(`Confirma exclusão desta ocorrência?`)
     setSelectedEvent(on)
     setModal(true)
@@ -64,11 +65,11 @@ const EventList = props => {
     setLoading(true)
     api.delete(`api/occurrence/${selectedEvent.id}`)
       .then(res => {
-        Toast.show(res.data.message, Constants.configToast)
+        Utils.toast(res.data.message)
         fetchEvents()
       })
       .catch((err) => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (EL2)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (EL2)')
       })
       .finally(() => {
         setLoading(false)
@@ -81,21 +82,24 @@ const EventList = props => {
     setRefreshing(false)
   }
 
-  const onClickPhotoHandler = item => {
+  const onClickPhotoHandler = async item => {
+    if(await Utils.handleNoConnection(setLoading)) return
     if (item.OccurrenceImages?.length) {
       setCarouselImages(item.OccurrenceImages)
       setModalCarousel(true)
     }
   }
 
-  const replyHandler = item => {
+  const replyHandler = async item => {
+    if(await Utils.handleNoConnection(setLoading)) return
     setSelectedEvent(item)
     setModalGeneric(true)
     setSubject('Re: ' + item.title)
     setReplyMessage('')
   }
 
-  const sendHandler = _ => {
+  const sendHandler = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
     api.post(`api/message/`, {
       messageBody: replyMessage,
       subject,
@@ -103,10 +107,10 @@ const EventList = props => {
     })
       .then(resp => {
         setModalGeneric(false)
-        Toast.show(resp.data.message, Constants.configToast)
+        Utils.toast(resp.data.message)
       })
       .catch(err => {
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CL3)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CL3)')
       })
       .finally(() => {
         setLoading(false)

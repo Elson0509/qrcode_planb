@@ -8,8 +8,8 @@ import {
   } from 'react-native';
 import InputBox from '../../components/InputBox';
 import * as Constants from '../../services/constants'
+import * as Utils from '../../services/util'
 import api from '../../services/api'
-import Toast from 'react-native-root-toast';
 import FooterButtons from '../../components/FooterButtons';
 
 const CondoAdd = props => {
@@ -17,7 +17,8 @@ const CondoAdd = props => {
   const [condoBeingAdded, setCondoBeingAdded] = useState(props.route?.params?.condoBeingAdded || {id: "0", name: '', address: '', city: '', state: '', slots: ''})
   const [errorMessage, setErrorMessage] = useState('')
 
-  const addHandler = _ => {
+  const addHandler = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
     if(!condoBeingAdded.name){
       return setErrorMessage('Nome não pode estar vazio.')
     }
@@ -43,11 +44,11 @@ const CondoAdd = props => {
     })
     .then((res)=>{
       setErrorMessage('')
-      Toast.show('Cadastro realizado', Constants.configToast)
+      Utils.toast('Cadastro realizado')
       setCondoBeingAdded({id: "0", name: '', address: '', city: '', state: '', slots: ''})
     })
     .catch((err)=> {
-      Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CoA1)', Constants.configToast)
+      Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CoA1)')
     })
     .finally(()=>{
       setLoading(false)

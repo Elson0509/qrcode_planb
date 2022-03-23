@@ -15,7 +15,6 @@ import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage'
 import ModalInfo from '../../components/ModalInfo'
 import api from '../../services/api'
-import Toast from 'react-native-root-toast'
 import PicUser from '../../components/PicUser'
 import ModalQRCode from '../../components/ModalQRCode'
 import ModalGeneric from '../../components/ModalGeneric'
@@ -66,20 +65,22 @@ const VisitorList = props => {
     setShowModalQRCode(true)
   }
 
-  const fetchUsers = _ => {
+  const fetchUsers = async _ => {
+    if(await Utils.handleNoConnection(setLoading)) return
     api.get(`api/user/condo/${props.route.params.user.condo_id}/${Constants.USER_KIND["VISITOR"]}`)
       .then(resp => {
         setUnits(resp.data)
       })
       .catch(err => {
-        Toast.show(err.response.data.message, Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response.data.message)
       })
       .finally(() => {
         setLoading(false)
       })
   }
 
-  const delUnitModal = unit => {
+  const delUnitModal = async unit => {
+    if(await Utils.handleNoConnection(setLoading)) return
     setUnitSelected(unit)
     setMessage(`Excluir visitantes e veículos do Bloco ${unit.bloco_name} unidade ${unit.number}?`)
     setModal(true)
@@ -94,18 +95,19 @@ const VisitorList = props => {
       }
     })
       .then(res => {
-        Toast.show(res.data.message, Constants.configToast)
+        Utils.toast(res.data.message)
         fetchUsers()
       })
       .catch((err) => {
-        Toast.show(err.response.data.message, Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response.data.message)
       })
       .finally(() => {
         setLoading(false)
       })
   }
 
-  const editHandler = unit => {
+  const editHandler = async unit => {
+    if(await Utils.handleNoConnection(setLoading)) return
     props.navigation.navigate('VisitorEdit',
       {
         user: props.route.params.user,
@@ -151,7 +153,8 @@ const VisitorList = props => {
     return unitsInfo
   }
 
-  const onClickPhotoHandler = item => {
+  const onClickPhotoHandler = async item => {
+    if(await Utils.handleNoConnection(setLoading)) return
     if(!item.photo_id)
       return
     setSelectedUser(item)
@@ -165,11 +168,12 @@ const VisitorList = props => {
     setRefreshing(false)
   }
 
-  const carIconHandler = unit => {
+  const carIconHandler = async unit => {
+    if(await Utils.handleNoConnection(setLoading)) return
     setUnitSelected(unit)
     //valid user?
     if (!(new Date(unit.residents[0].final_date) >= beginOfDay && new Date(unit.residents[0].initial_date) <= beginOfDay)) {
-      return Toast.show('Visitantes fora da data de autorização.', Constants.configToast)
+      return Utils.toast('Visitantes fora da data de autorização.')
     }
     setEntranceExitModal(true)
   }
@@ -189,7 +193,7 @@ const VisitorList = props => {
       .catch(err => {
         setLoading(false)
         setEntranceExitModal(false)
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VS3)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VS3)')
       })
   }
 
@@ -218,7 +222,7 @@ const VisitorList = props => {
       .catch(err => {
         setLoading(false)
         setEntranceExitModal(false)
-        Toast.show(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VS2)', Constants.configToast)
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VS2)')
       })
   }
 
