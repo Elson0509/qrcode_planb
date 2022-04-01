@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Modal, FlatList, TouchableOpacity, Image, ScrollView, TouchableHighlight, Pressable } from 'react-native';
 
-const ModalSelectUnit = (props) => {
+const ModalSelectResident = (props) => {
   return (
     <Modal
       visible={props.modalVisible}
@@ -11,23 +11,19 @@ const ModalSelectUnit = (props) => {
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.modalTitle}>Selecione a unidade:</Text>
-          {props.bloco && <FlatList
-            data={props.bloco.Units}
+          <Text style={styles.modalTitle}>Selecione quem está autorizando:</Text>
+          {props.users && <FlatList
+            data={props.users}
             renderItem={(obj) => {
               return <TouchableOpacity
                 key={obj.item.id}
-                onPress={() => { props.selectUnitHandler(obj.item) }}
+                onPress={() => { props.selectResidentHandler(obj.item) }}
                 style={[styles.item, { backgroundColor: props.backgroundItem || '#efe' }]}
               >
-                <Text style={styles.menuItemText}>{obj.item.number}</Text>
+                <Text style={styles.menuItemText}>{obj.item.name}</Text>
               </TouchableOpacity>
             }}
           />}
-          {
-            !!props.text &&
-            <Text style={styles.footer}>{props.text}</Text>
-          }
         </View>
       </View>
     </Modal>
@@ -74,10 +70,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: 'bold',
   },
-  footer:{
-    fontSize: 12,
-    fontWeight: '100'
-  }
 });
 
-export default ModalSelectUnit;
+export default ModalSelectResident;

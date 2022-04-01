@@ -135,7 +135,6 @@ const EventAdd = props => {
       .finally(() => {
         setLoading(false)
       })
-
   }
 
   if (loading)

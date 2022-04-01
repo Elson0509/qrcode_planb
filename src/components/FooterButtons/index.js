@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Modal, Button, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
+import THEME from '../../services/theme';	 
 
 const FooterButtons = (props) => {
   return (
@@ -9,12 +10,12 @@ const FooterButtons = (props) => {
         {!!props.title2 &&
           <TouchableOpacity disabled={props.disabled || false} style={[{ margin: props.marginButton || 10, backgroundColor: props.bgcolor2 || '#CF142B', padding: props.buttonPadding || 25, borderRadius: props.borderRadius || 20, }]}
             onPress={() => props.action2()}>
-            <Text style={[styles.text, { fontSize: props.fontSize || 20, color: props.color2 || 'white' }]}>{props.title2}</Text>
+            <Text style={[styles.text, { fontSize: props.fontSize || 20, color: props.color2 || 'white', fontFamily: THEME.FONTS.r500 }]}>{props.title2}</Text>
           </TouchableOpacity>}
         {!!props.title1 &&
           <TouchableOpacity disabled={props.disabled || false} style={[{ margin: props.marginButton || 10, backgroundColor: props.bgcolor1 || '#006DE3', padding: props.buttonPadding || 25, borderRadius: props.borderRadius || 20, }]}
             onPress={() => props.action1()}>
-            <Text style={[styles.text, { fontSize: props.fontSize || 20, color: props.color1 || 'white' }]}>{props.title1}</Text>
+            <Text style={[styles.text, { fontSize: props.fontSize || 20, color: props.color1 || 'white', fontFamily: THEME.FONTS.r500 }]}>{props.title1}</Text>
           </TouchableOpacity>}
       </View>
     </View>

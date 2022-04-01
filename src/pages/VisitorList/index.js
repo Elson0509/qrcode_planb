@@ -21,8 +21,9 @@ import ModalGeneric from '../../components/ModalGeneric'
 import InputBox from '../../components/InputBox'
 import Placa from '../../components/Placa'
 import Spinner from '../../components/Spinner'
-import ModalPhoto from '../../components/ModalPhoto';
+import ModalPhoto from '../../components/ModalPhoto'
 import { useAuth } from '../../contexts/auth'
+import THEME from '../../services/theme'
 
 const VisitorList = props => {
   const { user } = useAuth()
@@ -119,6 +120,10 @@ const VisitorList = props => {
           id: unit.id,
           number: unit.number
         },
+        selectedResident: {
+          id: unit.residents[0].User.id,
+          name: unit.residents[0].User.name,
+        }, 
         residents: unit.residents,
         vehicles: unit.vehicles,
         screen: 'VisitorEdit'
@@ -309,7 +314,8 @@ const VisitorList = props => {
 
           return (
             <View style={styles.menuItem}>
-              <Text style={styles.listText}>Bloco {obj.item.bloco_name} Unidade {obj.item.number}</Text>
+              <Text style={[styles.listText, { fontFamily: THEME.FONTS.r700 }]}>Bloco {obj.item.bloco_name}</Text>
+              <Text style={[styles.listText, { fontFamily: THEME.FONTS.r700 }]}>Unidade {obj.item.number}</Text>
               <View>
                 {
                   user.user_kind === Constants.USER_KIND['SUPERINTENDENT'] &&
@@ -335,7 +341,7 @@ const VisitorList = props => {
                 <View style={{ maxWidth: 300 }}>
                   <View>
                     {(!obj.item.residents || obj.item.residents.length === 0) && <Text style={{ marginTop: 10, textDecorationLine: 'underline' }}>Unidade sem visitantes</Text>}
-                    {obj.item.residents.length > 0 && <Text style={styles.subTitle}>Visitantes:</Text>}
+                    {obj.item.residents.length > 0 && <Text style={[styles.subTitle, { fontFamily: THEME.FONTS.r500 }]}>Visitantes:</Text>}
                     {
                       obj.item.residents.map((res) => {
                         return (
@@ -343,11 +349,12 @@ const VisitorList = props => {
                             <TouchableOpacity onPress={() => onClickPhotoHandler(res)}>
                               <PicUser user={res} />
                             </TouchableOpacity>
-                            <View style={{ maxWidth: 250 }}>
-                              <Text style={{ fontSize: 16, marginLeft: 7, fontWeight: 'bold' }}>{res.name}</Text>
-                              {!!res.email && <Text style={{ fontSize: 16, marginLeft: 7 }}>Email: {res.email}</Text>}
-                              {!!res.initial_date && <Text style={{ fontSize: 16, marginLeft: 7 }}>Início: {Utils.printDate(new Date(res.initial_date))}</Text>}
-                              {!!res.final_date && <Text style={{ fontSize: 16, marginLeft: 7 }}>Fim: {Utils.printDate(new Date(res.final_date))}</Text>}
+                            <View>
+                              <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r500 }}>{res.name}</Text>
+                              {!!res.email && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Email: {res.email}</Text>}
+                              {!!res.initial_date && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Início: {Utils.printDate(new Date(res.initial_date))}</Text>}
+                              {!!res.final_date && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Fim: {Utils.printDate(new Date(res.final_date))}</Text>}
+                              {!!res.User?.name && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Autorizado por: {res.User.name}</Text>}
                               {
                                 new Date(res.final_date) >= beginOfDay && new Date(res.initial_date) <= beginOfDay ?
                                   <Text style={{ fontSize: 16, marginLeft: 7 }}>Status: Válido</Text>
@@ -361,13 +368,13 @@ const VisitorList = props => {
                     }
                   </View>
                   <View>
-                    {obj.item.vehicles?.length > 0 && <Text style={styles.subTitle}>Veículos:</Text>}
+                    {obj.item.vehicles?.length > 0 && <Text style={[styles.subTitle, { fontFamily: THEME.FONTS.r500 }]}>Veículos:</Text>}
                     {(!obj.item.vehicles || obj.item.vehicles.length === 0) && <Text style={{ marginTop: 10, textDecorationLine: 'underline' }}>Sem veículos cadastrados</Text>}
                     {
                       obj.item.vehicles?.map((car, ind) => {
                         return (
                           <View key={ind} style={styles.plateDiv}>
-                            <Text>{`${car.maker} ${car.model} ${car.color}`}</Text>
+                            <Text style={{ fontFamily: THEME.FONTS.r500 }}>{`${car.maker} ${car.model} ${car.color}`}</Text>
                             <Placa placa={car.plate} />
                           </View>
                         )
@@ -474,12 +481,10 @@ const styles = StyleSheet.create({
   },
   listText: {
     color: 'black',
-    fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 25,
     textAlign: 'center'
   },
   subTitle: {
-    fontWeight: 'bold',
     fontSize: 18,
     marginTop: 5,
     textAlign: 'center'
@@ -489,7 +494,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginTop: 10,
     textAlign: 'center',
-    fontWeight: 'bold',
     fontSize: 12,
     borderWidth: 1,
     borderColor: '#F77',
@@ -500,7 +504,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     marginTop: 10,
     textAlign: 'center',
-    fontWeight: 'bold',
     fontSize: 12,
     borderWidth: 1,
     borderColor: '#77F',

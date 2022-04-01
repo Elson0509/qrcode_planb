@@ -14,7 +14,8 @@ import ActionButtons from '../../components/ActionButtons'
 import ModalMessage from '../../components/ModalMessage'
 import ModalEditUnit from '../../components/ModalEditUnit'
 import api from '../../services/api'
-import ModalConfirmPass from '../../components/ModalConfirmPass';
+import ModalConfirmPass from '../../components/ModalConfirmPass'
+import THEME from '../../services/theme'
 
 const UnitList = props => {
   const [blocos, setBlocos] = useState([])
@@ -33,7 +34,7 @@ const UnitList = props => {
 
   const listUnits = async _ => {
     if(await Utils.handleNoConnection(setLoading)) return
-    api.get(`api/condo/${props.route.params.user.condo_id}`)
+    api.get(`api/condo/all/${props.route.params.user.condo_id}`)
       .then(resp => {
         setBlocos(resp.data)
         setLoading(false)
@@ -150,7 +151,7 @@ const UnitList = props => {
                   <View
                     style={styles.menuItem}
                   >
-                    <Text style={styles.listText}>{`Bloco ${obj.item.bloco_name} Unidade ${obj.item.unit_number}`}</Text>
+                    <Text style={[styles.listText, {fontFamily: THEME.FONTS.r400}]}>{`Bloco ${obj.item.bloco_name} Unidade ${obj.item.unit_number}`}</Text>
                     <ActionButtons
                       action1={() => editUnitModal(obj.item)}
                       action2={() => delUnitModal(obj.item)}
@@ -209,7 +210,6 @@ const styles = StyleSheet.create({
   },
   listText: {
     color: 'black',
-    fontWeight: 'bold',
     fontSize: 16
   }
 });

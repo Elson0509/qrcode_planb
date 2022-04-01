@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Scanner from '../../components/Scanner';
 import FooterButtons from '../../components/FooterButtons';
 
@@ -8,12 +8,7 @@ import { StyleSheet,
 
 
 const Scan = (props) => {
-    //const [uid, setUid] = useState(0)
-    //const [type, setType] = useState(0)
-
     const onCodeScanned = ( typeInput, dataInput ) => {
-        //setUid(dataInput)
-        //setType(typeInput)
         props.navigation.navigate('Scanned', {dataInput, typeInput})
     }
 

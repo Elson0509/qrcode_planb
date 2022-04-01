@@ -9,12 +9,14 @@ import {
 import * as ImagePicker from 'expo-image-picker'
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
+import TakePic from '../../components/TakePic';
 import ModalMessage from '../../components/ModalMessage';
 import AddThirdsGroup from '../../components/AddThirdsGroup';
 import AddCarsGroup from '../../components/AddCarsGroup';
 import SelectBlocoGroup from '../../components/SelectBlocoGroup';
 import ModalSelectBloco from '../../components/ModalSelectBloco';
 import ModalSelectUnit from '../../components/ModalSelectUnit';
+import ModalSelectResident from '../../components/ModalSelectResident';
 import FooterButtons from '../../components/FooterButtons';
 import SelectDatesVisitorsGroup from '../../components/SelectDatesVisitorsGroup';
 import ModalQRCode from '../../components/ModalQRCode';
@@ -28,32 +30,38 @@ const ThirdAdd = props => {
   const [blocos, setBlocos] = useState([])
   const [modalSelectBloco, setModalSelectBloco] = useState(false)
   const [modalSelectUnit, setModalSelectUnit] = useState(false)
-  const [selectedBloco, setSelectedBloco] = useState(props.route?.params?.selectedBloco || null)
-  const [selectedUnit, setSelectedUnit] = useState(props.route?.params?.selectedUnit || null)
+  const [modalSelectResident, setModalSelectResident] = useState(false)
+  const [selectedBloco, setSelectedBloco] = useState(null)
+  const [selectedUnit, setSelectedUnit] = useState(null)
+  const [selectedResident, setSelectedResident] = useState(null)
   const [errorMessage, setErrorMessage] = useState('')
   const [errorAddResidentMessage, setErrorAddResidentMessage] = useState('')
   const [errorSetDateMessage, setErrorSetDateMessage] = useState('')
   const [errorAddVehicleMessage, setErrorAddVehicleMessage] = useState('')
-  const [residents, setResidents] = useState(props.route?.params?.residents?.map(el => { return { ...el, initial_date: new Date(el.initial_date), final_date: new Date(el.final_date) } }) || [])
-  const [vehicles, setVehicles] = useState(props.route?.params?.vehicles || [])
+  const [residents, setResidents] = useState([])
+  const [vehicles, setVehicles] = useState([])
   const [vehicleBeingAdded, setVehicleBeingAdded] = useState({ maker: '', model: '', color: '', plate: '' })
-  const [userBeingAdded, setUserBeingAdded] = useState(props.route?.params?.userBeingAdded || { name: '', identification: '', company: '', pic: '' })
+  const [userBeingAdded, setUserBeingAdded] = useState({ name: '', identification: '', company: '', pic: '' })
   const [dateInit, setDateInit] = useState({ day: currentDate.getDate(), month: currentDate.getMonth() + 1, year: currentDate.getFullYear() })
   const [dateEnd, setDateEnd] = useState({ day: '', month: '', year: '' })
   const [selectedDateInit, setSelectedDateInit] = useState('')
   const [selectedDateEnd, setSelectedDateEnd] = useState('')
-  const [screen, setScreen] = useState(props.route?.params?.screen || 'ThirdAdd')
   const [showModalQRCode, setShowModalQRCode] = useState(false)
   const [unitIdModalQRCode, setUnitIdModalQRCode] = useState('')
   const [addingUser, setAddingUser] = useState(false)
   const [addingDates, setAddingDates] = useState(false)
   const [addingVehicle, setAddingVehicle] = useState(false)
+  const [isTakingPic, setIsTakingPic] = useState(false)
+  const [isNoUnits, setIsNoUnits] = useState(false)
 
   //fetching blocos
   useEffect(() => {
     api.get(`api/condo/${props.route.params.user.condo_id}`)
       .then(res => {
         setBlocos(res.data)
+        if (res.data.length === 0) {
+          setIsNoUnits(true)
+        }
       })
       .catch(err => {
         Utils.toastTimeoutOrErrorMessage(err, err.response.data.message)
@@ -61,7 +69,6 @@ const ThirdAdd = props => {
       .finally(() => {
         setLoading(false)
       })
-    setLoading(false)
   }, [])
 
   useEffect(() => {
@@ -76,14 +83,14 @@ const ThirdAdd = props => {
   }, []);
 
   const removeResident = async index => {
-    if(await Utils.handleNoConnection(setLoading)) return
+    if (await Utils.handleNoConnection(setLoading)) return
     const residentsCopy = [...residents]
     residentsCopy.splice(index, 1)
     setResidents(residentsCopy)
   }
 
   const removeVehicle = async index => {
-    if(await Utils.handleNoConnection(setLoading)) return
+    if (await Utils.handleNoConnection(setLoading)) return
     const vehiclesCopy = [...vehicles]
     vehiclesCopy.splice(index, 1)
     setVehicles(vehiclesCopy)
@@ -103,7 +110,7 @@ const ThirdAdd = props => {
   }
 
   const addResidentHandler = async _ => {
-    if(await Utils.handleNoConnection(setLoading)) return
+    if (await Utils.handleNoConnection(setLoading)) return
     if (!userBeingAdded.name) {
       setErrorAddResidentMessage('Nome não pode estar vazio.')
       return false
@@ -127,7 +134,7 @@ const ThirdAdd = props => {
   }
 
   const selectDatesHandler = async _ => {
-    if(await Utils.handleNoConnection(setLoading)) return
+    if (await Utils.handleNoConnection(setLoading)) return
     if (!Utils.isValidDate(dateInit.day, dateInit.month, dateInit.year)) {
       setErrorSetDateMessage('Data inicial não é válida.')
       return false
@@ -157,7 +164,7 @@ const ThirdAdd = props => {
   }
 
   const addVehicleHandler = async _ => {
-    if(await Utils.handleNoConnection(setLoading)) return
+    if (await Utils.handleNoConnection(setLoading)) return
     if (!vehicleBeingAdded.maker) {
       setErrorAddVehicleMessage('Fabricante não pode estar vazio.')
       return false
@@ -188,17 +195,14 @@ const ThirdAdd = props => {
     setVehicleBeingAdded({ maker: '', model: '', color: '', plate: '' })
   }
 
+  const photoTaken = photoUri => {
+    setIsTakingPic(false)
+    setUserBeingAdded(prev => { return { ...prev, pic: photoUri } })
+  }
+
   const photoClickHandler = async _ => {
-    if(await Utils.handleNoConnection(setLoading)) return
-    props.navigation.navigate('CameraPic', {
-      userBeingAdded,
-      selectedBloco,
-      selectedUnit,
-      vehicles,
-      residents: JSON.stringify(residents),
-      user: props.route.params.user,
-      screen
-    })
+    if (await Utils.handleNoConnection(setLoading)) return
+    setIsTakingPic(true)
   }
 
   const selectBlocoHandler = bloco => {
@@ -211,11 +215,20 @@ const ThirdAdd = props => {
     setSelectedUnit(unit)
     setModalSelectUnit(false)
     setDateEnd({ day: '', month: '', year: '' })
+    setModalSelectResident(true)
+  }
+
+  const selectResidentHandler = res => {
+    setSelectedResident(res)
+    setModalSelectResident(false)
   }
 
   const clearUnit = _ => {
     setSelectedBloco(null)
     setSelectedUnit(null)
+    setResidents([])
+    setVehicles([])
+    cancelDatesHandler()
   }
 
   const cancelHandler = _ => {
@@ -226,7 +239,7 @@ const ThirdAdd = props => {
 
   //saving...
   const confirmHandler = async _ => {
-    if(await Utils.handleNoConnection(setLoading)) return
+    if (await Utils.handleNoConnection(setLoading)) return
     //checking if there is date selected and at least one visitor
     if (!selectedDateInit || !selectedDateEnd) {
       return setErrorMessage('É preciso selecionar um prazo.')
@@ -243,6 +256,7 @@ const ThirdAdd = props => {
       bloco_id: selectedBloco.id,
       selectedDateInit,
       selectedDateEnd,
+      user_permission: selectedResident.id,
       unit_kind_id: Constants.USER_KIND.THIRD,
       user_id_last_modify: props.route.params.user.id,
     })
@@ -252,6 +266,7 @@ const ThirdAdd = props => {
         setDateEnd({ day: '', month: '', year: '' })
         setSelectedUnit(null)
         setSelectedBloco(null)
+        setSelectedResident(null)
         setResidents([])
         setVehicles([])
         setLoading(false)
@@ -308,111 +323,135 @@ const ThirdAdd = props => {
       <ActivityIndicator size="large" color="white" />
     </SafeAreaView>
 
-  return (
-    <SafeAreaView style={styles.body}>
-      <ScrollView style={{ flex: 1, padding: 10, }} keyboardShouldPersistTaps="handled">
-        <SelectBlocoGroup
-          backgroundColor={backgroundColorBoxes}
-          backgroundColorButtons={backgroundColorButtonBoxes}
-          pressed={() => setModalSelectBloco(true)}
-          selectedBloco={selectedBloco}
-          selectedUnit={selectedUnit}
-          clearUnit={clearUnit}
-        />
-        {!!selectedUnit &&
-          <View>
-            <AddThirdsGroup
-              backgroundColor={backgroundColorBoxes}
-              backgroundColorButtons={backgroundColorButtonBoxes}
-              residents={residents}
-              userBeingAdded={userBeingAdded}
-              setUserBeingAdded={setUserBeingAdded}
-              photoClickHandler={photoClickHandler}
-              pickImage={pickImage}
-              errorAddResidentMessage={errorAddResidentMessage}
-              addResidentHandler={addResidentHandler}
-              cancelAddResidentHandler={cancelAddResidentHandler}
-              removeResident={removeResident}
-              addingUser={addingUser}
-              setAddingUser={setAddingUser}
-              buttonText='Incluir Terc.'
-            />
-            <SelectDatesVisitorsGroup
-              selectedDateInit={Utils.printDate(selectedDateInit)}
-              selectedDateEnd={Utils.printDate(selectedDateEnd)}
-              selectDatesHandler={selectDatesHandler}
-              cancelDatesHandler={cancelDatesHandler}
-              backgroundColorInput={Constants.backgroundLightColors["Thirds"]}
-              borderColor={Constants.backgroundDarkColors["Thirds"]}
-              colorInput={Constants.backgroundDarkColors["Thirds"]}
-              backgroundColor={backgroundColorBoxes}
-              backgroundColorButtons={backgroundColorButtonBoxes}
-              dateInit={dateInit}
-              setDateInit={setDateInit}
-              dateEnd={dateEnd}
-              setDateEnd={setDateEnd}
-              errorMessage={errorSetDateMessage}
-              addingDates={addingDates}
-              setAddingDates={setAddingDates}
-            />
-            <AddCarsGroup
-              backgroundColor={backgroundColorBoxes}
-              backgroundColorButtons={backgroundColorButtonBoxes}
-              data={vehicles}
-              vehicleBeingAdded={vehicleBeingAdded}
-              setVehicleBeingAdded={setVehicleBeingAdded}
-              errorAddVehicleMessage={errorAddVehicleMessage}
-              addVehicleHandler={addVehicleHandler}
-              cancelVehicleHandler={cancelVehicleHandler}
-              removeVehicle={removeVehicle}
-              backgroundLightColor={Constants.backgroundLightColors['Thirds']}
-              backgroundDarkColor={Constants.backgroundDarkColors['Thirds']}
-              addingVehicle={addingVehicle}
-              setAddingVehicle={setAddingVehicle}
-            />
-            {
-              !addingDates && !addingUser && !addingVehicle &&
-              <FooterButtons
-                backgroundColor={Constants.backgroundColors['Thirds']}
-                title1="Confirmar"
-                title2="Cancelar"
-                errorMessage={errorMessage}
-                buttonPadding={15}
-                fontSize={17}
-                action1={confirmHandler}
-                action2={cancelHandler}
-              />
-            }
-          </View>
-        }
-      </ScrollView>
-      <ModalMessage
-        message={errorMessage}
-        title="Atenção"
-        modalVisible={modal}
-        setModalVisible={setModal}
-      />
-      <ModalSelectBloco
-        selectBlocoHandler={selectBlocoHandler}
-        blocos={blocos}
-        modalVisible={modalSelectBloco}
-        setModalVisible={setModalSelectBloco}
-        backgroundItem={'#FFE5E5'}
-      />
-      <ModalSelectUnit
-        bloco={selectedBloco}
-        modalVisible={modalSelectUnit}
-        setModalVisible={setModalSelectUnit}
-        selectUnitHandler={selectUnitHandler}
-        backgroundItem={'#FFE5E5'}
-      />
-      <ModalQRCode
-        text={`QR Code dos ${"\n"}terceirizados adicionados`}
-        modalVisible={showModalQRCode}
-        setModalVisible={setShowModalQRCode}
-        value={unitIdModalQRCode}
-      />
+  if (isNoUnits) {
+    return <SafeAreaView style={styles.body}>
+      <Text style={{ textAlign: 'center', padding: 10 }}>Não há unidades ou residentes cadastrados.</Text>
     </SafeAreaView>
+  }
+
+  return (
+    isTakingPic ?
+      <TakePic
+        clicked={photoTaken}
+      />
+      :
+      <SafeAreaView style={styles.body}>
+        <ScrollView style={{ flex: 1, padding: 10, }} keyboardShouldPersistTaps="handled">
+          <SelectBlocoGroup
+            backgroundColor={backgroundColorBoxes}
+            backgroundColorButtons={backgroundColorButtonBoxes}
+            pressed={() => setModalSelectBloco(true)}
+            selectedBloco={selectedBloco}
+            selectedUnit={selectedUnit}
+            clearUnit={clearUnit}
+            resident={selectedResident}
+          />
+          {!!selectedUnit &&
+            <View>
+              <AddThirdsGroup
+                backgroundColor={backgroundColorBoxes}
+                backgroundColorButtons={backgroundColorButtonBoxes}
+                residents={residents}
+                userBeingAdded={userBeingAdded}
+                setUserBeingAdded={setUserBeingAdded}
+                photoClickHandler={photoClickHandler}
+                pickImage={pickImage}
+                errorAddResidentMessage={errorAddResidentMessage}
+                addResidentHandler={addResidentHandler}
+                cancelAddResidentHandler={cancelAddResidentHandler}
+                removeResident={removeResident}
+                addingUser={addingUser}
+                setAddingUser={setAddingUser}
+                buttonText='Incluir Terc.'
+              />
+              <SelectDatesVisitorsGroup
+                selectedDateInit={Utils.printDate(selectedDateInit)}
+                selectedDateEnd={Utils.printDate(selectedDateEnd)}
+                selectDatesHandler={selectDatesHandler}
+                cancelDatesHandler={cancelDatesHandler}
+                backgroundColorInput={Constants.backgroundLightColors["Thirds"]}
+                borderColor={Constants.backgroundDarkColors["Thirds"]}
+                colorInput={Constants.backgroundDarkColors["Thirds"]}
+                backgroundColor={backgroundColorBoxes}
+                backgroundColorButtons={backgroundColorButtonBoxes}
+                dateInit={dateInit}
+                setDateInit={setDateInit}
+                dateEnd={dateEnd}
+                setDateEnd={setDateEnd}
+                errorMessage={errorSetDateMessage}
+                addingDates={addingDates}
+                setAddingDates={setAddingDates}
+              />
+              <AddCarsGroup
+                backgroundColor={backgroundColorBoxes}
+                backgroundColorButtons={backgroundColorButtonBoxes}
+                data={vehicles}
+                vehicleBeingAdded={vehicleBeingAdded}
+                setVehicleBeingAdded={setVehicleBeingAdded}
+                errorAddVehicleMessage={errorAddVehicleMessage}
+                addVehicleHandler={addVehicleHandler}
+                cancelVehicleHandler={cancelVehicleHandler}
+                removeVehicle={removeVehicle}
+                backgroundLightColor={Constants.backgroundLightColors['Thirds']}
+                backgroundDarkColor={Constants.backgroundDarkColors['Thirds']}
+                addingVehicle={addingVehicle}
+                setAddingVehicle={setAddingVehicle}
+              />
+              {
+                !addingDates && !addingUser && !addingVehicle &&
+                <FooterButtons
+                  backgroundColor={Constants.backgroundColors['Thirds']}
+                  title1="Confirmar"
+                  title2="Cancelar"
+                  errorMessage={errorMessage}
+                  buttonPadding={15}
+                  fontSize={17}
+                  action1={confirmHandler}
+                  action2={cancelHandler}
+                />
+              }
+            </View>
+          }
+        </ScrollView>
+        <ModalMessage
+          message={errorMessage}
+          title="Atenção"
+          modalVisible={modal}
+          setModalVisible={setModal}
+        />
+        <ModalSelectBloco
+          selectBlocoHandler={selectBlocoHandler}
+          blocos={blocos}
+          modalVisible={modalSelectBloco}
+          setModalVisible={setModalSelectBloco}
+          backgroundItem={'#FFE5E5'}
+          text='Mostrando apenas blocos com residentes'
+        />
+        <ModalSelectUnit
+          bloco={selectedBloco}
+          modalVisible={modalSelectUnit}
+          setModalVisible={setModalSelectUnit}
+          selectUnitHandler={selectUnitHandler}
+          backgroundItem={'#FFE5E5'}
+          text='Mostrando apenas unidades com residentes'
+        />
+        {
+          !!selectedUnit &&
+          <ModalSelectResident
+            modalVisible={modalSelectResident}
+            setModalVisible={setModalSelectResident}
+            users={selectedUnit.Users}
+            backgroundItem={'#FFE5E5'}
+            selectResidentHandler={selectResidentHandler}
+          />
+        }
+        <ModalQRCode
+          text={`QR Code dos ${"\n"}terceirizados adicionados`}
+          modalVisible={showModalQRCode}
+          setModalVisible={setShowModalQRCode}
+          value={unitIdModalQRCode}
+        />
+      </SafeAreaView>
   );
 }
 

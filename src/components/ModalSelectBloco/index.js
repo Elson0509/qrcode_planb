@@ -24,6 +24,10 @@ const ModalSelectBloco = (props) => {
                               </TouchableOpacity>
                     }}
                   />
+              {
+                !!props.text &&
+                <Text style={styles.footer}>{props.text}</Text>
+              }
               </View>
           </View>
         </Modal>
@@ -71,6 +75,10 @@ const styles = StyleSheet.create({
       textAlign: 'center',
       fontWeight: 'bold',
     },  
+    footer:{
+      fontSize: 12,
+      fontWeight: '100'
+    }
   });
 
 export default ModalSelectBloco;

@@ -10,6 +10,7 @@ import * as Constants from '../../services/constants'
 import { useAuth } from '../../contexts/auth';
 import Icon from '../../components/Icon';
 import Greeting from '../../components/Greeting/Greeting';
+import THEME from '../../services/theme';
 
 const Dashboard = (props) => {
     const { user } = useAuth()
@@ -53,7 +54,8 @@ const Dashboard = (props) => {
                             <View style={[styles.menuIcon, { backgroundColor: obj.item.backgroundColor }]}>
                                 <Icon name={obj.item.icon} size={55} color='white' />
                             </View>
-                            <Text style={styles.menuItemText}>{obj.item.menuName}</Text>
+                            <Text style={[{fontFamily: THEME.FONTS.r500}, styles.menuItemText,]}>{obj.item.menuName}</Text>
+
                         </TouchableOpacity>
                     )
                 }}
@@ -86,8 +88,7 @@ const styles = StyleSheet.create({
     },
     menuItemText: {
         marginTop: 5,
-        fontWeight: '700',
-        fontSize: 13
+        fontSize: 13,
     }
 })
 

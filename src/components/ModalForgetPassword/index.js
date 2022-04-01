@@ -63,16 +63,16 @@ const ModalForgetPassword = props => {
           { !successMessage && !spinner &&
             <View style={styles.buttonGroup}>
               <Pressable
-                style={[styles.button, { backgroundColor: '#2323FF' }]}
-                onPress={submitHandler}
-              >
-                <Text style={styles.textStyle}>Enviar</Text>
-              </Pressable>
-              <Pressable
                 style={[styles.button, { backgroundColor: '#FF2323' }]}
                 onPress={() => props.setModalVisible(false)}
               >
                 <Text style={styles.textStyle}>Cancelar</Text>
+              </Pressable>
+              <Pressable
+                style={[styles.button, { backgroundColor: '#2323FF' }]}
+                onPress={submitHandler}
+              >
+                <Text style={styles.textStyle}>Enviar</Text>
               </Pressable>
             </View>
           }

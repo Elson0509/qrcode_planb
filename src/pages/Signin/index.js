@@ -23,7 +23,7 @@ export default function Signin() {
   const { signIn, errorMessage } = useAuth()
 
   const handleSignIn = async _ =>{
-    if(await Utils.handleNoConnection(setLoading)) return
+    if(await Utils.handleNoConnection()) return
     Keyboard.dismiss()
     signIn(email, password)
   }

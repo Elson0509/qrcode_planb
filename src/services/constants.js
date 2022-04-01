@@ -3,11 +3,11 @@ import Constants from 'expo-constants';
 
 const { manifest } = Constants
 
-export const apiurlPrefix = 'https://'
-export const apiurl = `qrcondo.herokuapp.com`
+export const apiurlPrefix = 'http://'
+//export const apiurl = `qrcondo.herokuapp.com`
 //lt --port 3333
 
-/*export const apiurl = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts.dev
+export const apiurl = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts.dev
   ? manifest.debuggerHost.split(`:`).shift().concat(`:3333`)
   : `api.example.com`;//*/
 

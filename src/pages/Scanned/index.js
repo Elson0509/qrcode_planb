@@ -10,6 +10,7 @@ import Spinner from '../../components/Spinner';
 import PicUser from '../../components/PicUser';
 import ModalMessage from '../../components/ModalMessage';
 import ModalGeneric from '../../components/ModalGeneric'
+import THEME from '../../services/theme'
 
 const Scanned = (props) => {
   const [dataFetched, setDataFetched] = useState(null)
@@ -155,18 +156,18 @@ const Scanned = (props) => {
     if (dataFetched && dataFetched.user_kind_id) {
       return (
         <View style={{ backgroundColor: backgroundColorScreen, alignItems: 'center', padding: 10 }}>
-          <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold', letterSpacing: 1, textDecorationLine: 'underline' }}>{userType}</Text>
+          <Text style={{ textAlign: 'center', fontSize: 26, letterSpacing: 2, fontFamily: THEME.FONTS.r700 }}>{userType}</Text>
           <PicUser user={dataFetched} height={240} width={200} />
-          <Text style={{ marginTop: 8, fontSize: 18, fontWeight: 'bold' }}>{dataFetched.name}</Text>
-          {!!dataFetched.Unit?.Bloco?.name && <Text style={{ marginTop: 4, fontSize: 18 }}>{`Bloco ${dataFetched.Unit.Bloco.name}`}</Text>}
-          {!!dataFetched.Unit?.number && <Text style={{ marginTop: 4, fontSize: 18, marginBottom: 20 }}>{`Unidade ${dataFetched.Unit.number}`}</Text>}
-          {!dataFetched.Unit?.Vehicles.length && <Text style={{ textDecorationLine: 'underline', fontSize: 15, }}>Não há veículos cadastrados.</Text>}
-          {!!dataFetched.Unit?.Vehicles.length && <Text style={{ fontSize: 15, marginBottom: 0 }}>Veículos cadastrados:</Text>}
+          <Text style={{ marginTop: 8, fontSize: 20, fontFamily: THEME.FONTS.r500 }}>{dataFetched.name}</Text>
+          {!!dataFetched.Unit?.Bloco?.name && <Text style={{ marginTop: 4, fontSize: 18, fontFamily: THEME.FONTS.r400 }}>{`Bloco ${dataFetched.Unit.Bloco.name}`}</Text>}
+          {!!dataFetched.Unit?.number && <Text style={{ marginTop: 4, fontSize: 18, marginBottom: 20, fontFamily: THEME.FONTS.r400 }}>{`Unidade ${dataFetched.Unit.number}`}</Text>}
+          {!dataFetched.Unit?.Vehicles.length && <Text style={{ fontSize: 15, fontFamily: THEME.FONTS.r300 }}>Não há veículos cadastrados.</Text>}
+          {!!dataFetched.Unit?.Vehicles.length && <Text style={{ textAlign: 'center', fontSize: 22, marginBottom: 0, letterSpacing: 1, fontFamily: THEME.FONTS.r500i }}>Veículos cadastrados:</Text>}
           {!!dataFetched.Unit?.Vehicles.length &&
             dataFetched.Unit?.Vehicles.map((el, ind) => {
               return (
                 <View key={ind} style={{ borderBottomWidth: 1, padding: 12 }}>
-                  <Text style={{ textAlign: 'center', fontSize: 15, fontWeight: 'bold', marginBottom: 5 }}>{`${el.maker} ${el.model} ${el.color}`}</Text>
+                  <Text style={{ textAlign: 'center', fontSize: 15, marginBottom: 5, fontFamily: THEME.FONTS.r400 }}>{`${el.maker} ${el.model} ${el.color}`}</Text>
                   <Placa placa={el.plate} />
                 </View>
               )
@@ -178,31 +179,33 @@ const Scanned = (props) => {
     if (dataFetched && dataFetched.unit_kind_id) {
       return (
         <View style={{ backgroundColor: backgroundColorScreen, padding: 10 }}>
-          <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: 'bold', letterSpacing: 1, textDecorationLine: 'underline' }}>{userType}</Text>
-          <Text style={{ textAlign: 'center', fontSize: 18, marginBottom: 0 }}>Autorizado por {'\n'} Bloco {dataFetched.Bloco.name} Unidade {dataFetched.number}</Text>
-          {dataFetched.Users.map((el, ind) => {
+          <Text style={{ textAlign: 'center', fontSize: 26, letterSpacing: 2, fontFamily: THEME.FONTS.r700 }}>{userType}</Text>
+          <Text style={{ textAlign: 'center', fontSize: 18, marginBottom: 0, fontFamily: THEME.FONTS.r500 }}>Bloco {dataFetched.Bloco.name} Unidade {dataFetched.number}</Text>
+          {!!dataFetched.Users[0]?.User && <Text style={{ textAlign: 'center', fontSize: 18, marginBottom: 0, fontFamily: THEME.FONTS.r500 }}>Autorizado por {dataFetched.Users[0]?.User.name}</Text>}
+          <Text style={{ textAlign: 'center', fontSize: 18, marginBottom: 0, fontFamily: THEME.FONTS.r500 }}>Até {Utils.printDate(new Date(dataFetched.Users[0].final_date))}</Text>
+          {dataFetched.Users.map((el) => {
             return (
               <View key={el.id} style={{ flexDirection: 'row', marginVertical: 5, marginBottom: 4 }}>
                 <View>
                   <PicUser user={el} height={120} width={90} />
                 </View>
                 <View>
-                  {!!el.name && <Text style={{ marginTop: 4, fontSize: 18, fontWeight: 'bold' }}>{el.name}</Text>}
-                  {!!el.company && <Text style={{ marginTop: 4, fontSize: 18 }}>Empresa: {el.company}</Text>}
-                  {!!el.identification && <Text style={{ marginTop: 4, fontSize: 18 }}>{`Id: ${el.identification}`}</Text>}
+                  {!!el.name && <Text style={{ marginTop: 4, fontSize: 18, fontFamily: THEME.FONTS.r400 }}>{el.name}</Text>}
+                  {!!el.company && <Text style={{ marginTop: 4, fontSize: 18, fontFamily: THEME.FONTS.r400 }}>Empresa: {el.company}</Text>}
+                  {!!el.identification && <Text style={{ marginTop: 4, fontSize: 18, fontFamily: THEME.FONTS.r400 }}>{`Id: ${el.identification}`}</Text>}
                 </View>
               </View>
             )
           })}
 
-          <View style={{ alignItems: 'center', marginTop: 10 }}>
-            {!dataFetched.Vehicles.length && <Text style={{ textDecorationLine: 'underline', fontSize: 15, }}>Não há veículos cadastrados.</Text>}
-            {!!dataFetched.Vehicles.length && <Text style={{ textAlign: 'center', fontSize: 22, fontWeight: 'bold', marginBottom: 0, letterSpacing: 1, textDecorationLine: 'underline' }}>Veículos cadastrados</Text>}
+          <View style={{ alignItems: 'center', marginVertical: 10 }}>
+            {!dataFetched.Vehicles.length && <Text style={{ fontSize: 15, fontFamily: THEME.FONTS.r300 }}>Não há veículos cadastrados.</Text>}
+            {!!dataFetched.Vehicles.length && <Text style={{ textAlign: 'center', fontSize: 22, marginBottom: 0, letterSpacing: 1, fontFamily: THEME.FONTS.r500i }}>Veículos cadastrados</Text>}
             {!!dataFetched.Vehicles.length &&
               dataFetched.Vehicles.map((el, ind) => {
                 return (
                   <View key={ind} style={{ padding: 12 }}>
-                    <Text style={{ textAlign: 'center', fontSize: 15, fontWeight: 'bold', marginBottom: 5 }}>{`${el.maker} ${el.model} ${el.color}`}</Text>
+                    <Text style={{ textAlign: 'center', fontSize: 15, marginBottom: 5, fontFamily: THEME.FONTS.r400 }}>{`${el.maker} ${el.model} ${el.color}`}</Text>
                     <Placa placa={el.plate} />
                   </View>
                 )

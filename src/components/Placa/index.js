@@ -5,6 +5,7 @@ import { StyleSheet,
     Image,
     Text,
 } from 'react-native';
+import THEME from '../../services/theme'
 
 const Placa = (props) => {
     const placa = props.placa.toUpperCase()
@@ -18,12 +19,12 @@ const Placa = (props) => {
                 <Image style={styles.plateImages} resizeMode="contain" source={require('../../../assets/brazil_logo_plate.jpg')}/>
             </View>
             
-            <Text style={styles.oldPlateText}>{placa}</Text>
+            <Text style={[styles.oldPlateText, { fontFamily: THEME.FONTS.r700 }]}>{placa}</Text>
         </View>
         :
         <View style={styles.oldPlateView}>
             <Text style={styles.oldPlateTextState}>UF - Município</Text>
-            <Text style={styles.oldPlateText}>{utils.oldModelPlateFormat(placa)}</Text>
+            <Text style={[styles.oldPlateText, { fontFamily: THEME.FONTS.r700 }]}>{utils.oldModelPlateFormat(placa)}</Text>
         </View>
         
     );
@@ -44,7 +45,7 @@ const styles = StyleSheet.create({
     oldPlateText:{
         textAlign: 'center',
         fontSize: 36,
-        fontWeight: '700',
+        //fontWeight: '700',
     },
     newPlateView:{
         backgroundColor: '#fff',
@@ -64,7 +65,7 @@ const styles = StyleSheet.create({
     newPlateCountry:{
         color: 'white',
         textTransform: 'uppercase',
-        fontWeight: '700'
+        //fontWeight: '700'
     },
     plateImages:{
         height: 20,

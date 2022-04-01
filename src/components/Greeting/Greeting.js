@@ -1,58 +1,56 @@
 import React, { useEffect, useState } from 'react';
 import {
-    SafeAreaView,
     StyleSheet,
-    ScrollView,
     View,
     Text,
     TouchableHighlight,
-  } from 'react-native';
-import {withBadge, Icon} from 'react-native-elements'
+} from 'react-native';
+import { withBadge, Icon } from 'react-native-elements'
 import IconApp from '../Icon';
 import * as Utils from '../../services/util'
 import api from '../../services/api';
 import { useNavigation } from '@react-navigation/native'
+import THEME from '../../services/theme'
 
 const Greeting = (props) => {
     const [newMessagesQtt, setNewMessagesQtt] = useState(0)
-
     const navigation = useNavigation();
 
-    useEffect(()=>{
+    useEffect(() => {
         fetchQttNewMessages()
-      const willFocusSubscription = navigation.addListener('focus', ()=> {
-        fetchQttNewMessages()
-      })
-      return willFocusSubscription
-    },[])
+        const willFocusSubscription = navigation.addListener('focus', () => {
+            fetchQttNewMessages()
+        })
+        return willFocusSubscription
+    }, [])
 
     const fetchQttNewMessages = _ => {
         api.get(`api/message/count/${props.user.id}`)
-        .then(res=> {
-            setNewMessagesQtt(res.data.count)
-        })
-        .catch((err)=> {
-            console.log(err)
-        })
+            .then(res => {
+                setNewMessagesQtt(res.data.count)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     const clickMessageHandler = _ => {
-        navigation.navigate('Messages', {user: props.user})
+        navigation.navigate('Messages', { user: props.user })
     }
 
-    const BadgedIcon  = withBadge(newMessagesQtt)(Icon)
+    const BadgedIcon = withBadge(newMessagesQtt)(Icon)
 
     return (
         <View style={styles.container}>
-            <Text style={styles.greeting}>{Utils.saudacaoHorario(props.user?.name)}</Text>
-            <TouchableHighlight style={styles.iconMessage} onPress={()=> clickMessageHandler()}>
+            <Text style={[styles.greeting, {fontFamily: THEME.FONTS.r700}]}>{Utils.saudacaoHorario(props.user?.name)}</Text>
+            <TouchableHighlight style={styles.iconMessage} onPress={() => clickMessageHandler()}>
                 {newMessagesQtt === 0 ?
-                <IconApp name="envelope" color='white' size={26}/>
-                :
-                <BadgedIcon type="font-awesome-5" name="envelope" color='white'/>
+                    <IconApp name="envelope" color='white' size={26} />
+                    :
+                    <BadgedIcon type="font-awesome-5" name="envelope" color='white' />
                 }
             </TouchableHighlight>
-            
+
         </View>
     );
 };
@@ -61,7 +59,7 @@ const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
         alignItems: 'center',
-        
+
     },
     iconMessage: {
         position: 'absolute',
@@ -70,7 +68,7 @@ const styles = StyleSheet.create({
         //borderWidth: 3,
         //borderColor: 'white',
         borderRadius: 5,
-    },  
+    },
     greeting: {
         fontFamily: 'monospace',
         fontWeight: '700',

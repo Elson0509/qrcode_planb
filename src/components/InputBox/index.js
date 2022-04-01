@@ -6,11 +6,12 @@ import {
   TextInput,
 } from 'react-native';
 import * as Constants from '../../services/constants'
+import THEME from '../../services/theme';
 
 const InputBox = (props) => {
     return (
         <View style={[styles.box, {width: props.width || '100%'}]}>
-            <Text style={[styles.labelStyle, {color: props.colorLabel || 'black'}]}>{props.text}</Text>
+            <Text style={[styles.labelStyle, {color: props.colorLabel || 'black', fontFamily: THEME.FONTS.r700}]}>{props.text}</Text>
             <TextInput
                 style={[
                   styles.txtInput, 
@@ -18,7 +19,8 @@ const InputBox = (props) => {
                     backgroundColor: props.backgroundColor || 'white', 
                     borderColor: props.borderColor || 'black',
                     color: props.colorInput || 'black',
-                    borderRadius: props.borderRadius || 10,
+                    borderRadius: props.borderRadius || 6,
+                    fontFamily: THEME.FONTS.r500,
                   }
                 ]}
                 placeholder={props.placeholder || ''}
@@ -44,7 +46,6 @@ const styles = StyleSheet.create({
     txtInput:{
       width:'100%',
       borderWidth:Constants.borderTextInputWidth,
-      fontWeight:'bold',
       fontSize: 14,
       textAlign:'left',
       paddingLeft: 10,
@@ -53,7 +54,6 @@ const styles = StyleSheet.create({
     },
     labelStyle:{
       fontSize:15,
-      fontWeight:'bold',
       marginBottom:5,
       marginLeft:5,
       color:'white'

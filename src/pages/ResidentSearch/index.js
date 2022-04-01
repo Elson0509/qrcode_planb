@@ -9,18 +9,19 @@ import {
   View,
   Text,
 } from 'react-native';
-import ActionButtons from '../../components/ActionButtons';
+import ActionButtons from '../../components/ActionButtons'
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
-import ModalMessage from '../../components/ModalMessage';
+import ModalMessage from '../../components/ModalMessage'
 import api from '../../services/api'
-import PicUser from '../../components/PicUser';
-import InputBox from '../../components/InputBox';
-import ModalConfirmPass from '../../components/ModalConfirmPass';
-import ModalPhoto from '../../components/ModalPhoto';
+import PicUser from '../../components/PicUser'
+import InputBox from '../../components/InputBox'
+import ModalConfirmPass from '../../components/ModalConfirmPass'
+import ModalPhoto from '../../components/ModalPhoto'
 import Placa from '../../components/Placa'
 import { toast } from '../../services/util'
-import { useAuth } from '../../contexts/auth';
+import { useAuth } from '../../contexts/auth'
+import THEME from '../../services/theme'
 
 const ResidentSearch = props => {
   const { user } = useAuth()
@@ -184,7 +185,8 @@ const ResidentSearch = props => {
         renderItem={(obj) => {
           return (
             <View style={styles.menuItem}>
-              <Text style={styles.listText}>Bloco {obj.item.bloco_name} Unidade {obj.item.number}</Text>
+              <Text style={[styles.listText, { fontFamily: THEME.FONTS.r700 }]}>Bloco {obj.item.bloco_name}</Text>
+              <Text style={[styles.listText, { fontFamily: THEME.FONTS.r700 }]}>Unidade {obj.item.number}</Text>
               <View>
                 {
                   user.user_kind === Constants.USER_KIND['SUPERINTENDENT'] &&
@@ -198,8 +200,8 @@ const ResidentSearch = props => {
               <View style={{ justifyContent: 'space-between', flexDirection: 'column' }}>
                 <View>
                   <View>
-                    {(!obj.item.residents || obj.item.residents.length === 0) && <Text style={{ marginTop: 10, textDecorationLine: 'underline' }}>Unidade sem moradores</Text>}
-                    {obj.item.residents.length > 0 && <Text style={styles.subTitle}>Moradores</Text>}
+                    {(!obj.item.residents || obj.item.residents.length === 0) && <Text style={{ marginTop: 10, fontFamily: THEME.FONTS.r300 }}>Unidade sem moradores</Text>}
+                    {obj.item.residents.length > 0 && <Text style={[styles.subTitle, { fontFamily: THEME.FONTS.r500 }]}>Moradores</Text>}
                     {
                       obj.item.residents.map((res) => {
                         return (
@@ -208,9 +210,9 @@ const ResidentSearch = props => {
                               <PicUser user={res} />
                             </TouchableOpacity>
                             <View>
-                              <Text style={{ fontSize: 18, marginLeft: 7 }}>{res.name}</Text>
-                              {!!res.email && <Text style={{ fontSize: 16, marginLeft: 7 }}>Email: {res.email}</Text>}
-                              {!!res.identification && <Text style={{ fontSize: 16, marginLeft: 7 }}>Id: {res.identification}</Text>}
+                              <Text style={{ fontSize: 18, marginLeft: 7, fontFamily: THEME.FONTS.r500 }}>{res.name}</Text>
+                              {!!res.email && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Email: {res.email}</Text>}
+                              {!!res.identification && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Id: {res.identification}</Text>}
                             </View>
                           </View>
                         )
@@ -218,13 +220,13 @@ const ResidentSearch = props => {
                     }
                   </View>
                   <View>
-                    {obj.item.vehicles?.length > 0 && <Text style={styles.subTitle}>Veículos</Text>}
-                    {(!obj.item.vehicles || obj.item.vehicles.length === 0) && <Text style={{ marginTop: 10, textDecorationLine: 'underline' }}>Sem veículos cadastrados</Text>}
+                    {obj.item.vehicles?.length > 0 && <Text style={[styles.subTitle, { fontFamily: THEME.FONTS.r500 }]}>Veículos</Text>}
+                    {(!obj.item.vehicles || obj.item.vehicles.length === 0) && <Text style={{ marginTop: 10, fontFamily: THEME.FONTS.r300 }}>Sem veículos cadastrados</Text>}
                     {
                       obj.item.vehicles?.map((car, ind) => {
                         return (
                           <View key={ind} style={styles.plateDiv}>
-                            <Text>{`${car.maker} ${car.model} ${car.color}`}</Text>
+                            <Text style={{ fontFamily: THEME.FONTS.r500 }}>{`${car.maker} ${car.model} ${car.color}`}</Text>
                             <Placa placa={car.plate} />
                           </View>
                         )
@@ -273,12 +275,10 @@ const styles = StyleSheet.create({
   },
   listText: {
     color: 'black',
-    fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 25,
     textAlign: 'center'
   },
   subTitle: {
-    fontWeight: 'bold',
     fontSize: 18,
     marginTop: 5,
     textAlign: 'center'

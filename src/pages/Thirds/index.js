@@ -29,7 +29,7 @@ const Thirds = (props) => {
                             <View style={[styles.menuIcon, { backgroundColor: Constants.backgroundColors['Thirds'] }]}>
                                 <Icon name={obj.item.icon} size={85} color='white' />
                             </View>
-                            <Text style={styles.menuItemText}>{obj.item.menuName}</Text>
+                            <Text style={[{fontFamily: THEME.FONTS.r500}, styles.menuItemText]}>{obj.item.menuName}</Text>
                         </TouchableOpacity>
                     )
                 }}
@@ -68,7 +68,6 @@ const styles = StyleSheet.create({
     },
     menuItemText: {
         marginTop: 5,
-        fontWeight: '700',
         fontSize: 16,
         letterSpacing: 1
     }

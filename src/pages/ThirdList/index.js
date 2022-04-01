@@ -119,6 +119,10 @@ const ThirdList = props => {
           id: unit.id,
           number: unit.number
         },
+        selectedResident: {
+          id: unit.residents[0].User.id,
+          name: unit.residents[0].User.name,
+        },  
         residents: unit.residents,
         vehicles: unit.vehicles,
         screen: 'ThirdEdit'
@@ -150,7 +154,6 @@ const ThirdList = props => {
           el.number.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1
       })
     }
-
     return unitsInfo
   }
 
@@ -343,12 +346,13 @@ const ThirdList = props => {
                             <TouchableOpacity onPress={() => onClickPhotoHandler(res)}>
                               <PicUser user={res} />
                             </TouchableOpacity>
-                            <View style={{ maxWidth: 250 }}>
+                            <View>
                               <Text style={{ fontSize: 16, marginLeft: 7, fontWeight: 'bold' }}>{res.name}</Text>
                               {!!res.email && <Text style={{ fontSize: 16, marginLeft: 7 }}>Email: {res.email}</Text>}
                               {!!res.company && <Text style={{ fontSize: 16, marginLeft: 7 }}>Empresa: {res.company}</Text>}
                               {!!res.initial_date && <Text style={{ fontSize: 16, marginLeft: 7 }}>Início: {Utils.printDate(new Date(res.initial_date))}</Text>}
                               {!!res.final_date && <Text style={{ fontSize: 16, marginLeft: 7 }}>Fim: {Utils.printDate(new Date(res.final_date))}</Text>}
+                              {!!res.User?.name && <Text style={{ fontSize: 16, marginLeft: 7 }}>Autorizado por: {res.User.name}</Text>}
                               {
                                 new Date(res.final_date) >= beginOfDay ?
                                   <Text style={{ fontSize: 16, marginLeft: 7 }}>

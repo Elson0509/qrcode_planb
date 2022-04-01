@@ -9,12 +9,14 @@ import {
 import * as ImagePicker from 'expo-image-picker'
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
+import TakePic from '../../components/TakePic';
 import ModalMessage from '../../components/ModalMessage';
 import AddThirdsGroup from '../../components/AddThirdsGroup';
 import AddCarsGroup from '../../components/AddCarsGroup';
 import SelectBlocoGroup from '../../components/SelectBlocoGroup';
 import ModalSelectBloco from '../../components/ModalSelectBloco';
 import ModalSelectUnit from '../../components/ModalSelectUnit';
+import ModalSelectResident from '../../components/ModalSelectResident';
 import FooterButtons from '../../components/FooterButtons';
 import SelectDatesVisitorsGroup from '../../components/SelectDatesVisitorsGroup';
 import api from '../../services/api';
@@ -27,8 +29,10 @@ const VisitorEdit = props => {
     const [blocos, setBlocos] = useState([])
     const [modalSelectBloco, setModalSelectBloco] = useState(false)
     const [modalSelectUnit, setModalSelectUnit] = useState(false)
+    const [modalSelectResident, setModalSelectResident] = useState(false)
     const [selectedBloco, setSelectedBloco] = useState(props.route?.params?.selectedBloco || null)
     const [selectedUnit, setSelectedUnit] = useState(props.route?.params?.selectedUnit || null)
+    const [selectedResident, setSelectedResident] = useState(props.route?.params?.selectedResident || null)
     const [errorMessage, setErrorMessage] = useState('')
     const [errorAddResidentMessage, setErrorAddResidentMessage] = useState('')
     const [errorSetDateMessage, setErrorSetDateMessage] = useState('')
@@ -41,10 +45,10 @@ const VisitorEdit = props => {
     const [dateEnd, setDateEnd] = useState({day: new Date(props.route.params.residents[0].final_date).getDate(), month: new Date(props.route.params.residents[0].final_date).getMonth()+1, year: new Date(props.route.params.residents[0].final_date).getFullYear()})
     const [selectedDateInit, setSelectedDateInit] = useState(new Date(props.route.params.residents[0].initial_date))
     const [selectedDateEnd, setSelectedDateEnd] = useState(new Date(props.route.params.residents[0].final_date))
-    const [screen, setScreen]= useState(props.route?.params?.screen || 'ThirdEdit')
     const [addingUser, setAddingUser] = useState(false)
     const [addingDates, setAddingDates] = useState(false)
     const [addingVehicle, setAddingVehicle] = useState(false)
+    const [isTakingPic, setIsTakingPic] = useState(false)
 
     //fetching blocos
     useEffect(()=>{
@@ -72,13 +76,15 @@ const VisitorEdit = props => {
       })();
     }, []);
 
-    const removeResident = index => {
+    const removeResident = async index => {
+      if (await Utils.handleNoConnection(setLoading)) return
       const residentsCopy = [...residents]
       residentsCopy.splice(index, 1)
       setResidents(residentsCopy)
     }
 
-    const removeVehicle = index => {
+    const removeVehicle = async index => {
+      if (await Utils.handleNoConnection(setLoading)) return
       const vehiclesCopy = [...vehicles]
       vehiclesCopy.splice(index, 1)
       setVehicles(vehiclesCopy)
@@ -171,17 +177,14 @@ const VisitorEdit = props => {
       setVehicleBeingAdded({id:'0', maker:'', model:'', color:'', plate:''})
     }
 
+    const photoTaken = photoUri => {
+      setIsTakingPic(false)
+      setUserBeingAdded(prev => { return { ...prev, pic: photoUri } })
+    }
+
     const photoClickHandler = async _ => {
       if(await Utils.handleNoConnection(setLoading)) return
-      props.navigation.navigate('CameraPic', {
-        userBeingAdded, 
-        selectedBloco, 
-        selectedUnit, 
-        vehicles, 
-        residents: JSON.stringify(residents), 
-        user:props.route.params.user,
-        screen
-      })
+      setIsTakingPic(true)
     }
 
     const selectBlocoHandler = bloco => {
@@ -193,12 +196,21 @@ const VisitorEdit = props => {
     const selectUnitHandler = unit => {
       setSelectedUnit(unit)
       setModalSelectUnit(false)
-      setDateEnd({day: '', month: '', year: ''})
+      setDateEnd({ day: '', month: '', year: '' })
+      setModalSelectResident(true)
+    }
+  
+    const selectResidentHandler = res => {
+      setSelectedResident(res)
+      setModalSelectResident(false)
     }
 
     const clearUnit = _ =>{
       setSelectedBloco(null)
       setSelectedUnit(null)
+      setResidents([])
+      setVehicles([])
+      cancelDatesHandler()
     }
 
     const cancelHandler = _ =>{
@@ -225,6 +237,7 @@ const VisitorEdit = props => {
         unit_id: selectedUnit.id,
         selectedDateInit,
         selectedDateEnd,
+        user_permission: selectedResident.id,
         unit_kind_id: Constants.USER_KIND.THIRD,
         user_id_last_modify: props.route.params.user.id,
         condo_id: props.route.params.user.condo_id,
@@ -296,6 +309,11 @@ const VisitorEdit = props => {
       </SafeAreaView>
 
     return(
+      isTakingPic ?
+      <TakePic
+        clicked={photoTaken}
+      />
+      :
       <SafeAreaView style={styles.body}>
         <ScrollView style={{flex: 1, padding:10,}} keyboardShouldPersistTaps="handled">
           <SelectBlocoGroup 
@@ -305,6 +323,8 @@ const VisitorEdit = props => {
             selectedBloco={selectedBloco}
             selectedUnit={selectedUnit}
             clearUnit={clearUnit}
+            resident={selectedResident}
+            noEdit
           />
           {!!selectedUnit &&
             <View>
@@ -386,6 +406,16 @@ const VisitorEdit = props => {
           setModalVisible={setModalSelectBloco}
           backgroundItem={'#FFE5E5'}
         />
+        {
+          !!selectedUnit &&
+          <ModalSelectResident
+            modalVisible={modalSelectResident}
+            setModalVisible={setModalSelectResident}
+            users={selectedUnit.Users}
+            backgroundItem={'#FFE5E5'}
+            selectResidentHandler={selectResidentHandler}
+          />
+        }
         <ModalSelectUnit
           bloco={selectedBloco}
           modalVisible={modalSelectUnit}

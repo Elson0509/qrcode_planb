@@ -1,20 +1,13 @@
 import React from 'react';
 import QRCode from '../../components/QRCode';
-import * as utils from '../../services/util'
 import Greeting from '../../components/Greeting/Greeting';
 import { StyleSheet,
-    TextInput,
     View,
-    KeyboardAvoidingView,
-    Image,
-    TouchableOpacity,
     Text,
-    FlatList,
-    Animated,
-    Keyboard,
     } from 'react-native';
 
 import * as Constants from '../../services/constants'
+import THEME from '../../services/theme'
 
 const MyQRCode = (props) => {
     const user = props.user || props.route.params.user
@@ -24,7 +17,7 @@ const MyQRCode = (props) => {
             <Greeting
                 user={user}
             />
-            <Text style={styles.obs}>Use o código abaixo para seu acesso:</Text>
+            <Text style={[styles.obs, {fontFamily: THEME.FONTS.r500}]}>Use o código abaixo para seu acesso:</Text>
             <QRCode value={`${Constants.QR_CODE_PREFIX}${user?.id}`} backgroundColor={Constants.backgroundColors['MyQRCode']}/>
         </View>
     )
