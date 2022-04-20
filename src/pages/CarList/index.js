@@ -17,6 +17,7 @@ import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage';
 import api from '../../services/api'
 import ModalReply from '../../components/ModalReply'
+import THEME from '../../services/theme';
 
 const CarList = props => {
   const [overnights, setOvernights] = useState([])
@@ -40,8 +41,8 @@ const CarList = props => {
   }, [])
 
   const fetchOvernights = async _ => {
-    if(await Utils.handleNoConnection(setLoading)) return
-    
+    if (await Utils.handleNoConnection(setLoading)) return
+
     api.get(`api/overnight`)
       .then(resp => {
         setOvernights(resp.data.overnights)
@@ -62,7 +63,7 @@ const CarList = props => {
 
   const deleteOvernightConfirmed = async _ => {
     setModal(false)
-    if(await Utils.handleNoConnection(setLoading)) return
+    if (await Utils.handleNoConnection(setLoading)) return
     setLoading(true)
     api.delete(`api/overnight/${selectedOvernight.id}`)
       .then(res => {
@@ -91,7 +92,7 @@ const CarList = props => {
   }
 
   const replyHandler = async item => {
-    if(await Utils.handleNoConnection(setLoading)) return
+    if (await Utils.handleNoConnection(setLoading)) return
     setSelectedOvernight(item)
     setModalGeneric(true)
     setSubject('')
@@ -146,38 +147,36 @@ const CarList = props => {
                     />
                   </View>
                   <View style={{ justifyContent: 'space-between', flexDirection: 'column' }}>
-                    <View style={{ maxWidth: 300 }}>
-                      <View>
-                        <View style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 5, borderColor: Constants.backgroundDarkColors["Cars"] }}>
-                          <TouchableOpacity onPress={() => onClickPhotoHandler(obj.item)}>
-                            {
-                              obj.item.OvernightImages.length ?
-                                <Image
-                                  style={{ width: 60, height: 80, marginRight: 5 }}
-                                  source={{ uri: `${Constants.PREFIX_IMG_GOOGLE_CLOUD}${obj.item.OvernightImages[0].photo_id}` }}
-                                />
-                                :
-                                <Image
-                                  style={{ width: 60, height: 80, marginRight: 5 }}
-                                  source={require('../../../assets/pics/generic-event.png')}
-                                />
-                            }
-                            {
-                              obj.item.OvernightImages.length ? 
-                                <Text style={{textAlign: 'center'}}>{obj.item.OvernightImages.length } foto{obj.item.OvernightImages.length > 1 ? 's' : ''}</Text>
-                                :
-                                null
-                            }
-                          </TouchableOpacity>
-                          <View style={{ width: 250 }}>
-                            <Text style={{ fontSize: 12, marginLeft: 7 }}><Text style={{ fontWeight: 'bold' }}>Data:</Text> {Utils.printDateAndHour(new Date(obj.item.created_at))}</Text>
-                            <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Veículo registrado:</Text> {obj.item.is_registered_vehicle ? 'Sim' : 'Não'}</Text>
-                            <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Quem registrou:</Text> {obj.item.userRegistering.name}</Text>
-                            {!obj.item.description && <Text style={{ fontSize: 12, marginLeft: 7, }}>Sem descrição</Text>}
-                            {!!obj.item.description &&
-                              <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Descrição:</Text> {obj.item.description}</Text>
-                            }
-                          </View>
+                    <View>
+                      <View style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 5, borderColor: Constants.backgroundDarkColors["Cars"] }}>
+                        <TouchableOpacity onPress={() => onClickPhotoHandler(obj.item)}>
+                          {
+                            obj.item.OvernightImages.length ?
+                              <Image
+                                style={{ width: 60, height: 80, marginRight: 5 }}
+                                source={{ uri: `${Constants.PREFIX_IMG_GOOGLE_CLOUD}${obj.item.OvernightImages[0].photo_id}` }}
+                              />
+                              :
+                              <Image
+                                style={{ width: 60, height: 80, marginRight: 5 }}
+                                source={require('../../../assets/pics/generic-event.png')}
+                              />
+                          }
+                          {
+                            obj.item.OvernightImages.length ?
+                              <Text style={{ textAlign: 'center', fontFamily: THEME.FONTS.r400 }}>{obj.item.OvernightImages.length} foto{obj.item.OvernightImages.length > 1 ? 's' : ''}</Text>
+                              :
+                              null
+                          }
+                        </TouchableOpacity>
+                        <View style={{ width: 250 }}>
+                          <Text style={{ fontSize: 12, marginLeft: 7, fontFamily: THEME.FONTS.r400}}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Data:</Text> {Utils.printDateAndHour(new Date(obj.item.created_at))}</Text>
+                          <Text style={{ fontSize: 12, marginLeft: 7, fontFamily: THEME.FONTS.r400}}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Veículo registrado:</Text> {obj.item.is_registered_vehicle ? 'Sim' : 'Não'}</Text>
+                          <Text style={{ fontSize: 12, marginLeft: 7, fontFamily: THEME.FONTS.r400}}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Quem registrou:</Text> {obj.item.userRegistering.name}</Text>
+                          {!obj.item.description && <Text style={{ fontSize: 12, marginLeft: 7, fontFamily: THEME.FONTS.r400}}>Sem descrição</Text>}
+                          {!!obj.item.description &&
+                            <Text style={{ fontSize: 12, marginLeft: 7, fontFamily: THEME.FONTS.r400}}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Descrição:</Text> {obj.item.description}</Text>
+                          }
                         </View>
                       </View>
                     </View>
@@ -187,7 +186,7 @@ const CarList = props => {
             }}
           />
           :
-          <Text style={{ textAlign: 'center', padding: 10 }}>Não há registros.</Text>
+          <Text style={{ textAlign: 'center', padding: 10, fontFamily: THEME.FONTS.r700 }}>Não há registros.</Text>
       }
       <ModalMessage
         message={message}
@@ -227,18 +226,6 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: Constants.backgroundLightColors['Cars'],
   },
-  listText: {
-    color: 'black',
-    fontWeight: 'bold',
-    fontSize: 16,
-    textAlign: 'center'
-  },
-  subTitle: {
-    fontWeight: 'bold',
-    fontSize: 15,
-    textDecorationLine: 'underline',
-    marginTop: 5,
-  }
 });
 
 export default CarList

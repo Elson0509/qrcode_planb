@@ -6,10 +6,9 @@ import {
   StyleSheet
 } from 'react-native';
 import * as Constants from '../../services/constants'
-
+import THEME from '../../services/theme';
 
 const CommentBox = (props) => {
-
   const changeHandler = value => {
     if (value.length <= Constants.MAX_COMMENT_SIZE)
       props.setValue(value)
@@ -17,7 +16,7 @@ const CommentBox = (props) => {
 
   return (
     <View>
-      {props.text && <Text style={[styles.labelStyle, { color: props.colorLabel || 'black' }]}>{props.text}</Text>}
+      {props.text && <Text style={[styles.labelStyle, { color: props.colorLabel || 'black', fontFamily: THEME.FONTS.r700 }]}>{props.text}</Text>}
       <TextInput
         style={[
           styles.txtInput,
@@ -30,6 +29,7 @@ const CommentBox = (props) => {
             backgroundColor: props.backgroundColor || 'white',
             borderColor: props.borderColor || 'black',
             color: props.colorInput || 'black',
+            fontFamily: THEME.FONTS.r500,
           }
         ]}
         value={props.value}
@@ -51,15 +51,13 @@ const styles = StyleSheet.create({
   txtInput: {
     borderWidth: Constants.borderTextInputWidth,
     borderRadius: 20,
-    fontWeight: 'bold',
     fontSize: 12,
     textAlign: 'left',
     paddingLeft: 10,
     fontWeight: '700',
   },
   labelStyle: {
-    fontSize: 11,
-    fontWeight: 'bold',
+    fontSize: 15,
     marginBottom: 5,
     marginLeft: 5,
     color: 'white'

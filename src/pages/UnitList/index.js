@@ -113,8 +113,6 @@ const UnitList = props => {
     api.post('/api/unit/bloco', {
       unitSelected,
       unitWillUpdate,
-      condo_id: props.route.params.user.condo_id,
-      user_id_last_modify: props.route.params.user.id
     })
       .then((resp) => {
         Utils.toast(resp.da)

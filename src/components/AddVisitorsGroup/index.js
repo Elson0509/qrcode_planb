@@ -3,6 +3,7 @@ import Icon from '../Icon';
 import InputBox from '../InputBox';
 import FooterButtons from '../FooterButtons';
 import * as Constants from '../../services/constants'
+import * as Utils from '../../services/util'
 import PicUser from '../PicUser'
 import { StyleSheet,
     View,
@@ -12,8 +13,8 @@ import { StyleSheet,
 } from 'react-native';
 
 const AddVisitorsGroup = (props) => {
-    const addHandler = _ => {
-        if(props.addResidentHandler()){
+    const addHandler = async _ => {
+        if(await props.addResidentHandler()){
             props.setAddingUser(false)
         }
     }
@@ -54,7 +55,7 @@ const AddVisitorsGroup = (props) => {
                     <InputBox
                         text="Nome*:"
                         value={props.userBeingAdded.name}
-                        changed={val=>props.setUserBeingAdded({...props.userBeingAdded, name: val})}
+                        changed={val=>Utils.testWordWithNoSpecialChars(val) && props.setUserBeingAdded({...props.userBeingAdded, name: val})}
                         autoCapitalize='words'
                         backgroundColor={Constants.backgroundLightColors['Visitors']}
                         borderColor={Constants.backgroundDarkColors['Visitors']}

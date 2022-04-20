@@ -39,7 +39,7 @@ const UnitAdd = props => {
   const [loadingAddingSmartBloco, setLoadingAddingSmartBloco] = useState(false)
 
   useEffect(() => {
-    api.get(`/api/bloco/condo/${props.route.params.user.condo_id}`)
+    api.get(`/api/bloco/condo`)
       .then(res => {
         const newBloco = [{ id: "0", name: 'Novo Bloco' }]
         setBlocosApi(newBloco.concat(res.data))

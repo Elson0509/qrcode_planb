@@ -5,7 +5,6 @@ import {
   FlatList,
   RefreshControl,
   ActivityIndicator,
-  TouchableOpacity,
   View,
   Text,
 } from 'react-native';
@@ -15,14 +14,14 @@ import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage'
 import ModalInfo from '../../components/ModalInfo'
 import api from '../../services/api'
-import PicUser from '../../components/PicUser'
 import InputBox from '../../components/InputBox'
 import ModalQRCode from '../../components/ModalQRCode'
 import ModalGeneric from '../../components/ModalGeneric'
-import Placa from '../../components/Placa';
 import Spinner from '../../components/Spinner'
-import ModalPhoto from '../../components/ModalPhoto';
 import { useAuth } from '../../contexts/auth'
+import THEME from '../../services/theme'
+import CarsView from '../../components/CarsView';
+import ResidentsView from '../../components/ResidentsView';
 
 const ThirdList = props => {
   const { user } = useAuth()
@@ -43,8 +42,6 @@ const ThirdList = props => {
   const [messageErrorModal, setMessageErrorModal] = useState('')
   const [modalGeneric, setModalGeneric] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState(false)
-  const [selectedUser, setSelectedUser] = useState(null)
-  const [isModalPhotoActive, setIsModalPhotoActive] = useState(false)
 
   useEffect(() => {
     fetchUsers()
@@ -145,15 +142,16 @@ const ThirdList = props => {
       })
     })
 
+
     if (!!nameFilter) {
       unitsInfo = unitsInfo.filter(el => {
-        return el.residents.some(res => res.name.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
-          el.vehicles.some(vei => vei.plate.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
-          el.residents.some(res => res.company && res.company.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
-          el.bloco_name.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1 ||
-          el.number.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1
+        return el.residents.some(res => Utils.removeAccent(res.name.toLowerCase()).indexOf(Utils.removeAccent(nameFilter.toLowerCase())) !== -1) ||
+          el.vehicles.some(vei => Utils.removeAccent(vei.plate.toLowerCase()).indexOf(Utils.removeAccent(nameFilter.toLowerCase())) !== -1) ||
+          el.residents.some(res => res.company && Utils.removeAccent(res.company.toLowerCase()).indexOf(Utils.removeAccent(nameFilter.toLowerCase())) !== -1) ||
+          Utils.removeAccent(el.number.toLowerCase()).indexOf(Utils.removeAccent(nameFilter.toLowerCase())) !== -1
       })
     }
+
     return unitsInfo
   }
 
@@ -268,14 +266,6 @@ const ThirdList = props => {
       })
   }
 
-  const onClickPhotoHandler = async item => {
-    if (await Utils.handleNoConnection(setLoading)) return
-    if (!item.photo_id)
-      return
-    setSelectedUser(item)
-    setIsModalPhotoActive(true)
-  }
-
   if (loading)
     return <SafeAreaView style={styles.body}>
       <ActivityIndicator size="large" color="white" />
@@ -293,7 +283,7 @@ const ThirdList = props => {
           autoCapitalize='words'
           value={nameFilter}
           changed={(val => setNameFilter(val))}
-          placeholder='Pesquisa por nome, placa, empresa, bloco ou número'
+          placeholder='Pesquisa por nome, placa, empresa ou número'
         />
       </View>
       <FlatList
@@ -312,10 +302,11 @@ const ThirdList = props => {
 
           return (
             <View style={styles.menuItem}>
-              <Text style={styles.listText}>Bloco {obj.item.bloco_name} Unidade {obj.item.number}</Text>
+              <Text style={[styles.listText, { fontFamily: THEME.FONTS.r700 }]}>Bloco {obj.item.bloco_name}</Text>
+              <Text style={[styles.listText, { fontFamily: THEME.FONTS.r700 }]}>Unidade {obj.item.number}</Text>
               <View>
                 {
-                  user.user_kind === Constants.USER_KIND['SUPERINTENDENT'] &&
+                  user.user_kind === Constants.USER_KIND['SUPERINTENDENT'] || user.user_kind === Constants.USER_KIND['RESIDENT'] ?
                   <ActionButtons
                     flexDirection='row'
                     action1={() => editHandler(obj.item)}
@@ -323,6 +314,8 @@ const ThirdList = props => {
                     action3={() => modalQRCodeHandler(obj.item.id)}
                     qrCodeButton={true}
                   />
+                  :
+                  null
                 }
                 {
                   user.user_kind === Constants.USER_KIND['GUARD'] &&
@@ -335,54 +328,14 @@ const ThirdList = props => {
                 }
               </View>
               <View style={{ justifyContent: 'space-between', flexDirection: 'column' }}>
-                <View style={{ maxWidth: 300 }}>
-                  <View>
-                    {(!obj.item.residents || obj.item.residents.length === 0) && <Text style={{ marginTop: 10, textDecorationLine: 'underline' }}>Unidade sem terceirizados</Text>}
-                    {obj.item.residents.length > 0 && <Text style={styles.subTitle}>Terceirizados:</Text>}
-                    {
-                      obj.item.residents.map((res) => {
-                        return (
-                          <View key={res.id} style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 5 }}>
-                            <TouchableOpacity onPress={() => onClickPhotoHandler(res)}>
-                              <PicUser user={res} />
-                            </TouchableOpacity>
-                            <View>
-                              <Text style={{ fontSize: 16, marginLeft: 7, fontWeight: 'bold' }}>{res.name}</Text>
-                              {!!res.email && <Text style={{ fontSize: 16, marginLeft: 7 }}>Email: {res.email}</Text>}
-                              {!!res.company && <Text style={{ fontSize: 16, marginLeft: 7 }}>Empresa: {res.company}</Text>}
-                              {!!res.initial_date && <Text style={{ fontSize: 16, marginLeft: 7 }}>Início: {Utils.printDate(new Date(res.initial_date))}</Text>}
-                              {!!res.final_date && <Text style={{ fontSize: 16, marginLeft: 7 }}>Fim: {Utils.printDate(new Date(res.final_date))}</Text>}
-                              {!!res.User?.name && <Text style={{ fontSize: 16, marginLeft: 7 }}>Autorizado por: {res.User.name}</Text>}
-                              {
-                                new Date(res.final_date) >= beginOfDay ?
-                                  <Text style={{ fontSize: 16, marginLeft: 7 }}>
-                                    Status: Válido
-                                  </Text>
-                                  :
-                                  <Text style={{ fontSize: 16, marginLeft: 7, fontWeight: 'bold', color: 'red' }}>
-                                    Status: Expirado
-                                  </Text>
-                              }
-                            </View>
-                          </View>
-                        )
-                      })
-                    }
-                  </View>
-                  <View>
-                    {obj.item.vehicles?.length > 0 && <Text style={styles.subTitle}>Veículos:</Text>}
-                    {(!obj.item.vehicles || obj.item.vehicles.length === 0) && <Text style={{ marginTop: 10, textDecorationLine: 'underline' }}>Sem veículos cadastrados</Text>}
-                    {
-                      obj.item.vehicles?.map((car, ind) => {
-                        return (
-                          <View key={ind} style={styles.plateDiv}>
-                            <Text>{`${car.maker} ${car.model} ${car.color}`}</Text>
-                            <Placa placa={car.plate} />
-                          </View>
-                        )
-                      })
-                    }
-                  </View>
+                <View>
+                  <ResidentsView
+                    type='Terceirizados'
+                    residents={obj.item.residents}
+                  />
+                  <CarsView
+                    vehicles={obj.item.vehicles}
+                  />
                 </View>
               </View>
             </View>
@@ -461,11 +414,6 @@ const ThirdList = props => {
           </View>
         }
       </ModalGeneric>
-      <ModalPhoto
-        modalVisible={isModalPhotoActive}
-        setModalVisible={setIsModalPhotoActive}
-        id={selectedUser?.photo_id}
-      />
     </SafeAreaView>
   );
 }
@@ -483,12 +431,10 @@ const styles = StyleSheet.create({
   },
   listText: {
     color: 'black',
-    fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 25,
     textAlign: 'center'
   },
   subTitle: {
-    fontWeight: 'bold',
     fontSize: 18,
     marginTop: 5,
     textAlign: 'center'

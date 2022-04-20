@@ -18,9 +18,7 @@ const Units = (props) => {
 
     return (
         <View style={[styles.container]}>
-            <Greeting
-                user={user}
-            />
+            <Greeting/>
             <FlatList
                 data={Constants.menuOptions}
                 numColumns={2}

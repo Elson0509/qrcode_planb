@@ -2,6 +2,7 @@ import { manipulateAsync, SaveFormat } from 'expo-image-manipulator'
 import Toast from 'react-native-root-toast'
 import { configToast } from './constants'
 import { getNetworkStateAsync } from 'expo-network'
+import { USER_KIND } from './constants'
 
 export const saudacaoHorario = (name) => {
     if (!name) return ''
@@ -106,18 +107,19 @@ export const printDate = date => {
 export const printDateAndHour = date => {
     if (!date)
         return null
-    let dd = date.getDate();
-    let mm = date.getMonth() + 1;
-    let yyyy = date.getFullYear();
-    if (dd < 10) {
-        dd = '0' + dd;
-    }
-    if (mm < 10) {
-        mm = '0' + mm;
-    }
+    // let dd = date.getDate();
+    // let mm = date.getMonth() + 1;
+    // let yyyy = date.getFullYear();
+    // if (dd < 10) {
+    //     dd = '0' + dd;
+    // }
+    // if (mm < 10) {
+    //     mm = '0' + mm;
+    // }
 
 
-    return `${dd}/${mm}/${yyyy} ${date.getHours()}:${date.getMinutes()}`
+    // return `${dd}/${mm}/${yyyy} ${date.getHours()}:${date.getMinutes()}`
+    return date.toLocaleString()
 }
 
 export const plateSizeValidator = plate => {
@@ -255,4 +257,72 @@ export const handleNoConnection = async setLoading => {
         return true
     }
     return false
+}
+
+export const removeAccent = text => {
+    return text.normalize('NFD').replace(/[\u0300-\u036f]/g, "")
+}
+
+export const canShowMessage = user => {
+    if(!user || !user.condo)
+        return false
+    if(!user.condo.guard_can_messages && !user.condo.resident_can_messages)
+        return false
+    if((user.user_kind === USER_KIND['GUARD'] && user.condo.guard_can_messages) ||
+       (user.user_kind === USER_KIND['RESIDENT'] && user.condo.resident_can_messages) ||
+       (user.user_kind !== USER_KIND['GUARD'] && user.user_kind !== USER_KIND['RESIDENT']))
+        return true
+    return false
+}
+
+export const canAddThirds = user => {
+    if(!user || !user.condo)
+        return false
+    if((user.user_kind === USER_KIND['GUARD'] && user.condo.guard_can_thirds) ||
+       (user.user_kind === USER_KIND['RESIDENT'] && user.condo.resident_can_thirds) ||
+       (user.user_kind === USER_KIND['SUPERINTENDENT']))
+        return true
+    return false
+}
+
+export const canAddVisitors = user => {
+    if(!user || !user.condo)
+        return false
+    if((user.user_kind === USER_KIND['GUARD'] && user.condo.guard_can_visitors) ||
+       (user.user_kind === USER_KIND['RESIDENT'] && user.condo.resident_can_visitors) ||
+       (user.user_kind === USER_KIND['SUPERINTENDENT']))
+        return true
+    return false
+}
+
+export const canAddOcorrences = user => {
+    if(!user || !user.condo)
+        return false
+    if((user.user_kind === USER_KIND['RESIDENT'] && user.condo.resident_can_ocorrences) ||
+       (user.user_kind === USER_KIND['SUPERINTENDENT'] || user.user_kind === USER_KIND['GUARD']))
+        return true
+    return false
+}
+
+export const phone_validation = phone => {
+    let telefone = phone.replace(/\D/g, '');
+    if (!(telefone.length >= 10 && telefone.length <= 11)) return false;
+    if (telefone.length === 11 && parseInt(telefone.substring(2, 3)) !== 9) return false;
+    for (let n = 0; n < 10; n++) {
+        if (telefone === new Array(11).join(n) || telefone === new Array(12).join(n)) return false;
+    }
+    const codigosDDD = [11, 12, 13, 14, 15, 16, 17, 18, 19,
+        21, 22, 24, 27, 28, 31, 32, 33, 34, 35, 37, 38, 41, 42, 43, 44, 45, 46,
+        47, 48, 49, 51, 53, 54, 55, 61, 62, 64, 63, 65, 66, 67, 68, 69, 71, 73,
+        74, 75, 77, 79, 81, 82, 83, 84, 85, 86, 87, 88, 89, 91, 92, 93, 94, 95,
+        96, 97, 98, 99];
+    if (codigosDDD.indexOf(parseInt(telefone.substring(0, 2))) === -1) return false;
+    if (new Date().getFullYear() < 2017) return true;
+    if (telefone.length === 10 && [2, 3, 4, 5, 7].indexOf(parseInt(telefone.substring(2, 3))) === -1) return false;
+    return true;
+}
+
+export const testWordWithNoSpecialChars = sentence => {
+    if (!sentence) return true
+    return /^[A-Za-záàâãéèêíïóôõöúçñÁÀÂÃÉÈÍÏÓÔÕÖÚÇÑ'\s]+$/.test(sentence)
 }

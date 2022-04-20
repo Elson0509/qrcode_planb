@@ -15,6 +15,7 @@ import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage';
 import ModalGeneric from '../../components/ModalGeneric';
+import THEME from '../../services/theme';
 import api from '../../services/api'
 
 const MessageList = props => {
@@ -106,7 +107,7 @@ const MessageList = props => {
               <TouchableOpacity style={styles.menuItem} onPress={() => viewMessageHandler(obj.item)}>
                 <View style={{ maxWidth: 300, alignSelf: 'center' }}>
                   <View style={{ width: 250 }}>
-                    <Text style={{ fontSize: 12, marginLeft: 7, fontWeight: !obj.item.is_read ? 'bold' : 'normal' }}>{obj.item.subject} ({Utils.printDateAndHour(new Date(obj.item.created_at))})</Text>
+                    <Text style={{ fontSize: 12, fontFamily: THEME.FONTS.r400, marginLeft: 7, fontWeight: !obj.item.is_read ? 'bold' : 'normal' }}>{obj.item.subject} ({Utils.printDateAndHour(new Date(obj.item.created_at))})</Text>
                   </View>
                 </View>
                 <View>
@@ -141,9 +142,9 @@ const MessageList = props => {
         modalVisible={modalViewMessage}
         setModalVisible={setModalViewMessage}
       >
-        {!!selectedMessage.sending?.name && <Text><Text style={{ fontWeight: 'bold' }}>De:</Text> {selectedMessage.sending?.name} ({Constants.USER_KIND_NAME[selectedMessage.sending.user_kind_id]})</Text>}
-        <Text><Text style={{ fontWeight: 'bold' }}>Assunto:</Text> {selectedMessage.subject}</Text>
-        <Text style={{ marginTop: 5 }}><Text style={{ fontWeight: 'bold' }}>Mensagem:</Text> {selectedMessage.message}</Text>
+        {!!selectedMessage.sending?.name && <Text style={{ fontFamily: THEME.FONTS.r400 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>De:</Text> {selectedMessage.sending?.name} ({Constants.USER_KIND_NAME[selectedMessage.sending.user_kind_id]})</Text>}
+        <Text style={{ fontFamily: THEME.FONTS.r400 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Assunto:</Text> {selectedMessage.subject}</Text>
+        <Text style={{ marginTop: 5, fontFamily: THEME.FONTS.r400 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Mensagem:</Text> {selectedMessage.message}</Text>
       </ModalGeneric>
     </SafeAreaView>
   );

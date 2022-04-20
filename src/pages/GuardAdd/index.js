@@ -135,7 +135,7 @@ const GuardAdd = props => {
         <InputBox
           text="Nome*:"
           value={userBeingAdded.name}
-          changed={value => setUserBeingAdded({ ...userBeingAdded, name: value })}
+          changed={value => Utils.testWordWithNoSpecialChars(value) && setUserBeingAdded({ ...userBeingAdded, name: value })}
           autoCapitalize='words'
           backgroundColor={Constants.backgroundLightColors['Guards']}
           borderColor={Constants.backgroundDarkColors['Guards']}

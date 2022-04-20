@@ -11,15 +11,14 @@ import { useAuth } from '../../contexts/auth';
 import Icon from '../../components/Icon';
 import * as Constants from '../../services/constants'
 import Greeting from '../../components/Greeting/Greeting';
+import THEME from '../../services/theme';
 
 const Thirds = (props) => {
     const { user } = useAuth()
 
     return (
         <View style={[styles.container]}>
-            <Greeting
-                user={user}
-            />
+            <Greeting/>
             <FlatList
                 data={Constants.menuOptions}
                 numColumns={2}

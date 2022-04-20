@@ -1,10 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {
-    Image,
     SafeAreaView,
     StyleSheet,
-    FlatList,
-    RefreshControl,
     ActivityIndicator,
     View,
     Text,
@@ -14,11 +11,10 @@ import Icon from '../../components/Icon'
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
 import api from '../../services/api'
-import Toast from 'react-native-root-toast';
+import THEME from '../../services/theme'
 
 const Slot = props => {
   const [loading, setLoading] = useState(true)
-  const [modal, setModal] = useState(false)
   const [freeSlots, setFreeSlots] = useState(0)
   const [totalSlots, setTotalSlots] = useState(0)
 
@@ -90,22 +86,22 @@ const Slot = props => {
   return (
     <SafeAreaView style={styles.body}>
       <View>
-        <Text style={{textAlign: 'center', fontSize: 15}}>Há <Text style={{fontWeight: 'bold', fontSize: 20}}> {freeSlots} </Text> vagas de estacionamento livres</Text>
-        <Text style={{textAlign: 'center', fontSize: 12}}>de um total de {totalSlots} vagas.</Text>
+        <Text style={{textAlign: 'center', fontSize: 15, fontFamily: THEME.FONTS.r400}}>Há <Text style={{fontSize: 20, fontFamily: THEME.FONTS.r700}}> {freeSlots} </Text> { freeSlots == 1 ? 'vaga' : 'vagas'} de estacionamento livres</Text>
+        <Text style={{textAlign: 'center', fontSize: 12, fontFamily: THEME.FONTS.r400}}>de um total de {totalSlots} { totalSlots == 1 ? 'vaga' : 'vagas'}</Text>
       </View>
       <TouchableOpacity style={[styles.button, {backgroundColor: '#0F7'}]} onPress={()=> {occupySlotHandler()}}>
         <View style={styles.rowIcons}>
           <Icon name='car' size={40}/>
           <Icon name='sign-in-alt' size={40}/>
         </View>
-        <Text>Dar entrada</Text>
+        <Text style={{ fontFamily: THEME.FONTS.r500i, letterSpacing: 1 }}>Dar entrada</Text>
       </TouchableOpacity>
       <TouchableOpacity style={[styles.button, {backgroundColor: '#F99'}]} onPress={()=> {freeSlotHandler()}}>
         <View style={styles.rowIcons}>
           <Icon name='sign-out-alt' size={40}/>
           <Icon name='car' size={40}/>
         </View>
-        <Text>Dar Saída</Text>
+        <Text style={{ fontFamily: THEME.FONTS.r500i, letterSpacing: 1 }}>Dar Saída</Text>
       </TouchableOpacity>
     </SafeAreaView>
   );

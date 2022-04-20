@@ -48,7 +48,7 @@ const ModalQRCode = (props) => {
                 buttonPadding={16}
                 fontSize={16}
                 action1={()=>shareQRCode()}
-                action2={()=> props.setModalVisible(false)}
+                action2={()=> props.action2 ? props.action2() : props.setModalVisible(false)}
               />
               </TouchableOpacity>
           </View>

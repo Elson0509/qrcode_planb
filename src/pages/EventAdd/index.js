@@ -8,23 +8,30 @@ import {
   View,
   TouchableOpacity,
 } from 'react-native';
-import InputBox from '../../components/InputBox';
+import InputBox from '../../components/InputBox'
 import * as Constants from '../../services/constants'
 import * as ImagePicker from 'expo-image-picker'
 import * as Utils from '../../services/util'
 import api from '../../services/api'
-import Icon from '../../components/Icon';
-import CommentBox from '../../components/CommentBox';
-import FooterButtons from '../../components/FooterButtons';
-import TakePic from '../../components/TakePic';
-import Carousel from '../../components/Carousel';
+import Icon from '../../components/Icon'
+import CommentBox from '../../components/CommentBox'
+import FooterButtons from '../../components/FooterButtons'
+import ModalSelectOccurrenceType from '../../components/ModalSelectOccurrenceType'
+import TakePic from '../../components/TakePic'
+import Carousel from '../../components/Carousel'
+import { useAuth } from '../../contexts/auth'
+import THEME from '../../services/theme'
 
 const EventAdd = props => {
+  const { user } = useAuth()
   const [loading, setLoading] = useState(false)
   const [userBeingAdded, setUserBeingAdded] = useState(props.route?.params?.userBeingAdded || { title: '', place: '', description: '', pic: '' })
   const [errorMessage, setErrorMessage] = useState('')
   const [isTakingPic, setIsTakingPic] = useState(false)
   const [images, setImages] = useState([])
+  const [titles, setTitles] = useState([])
+  const [selectedTitle, setSelectedTitle] = useState('')
+  const [modalSelectTitle, setModalSelectTitle] = useState(false)
 
   useEffect(() => {
     (async () => {
@@ -36,6 +43,21 @@ const EventAdd = props => {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    api.get('api/occurrencetype')
+      .then(res => {
+        setTitles(res.data)
+        setSelectedTitle(res.data[0])
+      })
+      .catch(err => {
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde.')
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+
+  }, [])
 
   const uploadImg = newId => {
     if (images.length && images.length <= 5) {
@@ -66,7 +88,7 @@ const EventAdd = props => {
   }
 
   const photoClickHandler = async _ => {
-    if(await Utils.handleNoConnection(setLoading)) return
+    if (await Utils.handleNoConnection(setLoading)) return
     if (images.length < 5) {
       setIsTakingPic(true)
     }
@@ -91,19 +113,12 @@ const EventAdd = props => {
   };
 
   const addHandler = async _ => {
-    if(await Utils.handleNoConnection(setLoading)) return
-    if (!userBeingAdded.title) {
-      return setErrorMessage('Título não pode estar vazio.')
-    }
+    if (await Utils.handleNoConnection(setLoading)) return
     if (!userBeingAdded.place) {
       return setErrorMessage('Local não pode estar vazio.')
     }
     if (!userBeingAdded.description) {
       return setErrorMessage('Descrição não pode estar vazio.')
-    }
-    const MIN_TITLE_CHARACTERS = 5
-    if (userBeingAdded.title.length < MIN_TITLE_CHARACTERS) {
-      return setErrorMessage(`Título muito curto. Pelo menos ${MIN_TITLE_CHARACTERS} caracteres.`)
     }
     const MIN_PLACE_CHARACTERS = 3
     if (userBeingAdded.place.length < MIN_PLACE_CHARACTERS) {
@@ -118,9 +133,9 @@ const EventAdd = props => {
     // }
     setLoading(true)
     api.post('api/occurrence', {
-      title: userBeingAdded.title,
       place: userBeingAdded.place,
       description: userBeingAdded.description,
+      occurrence_type_id: selectedTitle.id,
     })
       .then((res) => {
         uploadImg(res.data.occurrenceRegistered.id)
@@ -137,6 +152,11 @@ const EventAdd = props => {
       })
   }
 
+  const selectTitleHandler = data => {
+    setSelectedTitle(data)
+    setModalSelectTitle(false)
+  }
+
   if (loading)
     return <SafeAreaView style={styles.body}>
       <ActivityIndicator size="large" color="white" />
@@ -150,14 +170,14 @@ const EventAdd = props => {
       :
       <SafeAreaView style={styles.body}>
         <ScrollView keyboardShouldPersistTaps="handled">
-          <InputBox
-            text="Título*:"
-            value={userBeingAdded.title}
-            changed={value => setUserBeingAdded({ ...userBeingAdded, title: value })}
-            backgroundColor={Constants.backgroundLightColors['MyQRCode']}
-            borderColor={Constants.backgroundDarkColors['MyQRCode']}
-            colorInput={Constants.backgroundDarkColors['MyQRCode']}
-          />
+          <Text style={[styles.labelStyle, {color: 'black', fontFamily: THEME.FONTS.r700}]}>Título*:</Text>
+          <TouchableOpacity onPress={()=>setModalSelectTitle(true)}>
+            <View style={{backgroundColor: Constants.backgroundLightColors['MyQRCode'], alignItems: 'center', justifyContent: 'center', borderRadius: 6,}}>
+              <Text style={styles.txtInput}>
+                  {selectedTitle.type}
+              </Text>
+            </View>
+          </TouchableOpacity>
           <InputBox
             text="Local*:"
             value={userBeingAdded.place}
@@ -187,13 +207,18 @@ const EventAdd = props => {
                   <Icon name="camera" size={18} />
                   <Text>Câmera</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={[styles.buttonAddphotoIsClicked, { marginLeft: 40 }]}
-                  onPress={() => { pickImage() }}
-                >
-                  <Icon name="paperclip" size={18} />
-                  <Text>Arquivo</Text>
-                </TouchableOpacity>
+                {
+                  user.user_kind === Constants.USER_KIND.GUARD ?
+                    null 
+                    :
+                    <TouchableOpacity
+                      style={[styles.buttonAddphotoIsClicked, { marginLeft: 40 }]}
+                      onPress={() => { pickImage() }}
+                    >
+                      <Icon name="paperclip" size={18} />
+                      <Text>Arquivo</Text>
+                    </TouchableOpacity>
+                }
               </View>
             }
             {
@@ -216,6 +241,16 @@ const EventAdd = props => {
             action2={props.navigation.goBack}
           />
         </ScrollView>
+        {
+          !!titles.length &&
+          <ModalSelectOccurrenceType
+            titles={titles}
+            modalVisible={modalSelectTitle}
+            setModalVisible={setModalSelectTitle}
+            selectHandler={selectTitleHandler}
+            backgroundItem={Constants.backgroundLightColors['MyQRCode']}
+          />
+        }
       </SafeAreaView>
   );
 }
@@ -253,6 +288,26 @@ const styles = StyleSheet.create({
     marginTop: 15,
     padding: 15,
     alignItems: 'center',
+  },
+  labelStyle:{
+    fontSize:15,
+    marginBottom:5,
+    marginLeft:5,
+    color:'white'
+  },
+  txtInput:{
+    width:'100%',
+    borderWidth:Constants.borderTextInputWidth,
+    borderColor: Constants.backgroundDarkColors['MyQRCode'],
+    fontSize: 14,
+    textAlign:'left',
+    paddingLeft: 10,
+    height: 45,
+    letterSpacing: 1,
+    paddingTop: 10,
+    fontFamily: THEME.FONTS.r500,
+    color: Constants.backgroundDarkColors['MyQRCode'],
+    borderRadius: 6,
   },
 });
 

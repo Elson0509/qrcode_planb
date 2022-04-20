@@ -17,6 +17,7 @@ import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage'
 import api from '../../services/api'
 import ModalReply from '../../components/ModalReply'
+import THEME from '../../services/theme'
 
 const EventList = props => {
   const [events, setEvents] = useState([])
@@ -173,12 +174,12 @@ const EventList = props => {
                             }
                           </TouchableOpacity>
                           <View style={{ width: 245 }}>
-                            <Text style={{ fontSize: 12, marginLeft: 7 }}><Text style={{ fontWeight: 'bold' }}>Data:</Text> {Utils.printDateAndHour(new Date(obj.item.created_at))}</Text>
-                            <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Quem registrou:</Text> {obj.item.userRegistering.name} ({Constants.USER_KIND_NAME[obj.item.userRegistering.user_kind_id]})</Text>
-                            {!!obj.item.userRegistering?.Unit && <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Unidade:</Text> Bloco {obj.item.userRegistering.Unit.Bloco.name} - unidade {obj.item.userRegistering.Unit.number}</Text>}
-                            {!!obj.item.title && <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Título:</Text> {obj.item.title}</Text>}
-                            {!!obj.item.place && <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Local:</Text> {obj.item.place}</Text>}
-                            {!!obj.item.description && <Text style={{ fontSize: 12, marginLeft: 7, }}><Text style={{ fontWeight: 'bold' }}>Descrição:</Text> {obj.item.description}</Text>}
+                            <Text style={{ fontSize: 12, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Data:</Text> {Utils.printDateAndHour(new Date(obj.item.created_at))}</Text>
+                            <Text style={{ fontSize: 12, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Quem registrou:</Text> {obj.item.userRegistering.name} ({Constants.USER_KIND_NAME[obj.item.userRegistering.user_kind_id]})</Text>
+                            {!!obj.item.userRegistering?.Unit && <Text style={{ fontSize: 12, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Unidade:</Text> Bloco {obj.item.userRegistering.Unit.Bloco.name} - unidade {obj.item.userRegistering.Unit.number}</Text>}
+                            {!!obj.item.OccurrenceType?.type && <Text style={{ fontSize: 12, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Título:</Text> {obj.item.OccurrenceType.type}</Text>}
+                            {!!obj.item.place && <Text style={{ fontSize: 12, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Local:</Text> {obj.item.place}</Text>}
+                            {!!obj.item.description && <Text style={{ fontSize: 12, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Descrição:</Text> {obj.item.description}</Text>}
                           </View>
                         </View>
                       </View>
@@ -189,7 +190,7 @@ const EventList = props => {
             }}
           />
           :
-          <Text style={{ textAlign: 'center', padding: 10 }}>Não há registros.</Text>
+          <Text style={{ textAlign: 'center', padding: 10, fontFamily: THEME.FONTS.r700 }}>Não há registros.</Text>
       }
       <ModalMessage
         message={message}
@@ -231,12 +232,10 @@ const styles = StyleSheet.create({
   },
   listText: {
     color: 'black',
-    fontWeight: 'bold',
     fontSize: 16,
     textAlign: 'center'
   },
   subTitle: {
-    fontWeight: 'bold',
     fontSize: 15,
     textDecorationLine: 'underline',
     marginTop: 5,

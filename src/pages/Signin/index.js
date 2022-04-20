@@ -12,6 +12,7 @@ import { StyleSheet,
    Animated,
    Keyboard
    } from 'react-native';
+import THEME from '../../services/theme';
 
 export default function Signin() {
 
@@ -65,7 +66,7 @@ export default function Signin() {
         }
         ]}>
         <TextInput
-          style={styles.input}
+          style={[styles.input, {fontFamily: THEME.FONTS.r400 }]}
           placeholder="Email"
           autoCapitalize={'none'}
           autoCorrect={false}
@@ -73,7 +74,7 @@ export default function Signin() {
           onChangeText={val=>{setEmail(val)}}
         />
         <TextInput
-          style={styles.input}
+          style={[styles.input, {fontFamily: THEME.FONTS.r400 }]}
           placeholder="Senha"
           autoCapitalize='none'
           autoCorrect={false}

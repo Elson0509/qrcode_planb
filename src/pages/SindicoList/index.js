@@ -14,6 +14,7 @@ import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage';
 import api from '../../services/api'
+import THEME from '../../services/theme';
 
 const SindicoList = props => {
   const [sindicos, setSindicos] = useState([])
@@ -122,10 +123,11 @@ const SindicoList = props => {
                         }
                       </View>
                       <View style={{ marginLeft: 7 }}>
-                        <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{obj.item.name}</Text>
-                        {!!obj.item.Condo.name && <Text style={{ fontSize: 15 }}>Condomínio: {obj.item.Condo.name}</Text>}
-                        {!!obj.item.identification && <Text style={{ fontSize: 15 }}>Id: {obj.item.identification}</Text>}
-                        {!!obj.item.email && <Text style={{ fontSize: 15 }}>Email: {obj.item.email}</Text>}
+                        <Text style={{ fontSize: 16, fontFamily: THEME.FONTS.r700 }}>{obj.item.name}</Text>
+                        {!!obj.item.Condo.name && <Text style={{ fontSize: 15, fontFamily: THEME.FONTS.r400 }}>Condomínio: {obj.item.Condo.name}</Text>}
+                        {!!obj.item.phone && <Text style={{ fontSize: 15, fontFamily: THEME.FONTS.r400 }}>Telefone: {obj.item.phone}</Text>}
+                        {!!obj.item.identification && <Text style={{ fontSize: 15, fontFamily: THEME.FONTS.r400 }}>Id: {obj.item.identification}</Text>}
+                        {!!obj.item.email && <Text style={{ fontSize: 15, fontFamily: THEME.FONTS.r400 }}>Email: {obj.item.email}</Text>}
                       </View>
                     </View>
                   </View>

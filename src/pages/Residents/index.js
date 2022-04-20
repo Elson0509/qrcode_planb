@@ -7,10 +7,11 @@ import {
     FlatList,
 } from 'react-native';
 
-import { useAuth } from '../../contexts/auth';
-import Icon from '../../components/Icon';
+import { useAuth } from '../../contexts/auth'
+import Icon from '../../components/Icon'
 import * as Constants from '../../services/constants'
-import Greeting from '../../components/Greeting/Greeting';
+import Greeting from '../../components/Greeting/Greeting'
+import THEME from '../../services/theme'
 
 const Residents = (props) => {
     const { user } = useAuth()
@@ -24,9 +25,7 @@ const Residents = (props) => {
 
     return (
         <View style={[styles.container]}>
-            <Greeting
-                user={user}
-            />
+            <Greeting/>
             <FlatList
                 data={menuOptionsResidents}
                 numColumns={2}

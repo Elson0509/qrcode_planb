@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,30 +9,32 @@ import {
 import * as ImagePicker from 'expo-image-picker'
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
-import TakePic from '../../components/TakePic';
-import ModalMessage from '../../components/ModalMessage';
-import AddVisitorsGroup from '../../components/AddVisitorsGroup';
-import AddCarsGroup from '../../components/AddCarsGroup';
-import SelectBlocoGroup from '../../components/SelectBlocoGroup';
-import ModalSelectBloco from '../../components/ModalSelectBloco';
-import ModalSelectUnit from '../../components/ModalSelectUnit';
-import ModalSelectResident from '../../components/ModalSelectResident';
-import FooterButtons from '../../components/FooterButtons';
-import SelectDatesVisitorsGroup from '../../components/SelectDatesVisitorsGroup';
-import ModalQRCode from '../../components/ModalQRCode';
+import TakePic from '../../components/TakePic'
+import ModalMessage from '../../components/ModalMessage'
+import AddVisitorsGroup from '../../components/AddVisitorsGroup'
+import AddCarsGroup from '../../components/AddCarsGroup'
+import SelectBlocoGroup from '../../components/SelectBlocoGroup'
+import ModalSelectBloco from '../../components/ModalSelectBloco'
+import ModalSelectUnit from '../../components/ModalSelectUnit'
+import ModalSelectResident from '../../components/ModalSelectResident'
+import FooterButtons from '../../components/FooterButtons'
+import SelectDatesVisitorsGroup from '../../components/SelectDatesVisitorsGroup'
+import ModalQRCode from '../../components/ModalQRCode'
 import api from '../../services/api';
+import { useAuth } from '../../contexts/auth';
 
 const VisitorAdd = props => {
   const currentDate = new Date()
+  const { user } = useAuth()
 
   const [modal, setModal] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [blocos, setBlocos] = useState([])
   const [modalSelectBloco, setModalSelectBloco] = useState(false)
   const [modalSelectUnit, setModalSelectUnit] = useState(false)
   const [modalSelectResident, setModalSelectResident] = useState(false)
-  const [selectedBloco, setSelectedBloco] = useState(props.route?.params?.selectedBloco || null)
-  const [selectedUnit, setSelectedUnit] = useState(props.route?.params?.selectedUnit || null)
+  const [selectedBloco, setSelectedBloco] = useState(user.user_kind === Constants.USER_KIND['RESIDENT'] ? {} : null)
+  const [selectedUnit, setSelectedUnit] = useState(user.user_kind === Constants.USER_KIND['RESIDENT'] ? {} : null)
   const [selectedResident, setSelectedResident] = useState(props.route?.params?.setSelectedResident || null)
   const [errorMessage, setErrorMessage] = useState('')
   const [errorAddResidentMessage, setErrorAddResidentMessage] = useState('')
@@ -43,10 +45,9 @@ const VisitorAdd = props => {
   const [vehicleBeingAdded, setVehicleBeingAdded] = useState({ maker: '', model: '', color: '', plate: '' })
   const [userBeingAdded, setUserBeingAdded] = useState(props.route?.params?.userBeingAdded || { name: '', identification: '', pic: '' })
   const [dateInit, setDateInit] = useState({ day: currentDate.getDate(), month: currentDate.getMonth() + 1, year: currentDate.getFullYear() })
-  const [dateEnd, setDateEnd] = useState({ day: '', month: '', year: '' })
+  const [dateEnd, setDateEnd] = useState({ day: currentDate.getDate(), month: currentDate.getMonth() + 1, year: currentDate.getFullYear() })
   const [selectedDateInit, setSelectedDateInit] = useState('')
   const [selectedDateEnd, setSelectedDateEnd] = useState('')
-  const [screen, setScreen] = useState(props.route?.params?.screen || 'VisitorAdd')
   const [showModalQRCode, setShowModalQRCode] = useState(false)
   const [unitIdModalQRCode, setUnitIdModalQRCode] = useState('')
   const [addingVehicle, setAddingVehicle] = useState(false)
@@ -57,19 +58,22 @@ const VisitorAdd = props => {
 
   //fetching blocos
   useEffect(() => {
-    api.get(`api/condo/${props.route.params.user.condo_id}`)
-      .then(res => {
-        setBlocos(res.data)
-        if (res.data.length === 0) {
-          setIsNoUnits(true)
-        }
-      })
-      .catch(err => {
-        Utils.toastTimeoutOrErrorMessage(err, err.response.data.message)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
+    if (user.user_kind !== Constants.USER_KIND['RESIDENT']) {
+      setLoading(true)
+      api.get(`api/condo/${props.route.params.user.condo_id}`)
+        .then(res => {
+          setBlocos(res.data)
+          if (res.data.length === 0) {
+            setIsNoUnits(true)
+          }
+        })
+        .catch(err => {
+          Utils.toastTimeoutOrErrorMessage(err, err.response.data.message)
+        })
+        .finally(() => {
+          setLoading(false)
+        })
+    }
   }, [])
 
   useEffect(() => {
@@ -158,6 +162,7 @@ const VisitorAdd = props => {
 
   const cancelAddResidentHandler = _ => {
     setUserBeingAdded({ name: '', identification: '', email: '', pic: '' })
+    setErrorAddResidentMessage('')
   }
 
   const addVehicleHandler = async _ => {
@@ -190,6 +195,7 @@ const VisitorAdd = props => {
 
   const cancelVehicleHandler = _ => {
     setVehicleBeingAdded({ maker: '', model: '', color: '', plate: '' })
+    setErrorAddVehicleMessage('')
   }
 
   const photoTaken = photoUri => {
@@ -211,7 +217,6 @@ const VisitorAdd = props => {
   const selectUnitHandler = unit => {
     setSelectedUnit(unit)
     setModalSelectUnit(false)
-    setDateEnd({ day: '', month: '', year: '' })
     setModalSelectResident(true)
   }
 
@@ -229,6 +234,7 @@ const VisitorAdd = props => {
     clearUnit()
     setResidents([])
     setVehicles([])
+    props.navigation.navigate('Visitors')
   }
 
   //saving...
@@ -245,19 +251,17 @@ const VisitorAdd = props => {
     //storing unit for kind Visitor
     api.post(`api/user/person/unit`, {
       residents,
-      number: selectedUnit.number,
+      number: user.user_kind === Constants.USER_KIND['RESIDENT'] ? user.number : selectedUnit.number,
       vehicles,
-      bloco_id: selectedBloco.id,
+      bloco_id: user.user_kind === Constants.USER_KIND['RESIDENT'] ? user.bloco_id : selectedBloco.id,
       selectedDateInit,
       selectedDateEnd,
-      user_permission: selectedResident.id,
+      user_permission: user.user_kind === Constants.USER_KIND['RESIDENT'] ? user.id : selectedResident.id,
       unit_kind_id: Constants.USER_KIND.VISITOR,
-      user_id_last_modify: props.route.params.user.id,
     })
       .then(res => {
         uploadImgs(res.data.personsAdded)
         Utils.toast(res.data.message)
-        setDateEnd({ day: '', month: '', year: '' })
         setSelectedUnit(null)
         setSelectedBloco(null)
         setResidents([])
@@ -330,15 +334,20 @@ const VisitorAdd = props => {
       :
       <SafeAreaView style={styles.body}>
         <ScrollView style={{ padding: 10, }} keyboardShouldPersistTaps="handled">
-          <SelectBlocoGroup
-            backgroundColor={backgroundColorBoxes}
-            backgroundColorButtons={backgroundColorButtonBoxes}
-            pressed={() => setModalSelectBloco(true)}
-            selectedBloco={selectedBloco}
-            selectedUnit={selectedUnit}
-            clearUnit={clearUnit}
-            resident={selectedResident}
-          />
+          {
+            user.user_kind !== Constants.USER_KIND['RESIDENT'] ?
+              <SelectBlocoGroup
+                backgroundColor={backgroundColorBoxes}
+                backgroundColorButtons={backgroundColorButtonBoxes}
+                pressed={() => setModalSelectBloco(true)}
+                selectedBloco={selectedBloco}
+                selectedUnit={selectedUnit}
+                clearUnit={clearUnit}
+                resident={selectedResident}
+              />
+              :
+              null
+          }
           {!!selectedUnit &&
             <View>
               <AddVisitorsGroup
@@ -440,6 +449,7 @@ const VisitorAdd = props => {
           modalVisible={showModalQRCode}
           setModalVisible={setShowModalQRCode}
           value={unitIdModalQRCode}
+          action2={() => {setShowModalQRCode(false); props.navigation.navigate('Visitors')}}
         />
       </SafeAreaView>
   );

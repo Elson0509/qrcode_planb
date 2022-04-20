@@ -25,8 +25,7 @@ const SindicoAdd = props => {
     const [loading, setLoading] = useState(true)
     const [modalSelectCondo, setModalSelectCondo] = useState(false)
     const [errorMessage, setErrorMessage] = useState('')
-    const [userBeingAdded, setUserBeingAdded]= useState({id: "0", name: '', identification: '', email: '', condo: null, pic: ''})
-    const [screen, setScreen]= useState(props.route?.params?.screen || 'SindicoAdd')
+    const [userBeingAdded, setUserBeingAdded]= useState({id: "0", name: '', identification: '', email: '', phone: '', condo: null, pic: ''})
 
     //fetching condos
     useEffect(()=>{
@@ -110,24 +109,32 @@ const SindicoAdd = props => {
       if(!userBeingAdded.condo){
         return setErrorMessage('Selecione um condomínio.')
       }
+      if(!userBeingAdded.phone){
+        return setErrorMessage('Telefone não pode estar vazio.')
+      }
       if(!Utils.validateEmail(userBeingAdded.email)){
         return setErrorMessage('Email não válido.')
       }
+      if(!Utils.phone_validation(userBeingAdded.phone)){
+        return setErrorMessage('Telefone não válido.')
+      }
 
       setLoading(true)
+      
       api.post('api/user/signup', {
         name: userBeingAdded.name,
         condo_id: userBeingAdded.condo.id,
         user_kind_id: Constants.USER_KIND["SUPERINTENDENT"],
         identification: userBeingAdded.identification,
+        phone: userBeingAdded.phone,
         email: userBeingAdded.email,
         user_id_last_modify: props.route.params.user.id,
       })
       .then((res)=>{
-        uploadImg(res.data.userId)
+        uploadImg(res.data.user.id)
         setErrorMessage('')
         Utils.toast('Cadastro realizado')
-        setUserBeingAdded({id: "0", name: '', identification: '', email: '', pic: ''})
+        setUserBeingAdded({id: "0", name: '', identification: '', email: '', pic: '', phone: ''})
       })
       .catch((err)=> {
         Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (GA1)')
@@ -135,10 +142,6 @@ const SindicoAdd = props => {
       .finally(()=>{
         setLoading(false)
       })
-    }
-
-    const cancelAddResidentHandler = _ => {
-      setUserBeingAdded({id: '0', name: '', identification: '', email: '', pic: ''})
     }
 
     const photoClickHandler = async _ => {
@@ -165,7 +168,7 @@ const SindicoAdd = props => {
           <InputBox 
             text="Nome*:" 
             value={userBeingAdded.name} 
-            changed={value=>setUserBeingAdded({...userBeingAdded, name:value})}
+            changed={value=>Utils.testWordWithNoSpecialChars(value) && setUserBeingAdded({...userBeingAdded, name:value})}
             autoCapitalize='words'
             backgroundColor={Constants.backgroundLightColors['Visitors']}
             borderColor={Constants.backgroundDarkColors['Visitors']}
@@ -185,6 +188,16 @@ const SindicoAdd = props => {
             value={userBeingAdded.email} 
             changed={value=>setUserBeingAdded({...userBeingAdded, email:value})}
             autoCapitalize='none'
+            backgroundColor={Constants.backgroundLightColors['Visitors']}
+            borderColor={Constants.backgroundDarkColors['Visitors']}
+            colorInput={Constants.backgroundDarkColors['Visitors']}
+          />
+          <InputBox 
+            text="Telefone*:" 
+            value={userBeingAdded.phone} 
+            changed={value=>setUserBeingAdded({...userBeingAdded, phone:value})}
+            autoCapitalize='none'
+            placeholder='(XX) 90000-0000'
             backgroundColor={Constants.backgroundLightColors['Visitors']}
             borderColor={Constants.backgroundDarkColors['Visitors']}
             colorInput={Constants.backgroundDarkColors['Visitors']}

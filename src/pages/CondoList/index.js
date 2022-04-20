@@ -1,180 +1,197 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-    SafeAreaView,
-    StyleSheet,
-    FlatList,
-    RefreshControl,
-    ActivityIndicator,
-    View,
-    Text,
-  } from 'react-native';
+  SafeAreaView,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  ActivityIndicator,
+  View,
+  Text,
+} from 'react-native';
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
-import ModalMessage from '../../components/ModalMessage';
+import ModalMessage from '../../components/ModalMessage'
 import api from '../../services/api'
-import Toast from 'react-native-root-toast';
-import ActionButtons from '../../components/ActionButtons';
+import ActionButtons from '../../components/ActionButtons'
+import THEME from '../../services/theme'
 
 const CondoList = props => {
-    const [condos, setCondos] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [modal, setModal] = useState(false)
-    const [refreshing, setRefreshing] = useState(false)
-    const [selectedCondo, setSelectedCondo] = useState(null)
+  const [condos, setCondos] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [modal, setModal] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
+  const [selectedCondo, setSelectedCondo] = useState(null)
 
-    useEffect(()=>{
+  useEffect(() => {
+    fetchCondos()
+    const willFocusSubscription = props.navigation.addListener('focus', () => {
       fetchCondos()
-      const willFocusSubscription = props.navigation.addListener('focus', ()=> {
-        fetchCondos()
-      })
-      return willFocusSubscription
-    }, [])
+    })
+    return willFocusSubscription
+  }, [])
 
-    const fetchCondos = async _ => {
-      if(await Utils.handleNoConnection(setLoading)) return
-      api.get(`api/condo`)
-      .then(resp=>{
+  const fetchCondos = async _ => {
+    if (await Utils.handleNoConnection(setLoading)) return
+    api.get(`api/condo`)
+      .then(resp => {
         setCondos(resp.data)
       })
-      .catch(err=>{
+      .catch(err => {
         Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CoL1)')
       })
-      .finally(()=>{
+      .finally(() => {
         setLoading(false)
       })
-    }
+  }
 
-    const delCondo = on => {
-      setSelectedCondo(on)
-      setModal(true)
-    }
+  const delCondo = on => {
+    setSelectedCondo(on)
+    setModal(true)
+  }
 
-    const deleteCondoConfirmed = async _ =>{
-      if(await Utils.handleNoConnection(setLoading)) return
-      setModal(false)
-      setLoading(true)
-      api.delete(`api/condo/${selectedCondo.id}`)
-        .then(res=>{
-          Utils.toast(res.data.message || 'Condomínio apagado com sucesso.')
-          fetchCondos()
-        })
-        .catch((err)=>{
-          Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CoL2)')
-        })
-        .finally(()=>{
-          setLoading(false)
-        })
-    }
+  const deleteCondoConfirmed = async _ => {
+    if (await Utils.handleNoConnection(setLoading)) return
+    setModal(false)
+    setLoading(true)
+    api.delete(`api/condo/${selectedCondo.id}`)
+      .then(res => {
+        Utils.toast(res.data.message || 'Condomínio apagado com sucesso.')
+        fetchCondos()
+      })
+      .catch((err) => {
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (CoL2)')
+      })
+      .finally(() => {
+        setLoading(false)
+      })
+  }
 
-    const onRefreshHandler = _ =>{
-      setRefreshing(true)
-      fetchCondos()
-      setRefreshing(false)
-    }
+  const onRefreshHandler = _ => {
+    setRefreshing(true)
+    fetchCondos()
+    setRefreshing(false)
+  }
 
-    const editHandler = async condo => {
-      if(await Utils.handleNoConnection(setLoading)) return
-      props.navigation.navigate('CondoEdit', 
-        {
-          user: props.route.params.user,
-          condoBeingAdded: {
-            id: condo.id,
-            name: condo.name,
-            address: condo.address,
-            city: condo.city,
-            state: condo.state,
-            slots: condo.slots
-          },
-          screen: 'CondoEdit'
+  const editHandler = async condo => {
+    if (await Utils.handleNoConnection(setLoading)) return
+    props.navigation.navigate('CondoEdit',
+      {
+        condoBeingAdded: {
+          address: condo.address,
+          city: condo.city,
+          freeslots: condo.freeslots,
+          guard_can_messages: condo.guard_can_messages,
+          guard_can_thirds: condo.guard_can_thirds,
+          guard_can_visitors: condo.guard_can_visitors,
+          id: condo.id,
+          name: condo.name,
+          photo_id: condo.photo_id,
+          resident_can_messages: condo.resident_can_messages,
+          resident_can_ocorrences: condo.resident_can_ocorrences,
+          resident_can_thirds: condo.resident_can_thirds,
+          resident_can_visitors: condo.resident_can_visitors,
+          slots: condo.slots,
+          state: condo.state,
+        },
+        screen: 'CondoEdit'
+      }
+    )
+  }
+
+  if (loading)
+    return <SafeAreaView style={styles.body}>
+      <ActivityIndicator size="large" color="white" />
+    </SafeAreaView>
+
+  return (
+    <SafeAreaView style={styles.body}>
+      <FlatList
+        data={condos}
+        keyExtractor={item => item.id}
+        style={{ marginBottom: 80, paddingRight: 10 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={() => onRefreshHandler()}
+          />
         }
-      )
-    }
-
-    if(loading)
-      return <SafeAreaView style={styles.body}>
-        <ActivityIndicator size="large" color="white"/>
-      </SafeAreaView>
-
-    return (
-        <SafeAreaView style={styles.body}>
-            <FlatList
-              data={condos}
-              keyExtractor={item=>item.id}
-              style={{marginBottom: 80, paddingRight:10}}
-              refreshControl={
-                <RefreshControl
-                  refreshing={refreshing}
-                  onRefresh={()=> onRefreshHandler()}
+        renderItem={(obj) => {
+          return (
+            <View
+              style={styles.menuItem}
+            >
+              <View>
+                <ActionButtons
+                  flexDirection='row'
+                  action1={() => { editHandler(obj.item) }}
+                  action2={() => { delCondo(obj.item) }}
                 />
-              }
-              renderItem={(obj)=>{
-                return (
-                  <View 
-                    style={styles.menuItem} 
-                  >
+              </View>
+              <View style={{ justifyContent: 'space-between', flexDirection: 'column', width: '100%' }}>
+                <View style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 5, width: '100%', borderColor: Constants.backgroundDarkColors["Residents"] }}>
+                  <View style={{ width: '100%' }}>
+                    <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Nome:</Text> {obj.item.name}</Text>
+                    <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Endereço:</Text> {obj.item.address}, {obj.item.city} - {obj.item.state}</Text>
+                    <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Vagas de estacionamento:</Text> {obj.item.slots}</Text>
+                    <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Ativo desde </Text> {Utils.printDate(new Date(obj.item.createdAt))}</Text>
                     <View>
-                      <ActionButtons
-                        flexDirection='row'
-                        action1={()=> {editHandler(obj.item)}}
-                        action2={()=> {delCondo(obj.item)}}
-                      />
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 14, marginTop: 12, textAlign: 'center' }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Colaboradores</Text></Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Podem ver mensagens? </Text> {obj.item.guard_can_messages ? ' Sim' : ' Não'}</Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Podem cadastrar terceirizados? </Text> {obj.item.guard_can_thirds ? ' Sim' : ' Não'}</Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Podem cadastrar visitantes? </Text> {obj.item.guard_can_visitors ? ' Sim' : ' Não'}</Text>
                     </View>
-                    <View style={{justifyContent: 'space-between', flexDirection: 'column'}}>
-                      <View>
-                        <View>
-                            <View style={{flexDirection: 'row', paddingBottom:3, marginBottom: 5, borderColor: Constants.backgroundDarkColors["Residents"]}}>
-                              <View>
-                                <Text style={{fontSize: 12, marginLeft: 7}}><Text style={{fontWeight:'bold'}}>Nome:</Text> {obj.item.name}</Text>
-                                <Text style={{fontSize: 12, marginLeft: 7}}><Text style={{fontWeight:'bold'}}>Endereço:</Text> {obj.item.address}, {obj.item.city} - {obj.item.state}</Text>
-                                <Text style={{fontSize: 12, marginLeft: 7}}><Text style={{fontWeight:'bold'}}>Vagas de estacionamento:</Text> {obj.item.slots}</Text>
-                                <Text style={{fontSize: 12, marginLeft: 7}}><Text style={{fontWeight:'bold'}}>Ativo desde </Text> {Utils.printDate(new Date(obj.item.createdAt))}</Text>
-                              </View>
-                            </View>
-                        </View>
-                      </View>
+                    <View>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 14, marginTop: 12, textAlign: 'center' }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Residentes</Text></Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Podem ver mensagens? </Text> {obj.item.resident_can_messages ? ' Sim' : ' Não'}</Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Podem cadastrar terceirizados? </Text> {obj.item.resident_can_thirds ? ' Sim' : ' Não'}</Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Podem cadastrar visitantes? </Text> {obj.item.resident_can_visitors ? ' Sim' : ' Não'}</Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Podem registrar ocorrências? </Text> {obj.item.resident_can_ocorrences ? ' Sim' : ' Não'}</Text>
                     </View>
                   </View>
-                )
-              }}
-            />
-            <ModalMessage
-              message={`Tem certeza que quer excluir este condomínio?`}
-              title="Confirme"
-              btn1Pressed={deleteCondoConfirmed}
-              btn2Text='Cancelar'
-              btn1Text='Apagar'
-              modalVisible={modal}
-              setModalVisible={setModal}
-            />
-        </SafeAreaView>
-      );
+                </View>
+              </View>
+            </View>
+          )
+        }}
+      />
+      <ModalMessage
+        message={`Tem certeza que quer excluir este condomínio?`}
+        title="Confirme"
+        btn1Pressed={deleteCondoConfirmed}
+        btn2Text='Cancelar'
+        btn1Text='Apagar'
+        modalVisible={modal}
+        setModalVisible={setModal}
+      />
+    </SafeAreaView>
+  );
 }
 
 const styles = StyleSheet.create({
-    body:{
-      padding:10,
-      backgroundColor: Constants.backgroundColors['Residents'],
-      minHeight:'100%'
-    },
-    menuItem:{
-      borderWidth: 1,
-      padding: 10,
-      backgroundColor: Constants.backgroundLightColors['Residents'],
-      borderRadius: 20,
-      marginBottom: 10,
-    },
-    listText:{
-      color: 'black',
-      fontWeight: 'bold',
-      fontSize: 16,
-      textAlign:'center'
-    },
-    subTitle:{
-      fontWeight:'bold',
-      fontSize: 15,
-      textDecorationLine: 'underline',
-      marginTop: 5,
-    }
-  });
+  body: {
+    padding: 10,
+    backgroundColor: Constants.backgroundColors['Residents'],
+    minHeight: '100%'
+  },
+  menuItem: {
+    borderWidth: 1,
+    padding: 10,
+    backgroundColor: Constants.backgroundLightColors['Residents'],
+    borderRadius: 20,
+    marginBottom: 10,
+  },
+  listText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 16,
+    textAlign: 'center'
+  },
+  subTitle: {
+    fontWeight: 'bold',
+    fontSize: 15,
+    textDecorationLine: 'underline',
+    marginTop: 5,
+  }
+});
 
 export default CondoList

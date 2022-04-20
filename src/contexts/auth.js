@@ -24,7 +24,7 @@ export const AuthProvider = props =>{
     const [errorMessage, setErrorMessage] = useState('')
 
     useEffect(()=>{
-        const loadStoragegData = async () => {
+        const loadStorageData = async () => {
             const storagedUser = await AsyncStorage.getItem('@QRSeg:user')
             const storagedToken = await AsyncStorage.getItem('@QRSeg:token')
             if(storagedUser && storagedToken){
@@ -34,7 +34,7 @@ export const AuthProvider = props =>{
             }
             setLoading(false)
         }
-        loadStoragegData()
+        loadStorageData()
     }, [])
 
     const signInHandler = async (email, password) => {
@@ -52,14 +52,17 @@ export const AuthProvider = props =>{
             email: email.toLowerCase(),
             password: password
         })
-        .then((data)=> {
-            const token = data.data.token
+        .then(res=> {
+            const token = res.data.token
             const user = {
-                name: data.data.name,
-                id: data.data.userId,
-                user_kind: data.data.user_kind,
-                email: data.data.username,
-                condo_id: data.data.condo_id,
+                name: res.data.name,
+                id: res.data.userId,
+                user_kind: res.data.user_kind,
+                email: res.data.username,
+                condo_id: res.data.condo_id,
+                condo: res.data.condo,
+                bloco_id: res.data.bloco_id,
+                number: res.data.number,
             }
             setUser(user)
             api.defaults.headers['Authorization'] = `Bearer ${token}`
@@ -68,7 +71,7 @@ export const AuthProvider = props =>{
             AsyncStorage.setItem('@QRSeg:token', token).then()
         })
         .catch((err)=> {
-            setErrorMessage(err.response.data.message)
+            setErrorMessage(err.response?.data?.message || 'Erro no login. Tente de novo.')
         })
         .finally(()=>{
             setLoading(false)

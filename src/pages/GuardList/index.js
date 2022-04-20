@@ -9,13 +9,14 @@ import {
   View,
   Text,
 } from 'react-native';
-import ActionButtons from '../../components/ActionButtons';
+import ActionButtons from '../../components/ActionButtons'
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
-import ModalMessage from '../../components/ModalMessage';
+import ModalMessage from '../../components/ModalMessage'
 import api from '../../services/api'
-import PicUser from '../../components/PicUser';
-import ModalPhoto from '../../components/ModalPhoto';
+import PicUser from '../../components/PicUser'
+import ModalPhoto from '../../components/ModalPhoto'
+import THEME from '../../services/theme'
 
 const GuardList = props => {
   const [residents, setResidents] = useState([])
@@ -121,10 +122,10 @@ const GuardList = props => {
                         <PicUser user={obj.item} />
                       </TouchableOpacity>
                       <View>
-                        <Text style={{ fontSize: 16, marginLeft: 7, fontWeight: 'bold' }}>{obj.item.name}</Text>
-                        {!!obj.item.identification && <Text style={{ fontSize: 16, marginLeft: 7 }}>Id: {obj.item.identification}</Text>}
-                        {!!obj.item.company && <Text style={{ fontSize: 16, marginLeft: 7 }}>Empresa: {obj.item.company}</Text>}
-                        {!!obj.item.email && <Text style={{ fontSize: 16, marginLeft: 7 }}>Email: {obj.item.email}</Text>}
+                        <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r500 }}>{obj.item.name}</Text>
+                        {!!obj.item.identification && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Id: {obj.item.identification}</Text>}
+                        {!!obj.item.company && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Empresa: {obj.item.company}</Text>}
+                        {!!obj.item.email && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Email: {obj.item.email}</Text>}
                       </View>
                     </View>
                   </View>
@@ -133,7 +134,7 @@ const GuardList = props => {
             }}
           />
           :
-          <Text style={{ textAlign: 'center', padding: 10 }}>Sem colaboradores cadastrados.</Text>
+          <Text style={{ textAlign: 'center', padding: 10, fontFamily: THEME.FONTS.r400 }}>Sem colaboradores cadastrados.</Text>
       }
       <ModalMessage
         message={message}
@@ -164,18 +165,6 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: Constants.backgroundLightColors['Guards'],
   },
-  listText: {
-    color: 'black',
-    fontWeight: 'bold',
-    fontSize: 16,
-    textAlign: 'center'
-  },
-  subTitle: {
-    fontWeight: 'bold',
-    fontSize: 15,
-    textDecorationLine: 'underline',
-    marginTop: 5,
-  }
 });
 
 export default GuardList

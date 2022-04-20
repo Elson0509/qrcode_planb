@@ -39,7 +39,7 @@ const ResidentAdd = props => {
 
     //fetching blocos
     useEffect(()=>{
-      api.get(`api/condo/${props.route.params.user.condo_id}`)
+      api.get(`api/condo/all/${props.route.params.user.condo_id}`)
         .then(res=>{
           setBlocos(res.data)
         })
@@ -111,6 +111,7 @@ const ResidentAdd = props => {
 
     const cancelAddResidentHandler = _ => {
       setUserBeingAdded({id: '0', name: '', identification: '', email: '', pic: ''})
+      setErrorAddResidentMessage('')
     }
 
     const addVehicleHandler = async _ =>{
@@ -143,6 +144,7 @@ const ResidentAdd = props => {
 
     const cancelVehicleHandler = _ => {
       setVehicleBeingAdded({id: '0', maker:'', model:'', color:'', plate:''})
+      setErrorAddVehicleMessage('')
     }
 
     const photoClickHandler = async _ => {

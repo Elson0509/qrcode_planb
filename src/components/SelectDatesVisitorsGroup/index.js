@@ -1,6 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Icon from '../Icon';
-import InputBox from '../InputBox';
 import FooterButtons from '../FooterButtons';
 import * as Constants from '../../services/constants'
 import DateInputBox from '../DateInputBox'
@@ -100,12 +99,6 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         borderWidth: 2,
         marginBottom: 10,
-    },
-    menuItemText: {
-
-    },
-    menuItemTextPrefix:{
-        fontWeight: 'bold',
     },
     listItem:{
         padding: 3,

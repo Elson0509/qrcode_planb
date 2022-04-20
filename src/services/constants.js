@@ -26,13 +26,15 @@ export const PREFIX_IMG_GOOGLE_CLOUD = 'https://drive.google.com/uc?export=view&
 
 export const genericProfilePic = require('../../assets/pics/generic-profile.png')
 
+export const logoPic = require('../../assets/icon.png')
+
 export const menuOptions = [
     { menuName: "Adicionar", icon: 'plus-square', key: 'plus', screen: 'Add' },
     { menuName: "Listar", icon: 'list-alt', key: 'list', screen: 'List' },
 ]
 
 export const configToast = {
-    duration: Toast.durations.SHORT,
+    duration: Toast.durations.LONG,
     animation: true,
     hideOnPress: true,
 }

@@ -1,30 +1,23 @@
 import React from 'react';
 import { StyleSheet,
-    TextInput,
     View,
-    KeyboardAvoidingView,
-    Image,
     TouchableOpacity,
     Text,
     FlatList,
-    Animated,
-    Keyboard,
     } from 'react-native';
 
 import { useAuth } from '../../contexts/auth';
-import * as utils from '../../services/util'
 import Icon from '../../components/Icon';
 import * as Constants from '../../services/constants'
 import Greeting from '../../components/Greeting/Greeting';
+import THEME from '../../services/theme';
 
 const Visitors = (props) => {
     const {user} = useAuth()
 
     return (
         <View style={[styles.container]}>
-            <Greeting
-                user={user}
-            />
+            <Greeting/>
             <FlatList
                 data={Constants.menuOptions}
                 numColumns={2}

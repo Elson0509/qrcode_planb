@@ -14,9 +14,7 @@ const MyQRCode = (props) => {
     
     return (
         <View style={[styles.container]}>
-            <Greeting
-                user={user}
-            />
+            <Greeting/>
             <Text style={[styles.obs, {fontFamily: THEME.FONTS.r500}]}>Use o código abaixo para seu acesso:</Text>
             <QRCode value={`${Constants.QR_CODE_PREFIX}${user?.id}`} backgroundColor={Constants.backgroundColors['MyQRCode']}/>
         </View>

@@ -5,7 +5,6 @@ import {
   FlatList,
   RefreshControl,
   ActivityIndicator,
-  TouchableOpacity,
   View,
   Text,
 } from 'react-native'
@@ -15,15 +14,14 @@ import * as Utils from '../../services/util'
 import ModalMessage from '../../components/ModalMessage'
 import ModalInfo from '../../components/ModalInfo'
 import api from '../../services/api'
-import PicUser from '../../components/PicUser'
 import ModalQRCode from '../../components/ModalQRCode'
 import ModalGeneric from '../../components/ModalGeneric'
 import InputBox from '../../components/InputBox'
-import Placa from '../../components/Placa'
 import Spinner from '../../components/Spinner'
-import ModalPhoto from '../../components/ModalPhoto'
 import { useAuth } from '../../contexts/auth'
 import THEME from '../../services/theme'
+import CarsView from '../../components/CarsView';
+import ResidentsView from '../../components/ResidentsView'
 
 const VisitorList = props => {
   const { user } = useAuth()
@@ -44,8 +42,6 @@ const VisitorList = props => {
   const [messageErrorModal, setMessageErrorModal] = useState('')
   const [modalGeneric, setModalGeneric] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState(false)
-  const [selectedUser, setSelectedUser] = useState(null)
-  const [isModalPhotoActive, setIsModalPhotoActive] = useState(false)
 
   useEffect(() => {
     fetchUsers()
@@ -67,7 +63,7 @@ const VisitorList = props => {
   }
 
   const fetchUsers = async _ => {
-    if(await Utils.handleNoConnection(setLoading)) return
+    if (await Utils.handleNoConnection(setLoading)) return
     api.get(`api/user/condo/${props.route.params.user.condo_id}/${Constants.USER_KIND["VISITOR"]}`)
       .then(resp => {
         setUnits(resp.data)
@@ -81,7 +77,7 @@ const VisitorList = props => {
   }
 
   const delUnitModal = async unit => {
-    if(await Utils.handleNoConnection(setLoading)) return
+    if (await Utils.handleNoConnection(setLoading)) return
     setUnitSelected(unit)
     setMessage(`Excluir visitantes e veículos do Bloco ${unit.bloco_name} unidade ${unit.number}?`)
     setModal(true)
@@ -108,7 +104,7 @@ const VisitorList = props => {
   }
 
   const editHandler = async unit => {
-    if(await Utils.handleNoConnection(setLoading)) return
+    if (await Utils.handleNoConnection(setLoading)) return
     props.navigation.navigate('VisitorEdit',
       {
         user: props.route.params.user,
@@ -123,7 +119,7 @@ const VisitorList = props => {
         selectedResident: {
           id: unit.residents[0].User.id,
           name: unit.residents[0].User.name,
-        }, 
+        },
         residents: unit.residents,
         vehicles: unit.vehicles,
         screen: 'VisitorEdit'
@@ -148,24 +144,15 @@ const VisitorList = props => {
 
     if (!!nameFilter) {
       unitsInfo = unitsInfo.filter(el => {
-        return el.residents.some(res => res.name.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
-          el.vehicles.some(vei => vei.plate.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1) ||
-          el.bloco_name.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1 ||
-          el.number.toLowerCase().indexOf(nameFilter.toLowerCase()) !== -1
+        return el.residents.some(res => Utils.removeAccent(res.name.toLowerCase()).indexOf(Utils.removeAccent(nameFilter.toLowerCase())) !== -1) ||
+          el.vehicles.some(vei => Utils.removeAccent(vei.plate.toLowerCase()).indexOf(Utils.removeAccent(nameFilter.toLowerCase())) !== -1) ||
+          // el.bloco_name.toLowerCase().indexOf(searchInput.toLowerCase()) !== -1 ||
+          Utils.removeAccent(el.number.toLowerCase()).indexOf(Utils.removeAccent(nameFilter.toLowerCase())) !== -1
       })
     }
 
     return unitsInfo
   }
-
-  const onClickPhotoHandler = async item => {
-    if(await Utils.handleNoConnection(setLoading)) return
-    if(!item.photo_id)
-      return
-    setSelectedUser(item)
-    setIsModalPhotoActive(true)
-  }
-
 
   const onRefreshHandler = _ => {
     setRefreshing(true)
@@ -174,7 +161,7 @@ const VisitorList = props => {
   }
 
   const carIconHandler = async unit => {
-    if(await Utils.handleNoConnection(setLoading)) return
+    if (await Utils.handleNoConnection(setLoading)) return
     setUnitSelected(unit)
     //valid user?
     if (!(new Date(unit.residents[0].final_date) >= beginOfDay && new Date(unit.residents[0].initial_date) <= beginOfDay)) {
@@ -295,7 +282,7 @@ const VisitorList = props => {
           autoCapitalize='words'
           value={nameFilter}
           changed={(val => setNameFilter(val))}
-          placeholder='Pesquisa por nome, placa, bloco ou número'
+          placeholder='Pesquisa por nome, placa ou número'
         />
       </View>
       <FlatList
@@ -318,7 +305,7 @@ const VisitorList = props => {
               <Text style={[styles.listText, { fontFamily: THEME.FONTS.r700 }]}>Unidade {obj.item.number}</Text>
               <View>
                 {
-                  user.user_kind === Constants.USER_KIND['SUPERINTENDENT'] &&
+                  user.user_kind === Constants.USER_KIND['SUPERINTENDENT'] || user.user_kind === Constants.USER_KIND['RESIDENT'] ?
                   <ActionButtons
                     flexDirection='row'
                     action1={() => editHandler(obj.item)}
@@ -326,6 +313,7 @@ const VisitorList = props => {
                     action3={() => modalQRCodeHandler(obj.item.id)}
                     qrCodeButton={true}
                   />
+                  : null
                 }
                 {
                   user.user_kind === Constants.USER_KIND['GUARD'] &&
@@ -338,49 +326,14 @@ const VisitorList = props => {
                 }
               </View>
               <View style={{ justifyContent: 'space-between', flexDirection: 'column' }}>
-                <View style={{ maxWidth: 300 }}>
-                  <View>
-                    {(!obj.item.residents || obj.item.residents.length === 0) && <Text style={{ marginTop: 10, textDecorationLine: 'underline' }}>Unidade sem visitantes</Text>}
-                    {obj.item.residents.length > 0 && <Text style={[styles.subTitle, { fontFamily: THEME.FONTS.r500 }]}>Visitantes:</Text>}
-                    {
-                      obj.item.residents.map((res) => {
-                        return (
-                          <View key={res.id} style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 15, }}>
-                            <TouchableOpacity onPress={() => onClickPhotoHandler(res)}>
-                              <PicUser user={res} />
-                            </TouchableOpacity>
-                            <View>
-                              <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r500 }}>{res.name}</Text>
-                              {!!res.email && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Email: {res.email}</Text>}
-                              {!!res.initial_date && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Início: {Utils.printDate(new Date(res.initial_date))}</Text>}
-                              {!!res.final_date && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Fim: {Utils.printDate(new Date(res.final_date))}</Text>}
-                              {!!res.User?.name && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Autorizado por: {res.User.name}</Text>}
-                              {
-                                new Date(res.final_date) >= beginOfDay && new Date(res.initial_date) <= beginOfDay ?
-                                  <Text style={{ fontSize: 16, marginLeft: 7 }}>Status: Válido</Text>
-                                  :
-                                  <Text style={{ fontSize: 16, marginLeft: 7, fontWeight: 'bold', color: 'red' }}>Status: Expirado</Text>
-                              }
-                            </View>
-                          </View>
-                        )
-                      })
-                    }
-                  </View>
-                  <View>
-                    {obj.item.vehicles?.length > 0 && <Text style={[styles.subTitle, { fontFamily: THEME.FONTS.r500 }]}>Veículos:</Text>}
-                    {(!obj.item.vehicles || obj.item.vehicles.length === 0) && <Text style={{ marginTop: 10, textDecorationLine: 'underline' }}>Sem veículos cadastrados</Text>}
-                    {
-                      obj.item.vehicles?.map((car, ind) => {
-                        return (
-                          <View key={ind} style={styles.plateDiv}>
-                            <Text style={{ fontFamily: THEME.FONTS.r500 }}>{`${car.maker} ${car.model} ${car.color}`}</Text>
-                            <Placa placa={car.plate} />
-                          </View>
-                        )
-                      })
-                    }
-                  </View>
+                <View>
+                  <ResidentsView
+                    residents={obj.item.residents}
+                    type='Visitantes'
+                  />
+                  <CarsView
+                    vehicles={obj.item.vehicles}
+                  />
                 </View>
               </View>
             </View>
@@ -459,11 +412,6 @@ const VisitorList = props => {
           </View>
         }
       </ModalGeneric>
-      <ModalPhoto
-        modalVisible={isModalPhotoActive}
-        setModalVisible={setIsModalPhotoActive}
-        id={selectedUser?.photo_id}
-      />
     </SafeAreaView>
   );
 }

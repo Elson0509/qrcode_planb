@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 
 const AddCarsGroup = (props) => {
-  const addHandler = _ => {
-    if (props.addVehicleHandler()) {
+  const addHandler = async _ => {
+    if (await props.addVehicleHandler()) {
       props.setAddingVehicle(false)
     }
   }

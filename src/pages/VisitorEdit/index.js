@@ -19,12 +19,14 @@ import ModalSelectUnit from '../../components/ModalSelectUnit';
 import FooterButtons from '../../components/FooterButtons';
 import SelectDatesVisitorsGroup from '../../components/SelectDatesVisitorsGroup';
 import api from '../../services/api';
+import { useAuth } from '../../contexts/auth'
 
 const VisitorEdit = props => {
   const currentDate = new Date()
+  const { user } = useAuth()
 
   const [modal, setModal] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(false)
   const [blocos, setBlocos] = useState([])
   const [modalSelectBloco, setModalSelectBloco] = useState(false)
   const [modalSelectUnit, setModalSelectUnit] = useState(false)
@@ -48,21 +50,6 @@ const VisitorEdit = props => {
   const [addingUser, setAddingUser] = useState(false)
   const [addingDates, setAddingDates] = useState(false)
   const [isTakingPic, setIsTakingPic] = useState(false)
-
-  //fetching blocos
-  useEffect(() => {
-    api.get(`api/condo/${props.route.params.user.condo_id}`)
-      .then(res => {
-        setBlocos(res.data)
-      })
-      .catch(err => {
-        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (VE1)')
-      })
-      .finally(() => {
-        setLoading(false)
-      })
-    setLoading(false)
-  }, [])
 
   useEffect(() => {
     (async () => {
@@ -142,6 +129,7 @@ const VisitorEdit = props => {
 
   const cancelAddResidentHandler = _ => {
     setUserBeingAdded({ id: '0', name: '', identification: '', email: '', pic: '' })
+    setErrorAddResidentMessage('')
   }
 
   const addVehicleHandler = async _ => {
@@ -174,6 +162,7 @@ const VisitorEdit = props => {
 
   const cancelVehicleHandler = _ => {
     setVehicleBeingAdded({ id: '0', maker: '', model: '', color: '', plate: '' })
+    setErrorAddVehicleMessage('')
   }
 
   const photoTaken = photoUri => {
@@ -185,19 +174,6 @@ const VisitorEdit = props => {
     if (await Utils.handleNoConnection(setLoading)) return
     setIsTakingPic(true)
   }
-
-  // const photoClickHandler = async _ => {
-  //   if(await Utils.handleNoConnection(setLoading)) return
-  //   props.navigation.navigate('CameraPic', {
-  //     userBeingAdded, 
-  //     selectedBloco, 
-  //     selectedUnit, 
-  //     vehicles, 
-  //     residents: JSON.stringify(residents), 
-  //     user:props.route.params.user,
-  //     screen
-  //   })
-  // }
 
   const selectBlocoHandler = bloco => {
     setSelectedBloco(bloco)
@@ -249,10 +225,8 @@ const VisitorEdit = props => {
       unit_id: selectedUnit.id,
       selectedDateInit,
       selectedDateEnd,
-      user_permission: selectedResident.id,
+      user_permission: user.user_kind === Constants.USER_KIND['RESIDENT'] ? user.id : selectedResident.id,
       unit_kind_id: Constants.USER_KIND.VISITOR,
-      user_id_last_modify: props.route.params.user.id,
-      condo_id: props.route.params.user.condo_id,
     })
       .then(res => {
         uploadImgs(res.data.addedResidents)
@@ -327,16 +301,21 @@ const VisitorEdit = props => {
       :
       <SafeAreaView style={styles.body}>
         <ScrollView style={{ flex: 1, padding: 10, }} keyboardShouldPersistTaps="handled">
-          <SelectBlocoGroup
-            backgroundColor={backgroundColorBoxes}
-            backgroundColorButtons={backgroundColorButtonBoxes}
-            pressed={() => setModalSelectBloco(true)}
-            selectedBloco={selectedBloco}
-            selectedUnit={selectedUnit}
-            clearUnit={clearUnit}
-            resident={selectedResident}
-            noEdit
-          />
+          {
+            user.user_kind !== Constants.USER_KIND['RESIDENT'] ?
+              <SelectBlocoGroup
+                backgroundColor={backgroundColorBoxes}
+                backgroundColorButtons={backgroundColorButtonBoxes}
+                pressed={() => setModalSelectBloco(true)}
+                selectedBloco={selectedBloco}
+                selectedUnit={selectedUnit}
+                clearUnit={clearUnit}
+                resident={selectedResident}
+                noEdit
+              />
+              :
+              null
+          }
           {!!selectedUnit &&
             <View>
               <AddVisitorsGroup
