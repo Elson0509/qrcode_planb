@@ -47,6 +47,7 @@ const TakePic = (props) => {
                         type={type}
                         ref={camRef}
                         autoFocus="off"
+                        flashMode={Camera.Constants.FlashMode.auto}
                         
                     >
                     </Camera>
