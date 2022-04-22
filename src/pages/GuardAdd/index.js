@@ -68,12 +68,7 @@ const GuardAdd = props => {
   }
 
   const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      //aspect: [3, 4],
-      quality: 1,
-    });
+    let result = await ImagePicker.launchImageLibraryAsync(Constants.ImagePickerOptions);
     const compressed = await Utils.compressImage(result.uri)
     if (!result.cancelled) {
       setUserBeingAdded(prev => { return { ...prev, pic: compressed.uri } })
@@ -84,6 +79,10 @@ const GuardAdd = props => {
     if(await Utils.handleNoConnection(setLoading)) return
     if (!userBeingAdded.name) {
       return setErrorMessage('Nome não pode estar vazio.')
+    }
+    if(userBeingAdded.name.length < Constants.MIN_NAME_SIZE){
+      setErrorAddResidentMessage(`Nome deve ter no mínimo ${Constants.MIN_NAME_SIZE} caracteres.`)
+      return false
     }
     if (!userBeingAdded.identification) {
       return setErrorMessage('Documento não pode estar vazio.')

@@ -63,11 +63,7 @@ const CarSearch = props => {
   }
 
   const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      quality: 1,
-    });
+    let result = await ImagePicker.launchImageLibraryAsync(Constants.ImagePickerOptions);
     const compressed = await Utils.compressImage(result.uri)
     if (!result.cancelled) {
       setImages(prev => [...prev, compressed.uri])

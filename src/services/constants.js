@@ -1,5 +1,6 @@
 import Toast from 'react-native-root-toast';
 import Constants from 'expo-constants';
+import * as ImagePicker from 'expo-image-picker'
 
 const { manifest } = Constants
 
@@ -13,6 +14,12 @@ export const apiurl = (typeof manifest.packagerOpts === `object`) && manifest.pa
 
 export const borderTextInputWidth = 2
 
+export const ImagePickerOptions = {
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
+    allowsEditing: true,
+    quality: 1,
+}
+
 //scan qr code
 export const QR_CODE_PREFIX = 'epw:'
 export const TYPE_DATA_QRCODE = 256
@@ -21,6 +28,7 @@ export const is_autorized_backgroundColor = '#00B924'
 export const is_not_autorized_backgroundColor = '#FF726F'
 
 export const MIN_PASSWORD_SIZE = 6
+export const MIN_NAME_SIZE = 7
 
 export const PREFIX_IMG_GOOGLE_CLOUD = 'https://drive.google.com/uc?export=view&id='
 
