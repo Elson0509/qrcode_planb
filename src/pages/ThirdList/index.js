@@ -42,6 +42,8 @@ const ThirdList = props => {
   const [messageErrorModal, setMessageErrorModal] = useState('')
   const [modalGeneric, setModalGeneric] = useState(false)
   const [loadingMessage, setLoadingMessage] = useState(false)
+  const [modalConfirmDeleteUser, setModalConfirmDeleteUser] = useState(false)
+  const [selectedUser, setSelectedUser] = useState(null)
 
   useEffect(() => {
     fetchUsers()
@@ -266,6 +268,32 @@ const ThirdList = props => {
       })
   }
 
+  const editUserHandler = async resident => {
+    if(await Utils.handleNoConnection(setLoading)) return
+    props.navigation.navigate('EditThird',
+      {
+        resident
+      }
+    )
+  }
+
+  const deleteUserHandler = resident => {
+    setSelectedUser(resident)
+    setModalConfirmDeleteUser(true)
+  }
+
+  const confirmDeleteUserHandler = _ => {
+    api.delete(`api/user/${selectedUser.id}`)
+      .then(res => {
+        Utils.toast(res.data?.message || 'Usuário apagado.')
+        setModalConfirmDeleteUser(false)
+        fetchUsers()
+      })
+      .catch((err) => {
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (DU)')
+      })
+  }
+
   if (loading)
     return <SafeAreaView style={styles.body}>
       <ActivityIndicator size="large" color="white" />
@@ -332,6 +360,8 @@ const ThirdList = props => {
                   <ResidentsView
                     type='Terceirizados'
                     residents={obj.item.residents}
+                    editUserHandler={editUserHandler}
+                    deleteUserHandler={deleteUserHandler}
                   />
                   <CarsView
                     vehicles={obj.item.vehicles}
@@ -350,6 +380,15 @@ const ThirdList = props => {
         btn1Text='Apagar'
         modalVisible={modal}
         setModalVisible={setModal}
+      />
+      <ModalMessage
+        message='Confirma a exclusão deste terceirizado?'
+        title='Apagar terceirizado'
+        btn1Pressed={confirmDeleteUserHandler}
+        btn2Text='Cancelar'
+        btn1Text='Apagar'
+        modalVisible={modalConfirmDeleteUser}
+        setModalVisible={setModalConfirmDeleteUser}
       />
       <ModalQRCode
         modalVisible={showModalQRCode}

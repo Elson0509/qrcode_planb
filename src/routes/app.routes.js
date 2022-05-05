@@ -3,22 +3,23 @@ import Dashboard from '../pages/Dashboard'
 import { Button } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack'
 import { useAuth } from '../contexts/auth'
-import MyQRCode from '../pages/MyQRCode';
+import MyQRCode from '../pages/MyQRCode'
 import Scan from '../pages/Scan'
 import CameraPic from '../pages/CameraPic'
-import MessageList from '../pages/MessageList';
+import MessageList from '../pages/MessageList'
 import * as Constants from '../services/constants'
 import Scanned from '../pages/Scanned'
-import CarRoutes from './CarRoutes';
-import EventRoutes from './EventRoutes';
-import GuardRoutes from './GuardRoutes';
-import VisitorRoutes from './VisitorRoutes';
-import ThirdRoutes from './ThirdRoutes';
-import UnitRoutes from './UnitRoutes';
-import ResidentRoutes from './ResidentRoutes';
-import CondoRoutes from './CondoRoutes';
-import SindicoRoutes from './SindicoRoutes';
+import CarRoutes from './CarRoutes'
+import EventRoutes from './EventRoutes'
+import GuardRoutes from './GuardRoutes'
+import VisitorRoutes from './VisitorRoutes'
+import ThirdRoutes from './ThirdRoutes'
+import UnitRoutes from './UnitRoutes'
+import ResidentRoutes from './ResidentRoutes'
+import CondoRoutes from './CondoRoutes'
+import SindicoRoutes from './SindicoRoutes'
 import SlotRoutes from './SlotRoutes'
+import UserRoutes from './UserRoutes'
 import THEME from '../services/theme'
 
 const AppStack = createStackNavigator()
@@ -43,6 +44,7 @@ const AppRoutes = _ => {
         CondoRoutes,
         SindicoRoutes,
         SlotRoutes,
+        UserRoutes
     ]
 
     return (

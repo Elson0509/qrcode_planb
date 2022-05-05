@@ -31,6 +31,8 @@ const ResidentSearch = props => {
   const [refreshing, setRefreshing] = useState(false)
   const [nameFilter, setNameFilter] = useState('')
   const [passModal, setPassModal] = useState(false)
+  const [modalConfirmDeleteUser, setModalConfirmDeleteUser] = useState(false)
+  const [selectedUser, setSelectedUser] = useState(null)
 
   useEffect(() => {
     fetchUsers()
@@ -142,6 +144,32 @@ const ResidentSearch = props => {
     setRefreshing(false)
   }
 
+  const editUserHandler = async resident => {
+    if(await Utils.handleNoConnection(setLoading)) return
+    props.navigation.navigate('EditResident',
+      {
+        resident
+      }
+    )
+  }
+
+  const deleteUserHandler = resident => {
+    setSelectedUser(resident)
+    setModalConfirmDeleteUser(true)
+  }
+
+  const confirmDeleteUserHandler = _ => {
+    api.delete(`api/user/${selectedUser.id}`)
+      .then(res => {
+        Utils.toast(res.data?.message || 'Usuário apagado.')
+        setModalConfirmDeleteUser(false)
+        fetchUsers()
+      })
+      .catch((err) => {
+        Utils.toastTimeoutOrErrorMessage(err, err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (DU)')
+      })
+  }
+
   if (loading)
     return <SafeAreaView style={styles.body}>
       <ActivityIndicator size="large" color="white" />
@@ -191,6 +219,8 @@ const ResidentSearch = props => {
                   <ResidentsView
                     residents={obj.item.residents}
                     type='Moradores'
+                    editUserHandler={editUserHandler}
+                    deleteUserHandler={deleteUserHandler}
                   />
                   <CarsView
                     vehicles={obj.item.vehicles}
@@ -209,6 +239,15 @@ const ResidentSearch = props => {
         btn1Text='Apagar'
         modalVisible={modal}
         setModalVisible={setModal}
+      />
+      <ModalMessage
+        message='Confirma a exclusão deste morador?'
+        title='Apagar morador'
+        btn1Pressed={confirmDeleteUserHandler}
+        btn2Text='Cancelar'
+        btn1Text='Apagar'
+        modalVisible={modalConfirmDeleteUser}
+        setModalVisible={setModalConfirmDeleteUser}
       />
       <ModalConfirmPass
         modal={passModal}

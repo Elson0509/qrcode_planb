@@ -10,6 +10,7 @@ import {
   Text,
   TouchableOpacity,
 } from 'react-native';
+import { useAuth } from '../../contexts/auth';
 import ActionButtons from '../../components/ActionButtons'
 import ModalCarousel from '../../components/ModalCarousel'
 import * as Constants from '../../services/constants'
@@ -20,6 +21,7 @@ import ModalReply from '../../components/ModalReply'
 import THEME from '../../services/theme'
 
 const EventList = props => {
+  const { user } = useAuth()
   const [events, setEvents] = useState([])
   const [loading, setLoading] = useState(true)
   const [modal, setModal] = useState(false)
@@ -147,6 +149,7 @@ const EventList = props => {
                       editIcon='reply'
                       action1={() => replyHandler(obj.item)}
                       action2={() => delEvent(obj.item)}
+                      noEditButton={!Utils.canShowMessage(user)}
                     />
                   </View>
                   <View style={{ justifyContent: 'space-between', flexDirection: 'column' }}>

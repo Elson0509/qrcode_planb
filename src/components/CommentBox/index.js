@@ -21,7 +21,7 @@ const CommentBox = (props) => {
         style={[
           styles.txtInput,
           {
-            borderWidth: 2,
+            borderWidth: Constants.borderTextInputWidth,
             backgroundColor: 'white',
             padding: 12,
             borderRadius: 10,

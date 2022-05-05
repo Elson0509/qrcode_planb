@@ -20,7 +20,7 @@ const CameraPic = (props) => {
     }, [])
 
     if (hasPermission === null) {
-        return <View />
+        return <Text>Você precisa autorizar o uso de câmera para este aplicativo.</Text>
     }
     if (hasPermission === false) {
         return <Text>Você precisa autorizar o uso de câmera para este aplicativo.</Text>
@@ -61,8 +61,8 @@ const CameraPic = (props) => {
                         style={{ flex: 5 }}
                         type={type}
                         ref={camRef}
-                        autoFocus="off"
-                        
+                        autoFocus={Camera.Constants.AutoFocus.off}
+                        flashMode={Camera.Constants.FlashMode.auto}
                     >
                     </Camera>
                     <View style={{ flex: 1, backgroundColor: 'black', flexDirection: 'row', justifyContent: 'center', paddingTop: 15 }}>

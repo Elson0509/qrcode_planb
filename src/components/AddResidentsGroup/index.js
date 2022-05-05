@@ -38,7 +38,7 @@ const AddResidentsGroup = (props) => {
               <PicUser user={el} />
               <View style={{ marginLeft: 5, marginRight: 5, maxWidth: 210 }}>
                 <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Nome:</Text> {el.name}</Text>
-                <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Email:</Text> {el.email}</Text>
+                {!!el.email && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Email:</Text> {el.email}</Text>}
                 {!!el.identification && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Id:</Text> {el.identification}</Text>}
               </View>
             </View>
@@ -72,7 +72,7 @@ const AddResidentsGroup = (props) => {
             colorInput={Constants.backgroundDarkColors['Residents']}
           />
           <InputBox
-            text="Email*:"
+            text="Email:"
             value={props.userBeingAdded.email}
             changed={val => props.setUserBeingAdded({ ...props.userBeingAdded, email: val })}
             keyboard={'email-address'}
@@ -132,8 +132,8 @@ const styles = StyleSheet.create({
     padding: 20,
     marginTop: 5,
     borderRadius: 15,
-    borderWidth: 2,
-    borderStyle: 'dotted'
+    borderWidth: 0.5,
+    // borderStyle: 'dotted'
   },
   button: {
     alignItems: 'center',

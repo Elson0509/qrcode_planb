@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import THEME from '../../services/theme'
 import * as Utils from '../../services/util'
 import PicUser from '../PicUser'
-import ModalPhoto from '../ModalPhoto';
+import ModalPhoto from '../ModalPhoto'
+import ActionButtons from '../ActionButtons'
+import { useAuth } from '../../contexts/auth'
+import * as Constants from '../../services/constants'
 
 const ResidentsView = (props) => {
+  const { user } = useAuth()
   const [isModalPhotoActive, setIsModalPhotoActive] = useState(false)
   const [selectedUser, setSelectedUser] = useState(null)
 
@@ -24,17 +28,17 @@ const ResidentsView = (props) => {
   }
 
   return (
-    <View>
+    <View style={{ width: '100%' }}>
       {(!props.residents || props.residents.length === 0) && <Text style={{ marginTop: 10, textDecorationLine: 'underline' }}>Unidade sem {props.type.toLowerCase()}</Text>}
       {props.residents.length > 0 && <Text style={[styles.subTitle, { fontFamily: THEME.FONTS.r500 }]}>{props.type}:</Text>}
       {
         props.residents.map((res) => {
           return (
-            <View key={res.id} style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 5 }}>
+            <View key={res.id} style={{ flexDirection: 'row', paddingBottom: 3, marginBottom: 10, width: '100%' }}>
               <TouchableOpacity onPress={() => onClickPhotoHandler(res)}>
-                <PicUser user={res} />
+                <PicUser user={res} width={60} height={100} />
               </TouchableOpacity>
-              <View>
+              <View style={{ flexGrow: 1, flexShrink: 1 }}>
                 <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r500 }}>{res.name}</Text>
                 {!!res.identification && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Id: {res.identification}</Text>}
                 {/* {!!res.email && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Email: {res.email}</Text>} */}
@@ -59,6 +63,21 @@ const ResidentsView = (props) => {
                     :
                     null
                 }
+                <View>
+                  {
+                    user.user_kind === Constants.USER_KIND['SUPERINTENDENT'] || user.user_kind === Constants.USER_KIND['RESIDENT'] ?
+                      <ActionButtons
+                        editIcon='user-edit'
+                        closeIcon='user-slash'
+                        iconSize={22}
+                        action1={() => props.editUserHandler(res)}
+                        action2={() => props.deleteUserHandler(res)}
+                        justifyContent='flex-start'
+                      />
+                      :
+                      null
+                  }
+                </View>
               </View>
             </View>
           )
@@ -80,7 +99,7 @@ const styles = StyleSheet.create({
     textAlign: 'center'
   },
   text: {
-    fontSize: 16, 
+    fontSize: 16,
     marginLeft: 7
   }
 });

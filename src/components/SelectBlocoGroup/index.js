@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
     padding: 20,
     marginTop: 5,
     borderRadius: 15,
-    borderWidth: 2,
-    borderStyle: 'dotted'
+    borderWidth: 0.5,
+    // borderStyle: 'dotted'
   },
   button: {
     //backgroundColor: '#00FF7F',

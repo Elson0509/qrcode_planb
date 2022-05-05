@@ -94,11 +94,11 @@ const ResidentAdd = props => {
         setErrorAddResidentMessage(`Nome deve ter no mínimo ${Constants.MIN_NAME_SIZE} caracteres.`)
         return false
       }
-      if(!userBeingAdded.email){
-        setErrorAddResidentMessage('Email não pode estar vazio.')
-        return false
-      }
-      if(!Utils.validateEmail(userBeingAdded.email)){
+      // if(!userBeingAdded.email){
+      //   setErrorAddResidentMessage('Email não pode estar vazio.')
+      //   return false
+      // }
+      if(userBeingAdded.email && !Utils.validateEmail(userBeingAdded.email)){
         setErrorAddResidentMessage('Email não é válido.')
         return false
       }
@@ -208,7 +208,7 @@ const ResidentAdd = props => {
       const residentsPics = []
       newResidents.forEach(nr => {
         residents.forEach(re => {
-          if(nr.email === re.email && 
+          if ((nr.email === re.email || (!nr.email && !re.email)) &&
               nr.name === re.name && 
               nr.identification === re.identification &&
               re.pic != "")

@@ -1,20 +1,14 @@
 import React from 'react';
 import {
-    SafeAreaView,
-    StyleSheet,
-    ScrollView,
-    FlatList,
     TouchableOpacity,
     View,
-    Text,
   } from 'react-native';
-import { backgroundColors } from '../../services/constants';
 import Icon from '../Icon';
 
 const ActionButtons = (props) => {
-    const IconSize = 32
+    const IconSize = props.iconSize || 32
     return (
-        <View style={{flexDirection: props.flexDirection || 'row', justifyContent: 'center'}} >
+        <View style={{flexDirection: props.flexDirection || 'row', justifyContent: props.justifyContent || 'center', padding: 10}} >
             {props.noEditButton ? null : <TouchableOpacity style={{marginRight: 15, marginBottom: 0}}
                 onPress={props.action1}
             >
