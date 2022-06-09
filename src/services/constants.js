@@ -4,11 +4,11 @@ import * as ImagePicker from 'expo-image-picker'
 
 const { manifest } = Constants
 
-export const apiurlPrefix = 'https://'
-export const apiurl = `qrcondoapp.herokuapp.com`
+export const apiurlPrefix = 'http://'
+//export const apiurl = `qrcondoapp.herokuapp.com`
 //lt --port 3333
 
-//export const apiurl = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts.dev ? manifest.debuggerHost.split(`:`).shift().concat(`:3333`) : `api.example.com`;//*/
+export const apiurl = (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts.dev ? manifest.debuggerHost.split(`:`).shift().concat(`:3333`) : `api.example.com`;//*/
 
 export const borderTextInputWidth = 0
 
