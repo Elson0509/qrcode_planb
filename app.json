@@ -1,5 +1,10 @@
 {
   "expo": {
+    "androidStatusBar": {
+      "backgroundColor": "#000000",
+      "barStyle": "light-content",
+      "translucent": false
+    },
     "name": "QR Condo",
     "slug": "qr_condo",
     "version": "1.0.0",

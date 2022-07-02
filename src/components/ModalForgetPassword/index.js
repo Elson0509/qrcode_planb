@@ -49,6 +49,7 @@ const ModalForgetPassword = props => {
                 value={email}
                 changed={value=>setEmail(value)}
                 borderRadius={3}
+                borderWidth={1}
               />
               {!!errorMessage && <Text style={styles.errorMessage}>{errorMessage}</Text>}
             </View>

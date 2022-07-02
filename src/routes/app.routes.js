@@ -9,6 +9,7 @@ import CameraPic from '../pages/CameraPic'
 import MessageList from '../pages/MessageList'
 import * as Constants from '../services/constants'
 import Scanned from '../pages/Scanned'
+import AccessRoutes from './AccessRoutes';
 import CarRoutes from './CarRoutes'
 import EventRoutes from './EventRoutes'
 import GuardRoutes from './GuardRoutes'
@@ -34,6 +35,7 @@ const AppRoutes = _ => {
     }
 
     const AllRoutes = [
+        AccessRoutes,
         CarRoutes,
         EventRoutes,
         GuardRoutes,

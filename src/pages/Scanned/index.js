@@ -26,6 +26,7 @@ const Scanned = (props) => {
   const [messageInfoModal, setMessageInfoModal] = useState('')
   const [messageErrorModal, setMessageErrorModal] = useState('')
   const [disableButtons, setDisableButtons] = useState(false)
+  const [access, setAccess] = useState(null)
 
   const typeData = props.route.params.typeInput
   const idData = props.route.params.dataInput
@@ -57,6 +58,7 @@ const Scanned = (props) => {
         const fetchedDataApi = res.data.userFound || res.data.unitFound
         setDataFetched(fetchedDataApi)
         setReading(res.data.read)
+        setAccess(res.data.newAccess)
         if (fetchedDataApi.user_kind_id == Constants.USER_KIND['RESIDENT']) {
           setbackgroundColorScreen(Constants.backgroundColors['Residents'])
           setUserType('Residente')
@@ -92,7 +94,7 @@ const Scanned = (props) => {
 
   const exitHandler = _ => {
     setLoading(true)
-    api.put(`api/reading/${reading.id}`)
+    api.put(`api/access/${access.id}`)
       .then(resp => {
         setDisableButtons(true)
         setLoading(false)

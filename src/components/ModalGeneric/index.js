@@ -16,18 +16,18 @@ const ModalGeneric = (props) => {
             {props.children}
           </View>
           <View style={[styles.buttonGroup]}>
-            {!!props.btn1Text && <Pressable
-              style={[styles.button, { backgroundColor: props.btn1BgColor || '#2323FF' }]}
-              onPress={props.btn1Pressed}
-            >
-              <Text style={styles.textStyle}>{props.btn1Text}</Text>
-            </Pressable>}
             <Pressable
               style={[styles.button, { backgroundColor: props.btn2BgColor || '#FF2323' }]}
               onPress={() => props.setModalVisible(false)}
             >
               <Text style={styles.textStyle}>{props.btn2Text || 'Entendi!'}</Text>
             </Pressable>
+            {!!props.btn1Text && <Pressable
+              style={[styles.button, { backgroundColor: props.btn1BgColor || '#2323FF' }]}
+              onPress={props.btn1Pressed}
+            >
+              <Text style={styles.textStyle}>{props.btn1Text}</Text>
+            </Pressable>}
           </View>
         </View>
       </View>

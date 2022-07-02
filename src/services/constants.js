@@ -77,6 +77,7 @@ export const backgroundColors = {
     "Thirds":'#FF7F7F',
     "Units":'#DEB887',
     "Visitors":'#9E8EEA',
+    "Access": '#8E7B6C',
 }
 
 export const backgroundLightColors = {
@@ -92,6 +93,7 @@ export const backgroundLightColors = {
     "Thirds":'#FFBFBF',
     "Units":'#FFEBCD',
     "Visitors":'#CFBFFF',
+    "Access": '#DEBF8F',
 }
 
 export const backgroundDarkColors = {
@@ -108,4 +110,5 @@ export const backgroundDarkColors = {
     "Thirds":'#CC5C5C',
     "Units":'#CD853F',
     "Visitors":'#7C6CC8',
+    "Access": '#A85D4F',
 }

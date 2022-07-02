@@ -21,6 +21,7 @@ const InputBox = (props) => {
                     color: props.colorInput || 'black',
                     borderRadius: props.borderRadius || 6,
                     fontFamily: THEME.FONTS.r500,
+                    borderWidth: props.borderWidth || Constants.borderTextInputWidth,
                   }
                 ]}
                 placeholder={props.placeholder || ''}
@@ -45,7 +46,6 @@ const styles = StyleSheet.create({
     },
     txtInput:{
       width:'100%',
-      borderWidth:Constants.borderTextInputWidth,
       fontSize: 14,
       textAlign:'left',
       paddingLeft: 10,

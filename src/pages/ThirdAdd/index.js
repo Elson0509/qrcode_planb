@@ -4,6 +4,7 @@ import {
   StyleSheet,
   ScrollView,
   View,
+  Text,
   ActivityIndicator,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker'

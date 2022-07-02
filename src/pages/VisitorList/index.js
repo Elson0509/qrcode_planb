@@ -348,7 +348,7 @@ const VisitorList = props => {
                   <ActionButtons
                     flexDirection='row'
                     noDeleteButton
-                    editIcon='car-side'
+                    editIcon='people-arrows'
                     action1={() => carIconHandler(obj.item)}
                   />
                 }
