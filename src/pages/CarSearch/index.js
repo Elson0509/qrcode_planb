@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  CheckBox,
   KeyboardAvoidingView,
   TouchableOpacity,
   FlatList,
@@ -12,6 +11,7 @@ import {
   View,
   Text,
 } from 'react-native';
+import CheckBox from 'expo-checkbox';
 import * as Constants from '../../services/constants'
 import Placa from '../../components/Placa';
 import Icon from '../../components/Icon';
@@ -191,10 +191,11 @@ const CarSearch = props => {
           </View>
           {
             (filterData().length == 0 && !!plateFilter.trim()) || (
-              <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: "center", justifyContent: "center" }}>
+              <View style={{ flexDirection: 'row', alignSelf: 'center', alignItems: "center", justifyContent: "center", marginBottom: 10 }}>
                 <CheckBox
                   value={checked}
                   onValueChange={setChecked}
+                  style={{ marginRight: 10 }}
                 />
                 <Text style={{ color: 'white' }}>Registrar ocorrência?</Text>
               </View>
@@ -226,6 +227,12 @@ const CarSearch = props => {
                 )
               }}
             />
+          }
+          {
+            !checked && filterData().length == 0 && !!plateFilter.trim() &&
+            <Text style={styles.errorMessage}>
+              Nenhum veículo encontrado.
+            </Text>
           }
           {((filterData().length == 0 && !!plateFilter.trim()) || checked) && (
             <View style={{ padding: 10 }}>

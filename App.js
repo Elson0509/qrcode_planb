@@ -73,8 +73,6 @@ export default function App() {
       </RootSiblingParent>
     </View>
   )
-
-
 }
 
 const styles = StyleSheet.create({

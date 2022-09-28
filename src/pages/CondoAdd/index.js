@@ -26,6 +26,10 @@ const CondoAdd = props => {
   const [resident_can_ocorrences, setResident_can_ocorrences] = useState(true)
   const [resident_can_thirds, setResident_can_thirds] = useState(true)
   const [resident_can_visitors, setResident_can_visitors] = useState(true)
+  const [resident_has_dob, setResident_has_dob] = useState(false)
+  const [resident_has_phone, setResident_has_phone] = useState(false)
+  const [guard_see_dob, setGuard_see_dob] = useState(false)
+  const [guard_see_phone, setGuard_see_phone] = useState(false)
 
   const addHandler = async _ => {
     if (await Utils.handleNoConnection(setLoading)) return
@@ -58,6 +62,10 @@ const CondoAdd = props => {
       resident_can_ocorrences,
       resident_can_thirds,
       resident_can_visitors,
+      resident_has_dob,
+      resident_has_phone,
+      guard_see_dob,
+      guard_see_phone,
     })
       .then((res) => {
         setErrorMessage('')
@@ -153,6 +161,22 @@ const CondoAdd = props => {
             borderColor={Constants.backgroundDarkColors['Residents']}
             colorInput={Constants.backgroundDarkColors['Residents']}
           />
+          <InputBool
+            text="Podem ver telefone de moradores?"
+            value={guard_see_phone}
+            changed={() => setGuard_see_phone(prev => !prev)}
+            backgroundColor={Constants.backgroundLightColors['Residents']}
+            borderColor={Constants.backgroundDarkColors['Residents']}
+            colorInput={Constants.backgroundDarkColors['Residents']}
+          />
+          <InputBool
+            text="Podem ver nascimento de moradores?"
+            value={guard_see_dob}
+            changed={() => setGuard_see_dob(prev => !prev)}
+            backgroundColor={Constants.backgroundLightColors['Residents']}
+            borderColor={Constants.backgroundDarkColors['Residents']}
+            colorInput={Constants.backgroundDarkColors['Residents']}
+          />
           <Text style={{ fontFamily: THEME.FONTS.r700, fontSize: 17, marginLeft: 5, marginTop: 10 }}>Moradores</Text>
           <InputBool
             text="Pode enviar mensagens?"
@@ -182,6 +206,22 @@ const CondoAdd = props => {
             text="Pode cadastrar ocorrências?"
             value={resident_can_ocorrences}
             changed={() => setResident_can_ocorrences(prev => !prev)}
+            backgroundColor={Constants.backgroundLightColors['Residents']}
+            borderColor={Constants.backgroundDarkColors['Residents']}
+            colorInput={Constants.backgroundDarkColors['Residents']}
+          />
+          <InputBool
+            text="Possuem telefone?"
+            value={resident_has_phone}
+            changed={() => setResident_has_phone(prev => !prev)}
+            backgroundColor={Constants.backgroundLightColors['Residents']}
+            borderColor={Constants.backgroundDarkColors['Residents']}
+            colorInput={Constants.backgroundDarkColors['Residents']}
+          />
+          <InputBool
+            text="Possuem data de nascimento?"
+            value={resident_has_dob}
+            changed={() => setResident_has_dob(prev => !prev)}
             backgroundColor={Constants.backgroundLightColors['Residents']}
             borderColor={Constants.backgroundDarkColors['Residents']}
             colorInput={Constants.backgroundDarkColors['Residents']}

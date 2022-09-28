@@ -105,6 +105,8 @@ const styles = StyleSheet.create({
     height: 50,
     borderWidth: 1,
     borderColor: '#fff',
+    marginLeft: 5,
+    marginTop: 5,
   },
   logoPartner: {
     padding: 5,
@@ -112,6 +114,8 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     backgroundColor: 'black',
+    marginLeft: 5,
+    marginTop: 5,
   },
   iconMessage: {
     position: 'absolute',
@@ -123,7 +127,7 @@ const styles = StyleSheet.create({
     color: 'white',
     width: '100%',
     textAlign: 'center',
-    letterSpacing: 0.5,
+    letterSpacing: 0,
     fontSize: 20,
     marginTop: 10,
     marginBottom: 10

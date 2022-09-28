@@ -12,8 +12,12 @@ import {
   Text,
 } from 'react-native';
 import PicUser from '../PicUser';
+import { useAuth } from '../../contexts/auth'
+import DOBInputBox from '../DOBInputBox'
 
 const AddResidentsGroup = (props) => {
+  const { user } = useAuth()
+
   const addHandler = async _ => {
     if (await props.addResidentHandler()) {
       props.setAddingUser(false)
@@ -40,6 +44,8 @@ const AddResidentsGroup = (props) => {
                 <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Nome:</Text> {el.name}</Text>
                 {!!el.email && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Email:</Text> {el.email}</Text>}
                 {!!el.identification && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Id:</Text> {el.identification}</Text>}
+                {!!el.phone && user.condo.resident_has_phone && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Tel:</Text> {el.phone}</Text>}
+                {!!el.dob && user.condo.resident_has_dob && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Nascimento:</Text> {Utils.printDate(el.dob)}</Text>}
               </View>
             </View>
 
@@ -81,6 +87,34 @@ const AddResidentsGroup = (props) => {
             borderColor={Constants.backgroundDarkColors['Residents']}
             colorInput={Constants.backgroundDarkColors['Residents']}
           />
+          {
+            user.condo.resident_has_phone &&
+            <InputBox
+              text="Telefone:"
+              value={props.userBeingAdded.phone}
+              changed={val => props.setUserBeingAdded({ ...props.userBeingAdded, phone: val })}
+              autoCapitalize='none'
+              placeholder='(XX) 90000-0000'
+              backgroundColor={Constants.backgroundLightColors['Residents']}
+              borderColor={Constants.backgroundDarkColors['Residents']}
+              colorInput={Constants.backgroundDarkColors['Residents']}
+            />
+          }
+          {
+            user.condo.resident_has_dob &&
+            <DOBInputBox
+              changed1={value => props.setDobBeingAdded({ ...props.dobBeingAdded, day: value })}
+              changed2={value => props.setDobBeingAdded({ ...props.dobBeingAdded, month: value })}
+              changed3={value => props.setDobBeingAdded({ ...props.dobBeingAdded, year: value })}
+              text='Nascimento:'
+              backgroundColor={props.backgroundColorInput || Constants.backgroundLightColors['Residents']}
+              borderColor={props.borderColor || Constants.backgroundDarkColors['Residents']}
+              colorInput={props.colorInput || Constants.backgroundDarkColors['Residents']}
+              value1={props.dobBeingAdded.day}
+              value2={props.dobBeingAdded.month}
+              value3={props.dobBeingAdded.year}
+            />
+          }
           <Text style={styles.title}>Foto:</Text>
           {!props.userBeingAdded.pic &&
             <View style={styles.buttonAddPhotoGroup}>

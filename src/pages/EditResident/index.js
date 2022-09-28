@@ -7,7 +7,6 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 import InputBox from '../../components/InputBox';
 import * as Constants from '../../services/constants'
@@ -18,9 +17,15 @@ import Icon from '../../components/Icon';
 import FooterButtons from '../../components/FooterButtons'
 import PicUser from '../../components/PicUser'
 import TakePic from '../../components/TakePic'
+import { useAuth } from '../../contexts/auth'
+import DOBInputBox from '../../components/DOBInputBox'
 
 const EditResident = props => {
-  const [userEdit, setUserEdit] = useState({ name: props.route.params.resident.name, id: props.route.params.resident.id, identification: props.route.params.resident.identification ?? '', email: props.route.params.resident.email ?? '', photo_id: props.route.params.resident.photo_id ?? '',  })
+  const { user } = useAuth()
+
+  const dob = props.route.params.resident.dob ? new Date(props.route.params.resident.dob) : null
+  const [userEdit, setUserEdit] = useState({ name: props.route.params.resident.name, id: props.route.params.resident.id, identification: props.route.params.resident.identification ?? '', email: props.route.params.resident.email ?? '', photo_id: props.route.params.resident.photo_id ?? '', phone: props.route.params.resident.phone ?? '',   })
+  const [dobBeingAdded, setDobBeingAdded] = useState({ day: dob ? dob.getDate() : null, month: dob ? dob.getMonth() + 1 : null, year: dob ? dob.getFullYear() : null })
   const [loading, setLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [pic, setPic] = useState(false)
@@ -90,13 +95,25 @@ const EditResident = props => {
     if (userEdit.email && !Utils.validateEmail(userEdit.email)) {
       return setErrorMessage('Email não é válido.')
     }
+    if (!!userEdit.phone && !Utils.phone_validation(userEdit.phone)) {
+      return setErrorMessage('Telefone não válido.')
+    }
+    if ((!!dobBeingAdded.day || !!dobBeingAdded.year) && !Utils.isValidDate(dobBeingAdded.day, dobBeingAdded.month, dobBeingAdded.year)) {
+      return setErrorMessage('Data não é válida.')
+    }
+    const dob = user.condo.resident_has_dob && !!dobBeingAdded.day && !!dobBeingAdded.year ? new Date(dobBeingAdded.year, dobBeingAdded.month - 1, dobBeingAdded.day, 0, 0, 0) : null
+    if((!!dobBeingAdded.day || !!dobBeingAdded.year) && dob > new Date()){
+      return setErrorMessage('Data não é válida.')
+    }
     setLoading(true)
     api.put(`api/user/${userEdit.id}`, {
       name: userEdit.name,
       email: userEdit.email,
       identification: userEdit.identification,
+      phone: userEdit.phone,
+      dob
     })
-      .then((res) => {
+      .then(() => {
         if (pic) {
           uploadImg(userEdit.id)
             .then(res => {
@@ -161,6 +178,34 @@ const EditResident = props => {
             colorInput={Constants.backgroundDarkColors['Residents']}
             editable={editable}
           />
+          {
+            user.condo.resident_has_phone &&
+            <InputBox
+              text="Telefone:"
+              value={userEdit.phone}
+              changed={value => setUserEdit({ ...userEdit, phone: value })}
+              autoCapitalize='none'
+              placeholder='(XX) 90000-0000'
+              backgroundColor={Constants.backgroundLightColors['Residents']}
+              borderColor={Constants.backgroundDarkColors['Residents']}
+              colorInput={Constants.backgroundDarkColors['Residents']}
+            />
+          }
+          {
+            user.condo.resident_has_dob &&
+            <DOBInputBox
+              changed1={value => setDobBeingAdded({ ...dobBeingAdded, day: value })}
+              changed2={value => setDobBeingAdded({ ...dobBeingAdded, month: value })}
+              changed3={value => setDobBeingAdded({ ...dobBeingAdded, year: value })}
+              text='Nascimento:'
+              backgroundColor={Constants.backgroundLightColors['Residents']}
+              borderColor={Constants.backgroundDarkColors['Residents']}
+              colorInput={Constants.backgroundDarkColors['Residents']}
+              value1={dobBeingAdded.day}
+              value2={dobBeingAdded.month}
+              value3={dobBeingAdded.year}
+            />
+          }
           <Text style={styles.title}>Foto:</Text>
           {
             !pic &&
@@ -210,7 +255,7 @@ const styles = StyleSheet.create({
   body: {
     padding: 10,
     backgroundColor: Constants.backgroundColors['Residents'],
-    minHeight: '100%'
+    flex: 1
   },
   errorMessage: {
     color: '#F77',

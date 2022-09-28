@@ -191,9 +191,8 @@ const UnitList = props => {
 
 const styles = StyleSheet.create({
   body: {
-    paddingBottom: 90,
+    flex: 1,
     backgroundColor: Constants.backgroundColors['Units'],
-    minHeight: '100%',
   },
   
   menuItem: {

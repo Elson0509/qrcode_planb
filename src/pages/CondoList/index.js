@@ -90,6 +90,10 @@ const CondoList = props => {
           resident_can_ocorrences: condo.resident_can_ocorrences,
           resident_can_thirds: condo.resident_can_thirds,
           resident_can_visitors: condo.resident_can_visitors,
+          resident_has_dob: condo.resident_has_dob,
+          resident_has_phone: condo.resident_has_phone,
+          guard_see_dob: condo.guard_see_dob,
+          guard_see_phone: condo.guard_see_phone,
           slots: condo.slots,
           state: condo.state,
         },
@@ -139,6 +143,8 @@ const CondoList = props => {
                       <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Podem ver mensagens? </Text> {obj.item.guard_can_messages ? ' Sim' : ' Não'}</Text>
                       <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Podem cadastrar terceirizados? </Text> {obj.item.guard_can_thirds ? ' Sim' : ' Não'}</Text>
                       <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Podem cadastrar visitantes? </Text> {obj.item.guard_can_visitors ? ' Sim' : ' Não'}</Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Podem ver telefone de moradores? </Text> {obj.item.guard_see_phone ? ' Sim' : ' Não'}</Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Podem ver nascimento de moradores? </Text> {obj.item.guard_see_dob ? ' Sim' : ' Não'}</Text>
                     </View>
                     <View>
                       <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 14, marginTop: 12, textAlign: 'center' }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Residentes</Text></Text>
@@ -146,6 +152,8 @@ const CondoList = props => {
                       <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Podem cadastrar terceirizados? </Text> {obj.item.resident_can_thirds ? ' Sim' : ' Não'}</Text>
                       <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Podem cadastrar visitantes? </Text> {obj.item.resident_can_visitors ? ' Sim' : ' Não'}</Text>
                       <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Podem registrar ocorrências? </Text> {obj.item.resident_can_ocorrences ? ' Sim' : ' Não'}</Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Possuem telefone? </Text> {obj.item.resident_has_phone ? ' Sim' : ' Não'}</Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Possuem data de nascimento? </Text> {obj.item.resident_has_dob ? ' Sim' : ' Não'}</Text>
                     </View>
                   </View>
                 </View>

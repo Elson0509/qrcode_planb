@@ -7,7 +7,7 @@ import {
   ActivityIndicator,
   View,
   Text,
-} from 'react-native';
+} from 'react-native'
 import ActionButtons from '../../components/ActionButtons'
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
@@ -17,8 +17,8 @@ import InputBox from '../../components/InputBox'
 import ModalConfirmPass from '../../components/ModalConfirmPass'
 import { toast } from '../../services/util'
 import { useAuth } from '../../contexts/auth'
-import CarsView from '../../components/CarsView';
-import ResidentsView from '../../components/ResidentsView';
+import CarsView from '../../components/CarsView'
+import ResidentsView from '../../components/ResidentsView'
 import THEME from '../../services/theme'
 
 const ResidentSearch = props => {

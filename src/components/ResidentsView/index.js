@@ -38,11 +38,28 @@ const ResidentsView = (props) => {
               <TouchableOpacity onPress={() => onClickPhotoHandler(res)}>
                 <PicUser user={res} width={60} height={100} />
               </TouchableOpacity>
-              <View style={{ flexGrow: 1, flexShrink: 1 }}>
+              <View style={{ flexGrow: 1, flexShrink: 1, justifyContent: 'center' }}>
                 <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r500 }}>{res.name}</Text>
                 {!!res.identification && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Id: {res.identification}</Text>}
-                {/* {!!res.email && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Email: {res.email}</Text>} */}
+                {
+                  user.user_kind===Constants.USER_KIND['SUPERINTENDENT'] &&
+                  !!res.email && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Email: {res.email}</Text>
+                }
                 {!!res.company && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Empresa: {res.company}</Text>}
+                {
+                  (user.user_kind === Constants.USER_KIND['SUPERINTENDENT']
+                    ||
+                    (user.user_kind === Constants.USER_KIND['GUARD'] && user.condo.guard_see_phone)) &&
+                  !!res.phone &&
+                  <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Tel: {res.phone}</Text>
+                }
+                {
+                  (user.user_kind === Constants.USER_KIND['SUPERINTENDENT']
+                    ||
+                    (user.user_kind === Constants.USER_KIND['GUARD'] && user.condo.guard_see_dob)) &&
+                  !!res.dob &&
+                  <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Nasc: {Utils.printDate(new Date(res.dob))}</Text>
+                }
                 {!!res.initial_date && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Início: {Utils.printDate(new Date(res.initial_date))}</Text>}
                 {!!res.final_date && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Fim: {Utils.printDate(new Date(res.final_date))}</Text>}
                 {!!res.User?.name && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Autorizado por: {res.User.name}</Text>}

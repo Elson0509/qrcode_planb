@@ -13,6 +13,7 @@ import AccessRoutes from './AccessRoutes';
 import CarRoutes from './CarRoutes'
 import EventRoutes from './EventRoutes'
 import GuardRoutes from './GuardRoutes'
+import Info from '../pages/Info';
 import VisitorRoutes from './VisitorRoutes'
 import ThirdRoutes from './ThirdRoutes'
 import UnitRoutes from './UnitRoutes'
@@ -101,6 +102,18 @@ const AppRoutes = _ => {
                 component={MessageList}
                 options={{
                     headerTitle: 'Mensagens',
+                    headerRight: () => logoutButton,
+                    headerStyle: {
+                        backgroundColor: '#ddd'
+                    },
+                    headerTitleStyle
+                }}
+            />
+            <AppStack.Screen
+                name="Info"
+                component={Info}
+                options={{
+                    headerTitle: 'Info',
                     headerRight: () => logoutButton,
                     headerStyle: {
                         backgroundColor: '#ddd'

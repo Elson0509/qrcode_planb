@@ -15,7 +15,6 @@ import THEME from '../../services/theme';
 
 const Dashboard = (props) => {
   const { user } = useAuth()
-
   const menuOptionsQRCode = { menuName: "Meu QR Code", icon: 'qrcode', key: 'QRCode', screen: 'MyQRCode', backgroundColor: Constants.backgroundColors['MyQRCode'] }
   const menuOptionsScan = { menuName: "Escanear", icon: 'camera', key: 'Scan', screen: 'Scan', backgroundColor: Constants.backgroundColors['Scan'] }
   const menuOptionsUnits = { menuName: "Unidades", icon: 'building', key: 'building', screen: 'Units', backgroundColor: Constants.backgroundColors['Units'] }
@@ -29,8 +28,8 @@ const Dashboard = (props) => {
   const menuOptionsCarSuperIntendent = { menuName: "Pernoite", icon: 'car', key: 'car', screen: 'Car', backgroundColor: Constants.backgroundColors['Cars'] }
   const menuOptionsCarGuard = { menuName: "Pernoite", icon: 'car', key: 'car', screen: 'CarSearch', backgroundColor: Constants.backgroundColors['Cars'] }
   const menuOptionsEventResident = { menuName: "Ocorrências", icon: 'exclamation', key: 'event', screen: 'EventAdd', backgroundColor: Constants.backgroundColors['Events'] }
-  const menuOptionsEventGuard = { menuName: "Ronda", icon: 'exclamation', key: 'event', screen: 'EventAdd', backgroundColor: Constants.backgroundColors['MyQRCode'] }
-  const menuOptionsEventSuperintendent = { menuName: "Ronda", icon: 'exclamation', key: 'event', screen: 'EventsGuard', backgroundColor: Constants.backgroundColors['MyQRCode'] }
+  const menuOptionsEventGuard = { menuName: "Ocorrências", icon: 'exclamation', key: 'event', screen: 'EventAdd', backgroundColor: Constants.backgroundColors['MyQRCode'] }
+  const menuOptionsEventSuperintendent = { menuName: "Ocorrências", icon: 'exclamation', key: 'event', screen: 'EventsGuard', backgroundColor: Constants.backgroundColors['MyQRCode'] }
   const menuOptionsSurvey = { menuName: "Avaliação", icon: 'smile', key: 'pesquisa', screen: 'Survey', backgroundColor: Constants.backgroundColors['Survey'] }
   const menuOptionsInfo = { menuName: "Informações", icon: 'info-circle', key: 'info', screen: 'Info', backgroundColor: Constants.backgroundColors['Info'] }
   const menuOptionsCondo = { menuName: "Condomínios", icon: 'city', key: 'condo', screen: 'Condo', backgroundColor: Constants.backgroundColors['Residents'] }
@@ -39,9 +38,9 @@ const Dashboard = (props) => {
   const menuOptionsAccess = { menuName: "Acessos", icon: 'people-arrows', key: 'access', screen: 'Access', backgroundColor: Constants.backgroundColors['Access'] }
 
   const profiles = []
-  profiles[Constants.USER_KIND['RESIDENT']] = [menuOptionsQRCode, Utils.canAddOcorrences(user) ? menuOptionsEventResident : null, Utils.canAddVisitors(user) ? menuOptionsVisitor : null, Utils.canAddThirds(user) ? menuOptionsService : null]
-  profiles[Constants.USER_KIND['GUARD']] = [menuOptionsQRCode, menuOptionsScan, menuOptionsResidentsToGuard, Utils.canAddVisitors(user) ? menuOptionsVisitor : menuOptionsVisitorOnlyList, Utils.canAddThirds(user) ? menuOptionsService : menuOptionsServiceOnlyList, menuOptionsCarGuard, menuOptionsEventGuard, menuOptionsSlot]
-  profiles[Constants.USER_KIND['SUPERINTENDENT']] = [menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsGuard, menuOptionsCarSuperIntendent, menuOptionsEventSuperintendent, menuOptionsSlot, menuOptionsAccess]
+  profiles[Constants.USER_KIND['RESIDENT']] = [menuOptionsQRCode, Utils.canAddOcorrences(user) ? menuOptionsEventResident : null, Utils.canAddVisitors(user) ? menuOptionsVisitor : null, Utils.canAddThirds(user) ? menuOptionsService : null, menuOptionsInfo]
+  profiles[Constants.USER_KIND['GUARD']] = [menuOptionsQRCode, menuOptionsScan, menuOptionsResidentsToGuard, Utils.canAddVisitors(user) ? menuOptionsVisitor : menuOptionsVisitorOnlyList, Utils.canAddThirds(user) ? menuOptionsService : menuOptionsServiceOnlyList, menuOptionsCarGuard, menuOptionsEventGuard, menuOptionsSlot, menuOptionsInfo]
+  profiles[Constants.USER_KIND['SUPERINTENDENT']] = [menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsGuard, menuOptionsCarSuperIntendent, menuOptionsEventSuperintendent, menuOptionsSlot, menuOptionsAccess, menuOptionsInfo]
   profiles[Constants.USER_KIND['ADM']] = [menuOptionsCondo, menuOptionsSindico]
 
   return (
