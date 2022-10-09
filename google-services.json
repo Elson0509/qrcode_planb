@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "897528927013",
+    "project_id": "qrcondo-notifications",
+    "storage_bucket": "qrcondo-notifications.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:897528927013:android:c53ed2331a81993e8800cc",
+        "android_client_info": {
+          "package_name": "com.qrcondo.qrcondo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "897528927013-jcu40ga9qapnc2ods8mrpmg69de6j89g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBwIcwOsv9SidX6wn0nvZE4dpYwtQD0nqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "897528927013-jcu40ga9qapnc2ods8mrpmg69de6j89g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

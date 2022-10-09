@@ -7,7 +7,7 @@
     },
     "name": "QR Condo",
     "slug": "qr_condo",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -28,7 +28,8 @@
     },
     "android": {
       "package": "com.qrcondo.qrcondo",
-      "versionCode": 2,
+      "googleServicesFile": "./google-services.json",
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"

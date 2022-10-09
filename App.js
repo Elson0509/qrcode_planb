@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { View, StyleSheet } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import Routes from './src/routes'

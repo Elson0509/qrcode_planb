@@ -11,7 +11,7 @@ import IconApp from '../Icon';
 import * as Utils from '../../services/util'
 import * as Constants from '../../services/constants'
 import api from '../../services/api';
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation, useRoute } from '@react-navigation/native'
 import THEME from '../../services/theme'
 import { useAuth } from '../../contexts/auth';
 
@@ -19,6 +19,7 @@ const Greeting = _ => {
   const [newMessagesQtt, setNewMessagesQtt] = useState(0)
   const { user } = useAuth()
   const navigation = useNavigation();
+  const route = useRoute();
 
   useEffect(() => {
     fetchQttNewMessages()
@@ -29,13 +30,15 @@ const Greeting = _ => {
   }, [])
 
   const fetchQttNewMessages = _ => {
-    api.get(`api/message/count/${user.id}`)
-      .then(res => {
-        setNewMessagesQtt(res.data.count)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+    if (route.name === 'Dashboard') {
+      api.get(`api/message/count/${user.id}`)
+        .then(res => {
+          setNewMessagesQtt(res.data.count)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
+    }
   }
 
   const clickMessageHandler = _ => {
@@ -49,17 +52,17 @@ const Greeting = _ => {
       <View>
         {
           user.condo?.Partner ?
-          <Image
-            style={styles.logoPartner}
-            source={{ uri: `${Constants.PREFIX_IMG_GOOGLE_CLOUD}${user.condo.Partner.photo_id}` }}
-            resizeMode='contain'
-          />
-          :
-          <Image
-            style={styles.logo}
-            source={Constants.logoPic}
-            resizeMode='contain'
-          />
+            <Image
+              style={styles.logoPartner}
+              source={{ uri: `${Constants.PREFIX_IMG_GOOGLE_CLOUD}${user.condo.Partner.photo_id}` }}
+              resizeMode='contain'
+            />
+            :
+            <Image
+              style={styles.logo}
+              source={Constants.logoPic}
+              resizeMode='contain'
+            />
         }
       </View>
       <View>

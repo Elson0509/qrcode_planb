@@ -6,10 +6,8 @@ import {
   Text,
   Image,
 } from 'react-native';
-import Icon from '../../components/Icon'
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
-import api from '../../services/api'
 import THEME from '../../services/theme'
 import { useAuth } from '../../contexts/auth';
 
@@ -18,11 +16,19 @@ const Info = () => {
 
   return (
     <SafeAreaView style={styles.body}>
-      <Image style={styles.image} resizeMode="contain" source={require('../../../assets/condo.jpg')} />
+      {
+        !!user.condo.photo_id ?
+          <Image
+            style={styles.image}
+            source={{ uri: `${Constants.PREFIX_IMG_GOOGLE_CLOUD}${user.condo.photo_id}` }}
+          />
+          :
+          <Image style={styles.image} resizeMode="contain" source={require('../../../assets/condo.jpg')} />
+      }
       <View style={styles.textBox}>
         <Text style={styles.text}>Condomínio</Text>
         <Text style={styles.text}>{user.condo.name}</Text>
-        { !!user.condo.created_at && <Text style={styles.textMember}>Membro desde {Utils.printDate(new Date(user.condo.created_at))}</Text> }
+        {!!user.condo.created_at && <Text style={styles.textMember}>Membro desde {Utils.printDate(new Date(user.condo.created_at))}</Text>}
       </View>
     </SafeAreaView>
   );
@@ -41,20 +47,20 @@ const styles = StyleSheet.create({
     paddingTop: 20,
     alignItems: 'center',
   },
-  text:{
+  text: {
     fontFamily: THEME.FONTS.r500,
     fontSize: 20,
     textAlign: 'center',
   },
-  textMember:{
+  textMember: {
     paddingTop: 20,
     fontFamily: THEME.FONTS.r300,
     fontSize: 15,
     textAlign: 'center',
   },
   image: {
-    height: 150,
     width: 150,
+    height: 150,
   },
 });
 

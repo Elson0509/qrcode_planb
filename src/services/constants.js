@@ -6,7 +6,7 @@ const { manifest } = Constants
 
 const environmentOptions = ['development', 'production']
 
-const environment = environmentOptions[1]
+const environment = environmentOptions[0]
 
 export const apiurlPrefix = environment === 'development' ? 'http://' :  'https://'
 //export const apiurl = `qrcondoapp.herokuapp.com`
@@ -38,7 +38,15 @@ export const PREFIX_IMG_GOOGLE_CLOUD = 'https://drive.google.com/uc?export=view&
 
 export const genericProfilePic = require('../../assets/pics/generic-profile.png')
 
+export const genericParcel = require('../../assets/parcel.jpg')
+
 export const logoPic = require('../../assets/icon.png')
+
+export const MAIL_STATUS = {
+    'Em espera': 1,
+    'Entregue': 2,
+    'Recusado': 3
+}
 
 export const menuOptions = [
     { menuName: "Adicionar", icon: 'plus-square', key: 'plus', screen: 'Add' },

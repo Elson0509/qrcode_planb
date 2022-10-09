@@ -36,12 +36,51 @@ const Dashboard = (props) => {
   const menuOptionsSindico = { menuName: "Administradores", icon: 'users-cog', key: 'sindico', screen: 'Sindico', backgroundColor: Constants.backgroundColors['Visitors'] }
   const menuOptionsSlot = { menuName: "Estacionamento", icon: 'car-side', key: 'slot', screen: 'Slot', backgroundColor: Constants.backgroundColors['Slot'] }
   const menuOptionsAccess = { menuName: "Acessos", icon: 'people-arrows', key: 'access', screen: 'Access', backgroundColor: Constants.backgroundColors['Access'] }
+  const menuOptionsServices = { menuName: "Serviços", icon: 'landmark', key: 'services', screen: 'Services', backgroundColor: Constants.backgroundColors['Residents'] }
+  const menuOptionsMailListResident = { menuName: "Correios", icon: 'mail-bulk', key: 'mailList', screen: 'MailList', backgroundColor: Constants.backgroundColors['Residents'] }
 
   const profiles = []
-  profiles[Constants.USER_KIND['RESIDENT']] = [menuOptionsQRCode, Utils.canAddOcorrences(user) ? menuOptionsEventResident : null, Utils.canAddVisitors(user) ? menuOptionsVisitor : null, Utils.canAddThirds(user) ? menuOptionsService : null, menuOptionsInfo]
-  profiles[Constants.USER_KIND['GUARD']] = [menuOptionsQRCode, menuOptionsScan, menuOptionsResidentsToGuard, Utils.canAddVisitors(user) ? menuOptionsVisitor : menuOptionsVisitorOnlyList, Utils.canAddThirds(user) ? menuOptionsService : menuOptionsServiceOnlyList, menuOptionsCarGuard, menuOptionsEventGuard, menuOptionsSlot, menuOptionsInfo]
-  profiles[Constants.USER_KIND['SUPERINTENDENT']] = [menuOptionsQRCode, menuOptionsScan, menuOptionsUnits, menuOptionsResidents, menuOptionsVisitor, menuOptionsService, menuOptionsGuard, menuOptionsCarSuperIntendent, menuOptionsEventSuperintendent, menuOptionsSlot, menuOptionsAccess, menuOptionsInfo]
-  profiles[Constants.USER_KIND['ADM']] = [menuOptionsCondo, menuOptionsSindico]
+  profiles[Constants.USER_KIND['RESIDENT']] = [
+    menuOptionsQRCode, 
+    Utils.canAddOcorrences(user) ? menuOptionsEventResident : null, 
+    Utils.canAddVisitors(user) ? menuOptionsVisitor : null, 
+    Utils.canAddThirds(user) ? menuOptionsService : null, 
+    Utils.condoHasMail(user) ? menuOptionsMailListResident : null,
+    menuOptionsInfo
+  ]
+
+  profiles[Constants.USER_KIND['GUARD']] = [
+    menuOptionsQRCode, 
+    menuOptionsScan, 
+    menuOptionsResidentsToGuard, 
+    Utils.canAddVisitors(user) ? menuOptionsVisitor : menuOptionsVisitorOnlyList, 
+    Utils.canAddThirds(user) ? menuOptionsService : menuOptionsServiceOnlyList, 
+    menuOptionsCarGuard, 
+    menuOptionsEventGuard, 
+    menuOptionsSlot, 
+    menuOptionsInfo
+  ]
+
+  profiles[Constants.USER_KIND['SUPERINTENDENT']] = [
+    menuOptionsQRCode, 
+    menuOptionsScan, 
+    menuOptionsUnits, 
+    menuOptionsResidents, 
+    menuOptionsVisitor, 
+    menuOptionsService, 
+    menuOptionsGuard, 
+    menuOptionsCarSuperIntendent, 
+    menuOptionsEventSuperintendent, 
+    menuOptionsSlot, 
+    menuOptionsAccess, 
+    menuOptionsServices, 
+    menuOptionsInfo
+  ]
+
+  profiles[Constants.USER_KIND['ADM']] = [
+    menuOptionsCondo, 
+    menuOptionsSindico
+  ]
 
   return (
     <View style={styles.container}>
@@ -89,7 +128,7 @@ const styles = StyleSheet.create({
   },
   menuItemText: {
     marginTop: 5,
-    fontSize: 13,
+    fontSize: 12,
   }
 })
 

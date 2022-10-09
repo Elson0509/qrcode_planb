@@ -101,7 +101,7 @@ const Scanned = (props) => {
         setModalExit(true)
       })
       .catch(err => {
-        toast.error(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (SC3)', Constants.TOAST_CONFIG)
+        toast.error(err.response?.data?.message || 'Um erro ocorreu. Tente mais tarde. (SC3)', Constants.configToast)
         setLoading(false)
       })
   }

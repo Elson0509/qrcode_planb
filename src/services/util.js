@@ -295,6 +295,14 @@ export const canAddVisitors = user => {
     return false
 }
 
+export const condoHasMail = user => {
+    if(!user || !user.condo)
+        return false
+    if(user.condo.condo_has_mail)
+        return true
+    return false
+}
+
 export const canAddOcorrences = user => {
     if(!user || !user.condo)
         return false
