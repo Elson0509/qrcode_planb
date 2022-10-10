@@ -27,9 +27,15 @@ const CondoAdd = props => {
   const [resident_can_thirds, setResident_can_thirds] = useState(true)
   const [resident_can_visitors, setResident_can_visitors] = useState(true)
   const [resident_has_dob, setResident_has_dob] = useState(false)
+  const [resident_has_owner_field, setResident_has_owner_field] = useState(false)
   const [resident_has_phone, setResident_has_phone] = useState(false)
   const [guard_see_dob, setGuard_see_dob] = useState(false)
   const [guard_see_phone, setGuard_see_phone] = useState(false)
+  const [condo_has_classifieds, setCondo_has_classifieds] = useState(false)
+  const [condo_has_guard_routes, setCondo_has_guard_routes] = useState(false)
+  const [condo_has_mail, setCondo_has_mail] = useState(false)
+  const [condo_has_news, setCondo_has_news] = useState(false)
+  const [condo_has_reservations, setCondo_has_reservations] = useState(false)
 
   const addHandler = async _ => {
     if (await Utils.handleNoConnection(setLoading)) return
@@ -63,9 +69,15 @@ const CondoAdd = props => {
       resident_can_thirds,
       resident_can_visitors,
       resident_has_dob,
+      resident_has_owner_field,
       resident_has_phone,
       guard_see_dob,
       guard_see_phone,
+      condo_has_classifieds,
+      condo_has_guard_routes,
+      condo_has_mail,
+      condo_has_news,
+      condo_has_reservations,
     })
       .then((res) => {
         setErrorMessage('')
@@ -211,6 +223,14 @@ const CondoAdd = props => {
             colorInput={Constants.backgroundDarkColors['Residents']}
           />
           <InputBool
+            text="Possuem campo de alugado/dono?"
+            value={resident_has_owner_field}
+            changed={() => setResident_has_owner_field(prev => !prev)}
+            backgroundColor={Constants.backgroundLightColors['Residents']}
+            borderColor={Constants.backgroundDarkColors['Residents']}
+            colorInput={Constants.backgroundDarkColors['Residents']}
+          />
+          <InputBool
             text="Possuem telefone?"
             value={resident_has_phone}
             changed={() => setResident_has_phone(prev => !prev)}
@@ -222,6 +242,47 @@ const CondoAdd = props => {
             text="Possuem data de nascimento?"
             value={resident_has_dob}
             changed={() => setResident_has_dob(prev => !prev)}
+            backgroundColor={Constants.backgroundLightColors['Residents']}
+            borderColor={Constants.backgroundDarkColors['Residents']}
+            colorInput={Constants.backgroundDarkColors['Residents']}
+          />
+          <Text style={{ fontFamily: THEME.FONTS.r700, fontSize: 17, marginLeft: 5, marginTop: 10 }}>Condomínio</Text>
+          <InputBool
+            text="Possui controle de correspondência?"
+            value={condo_has_mail}
+            changed={() => setCondo_has_mail(prev => !prev)}
+            backgroundColor={Constants.backgroundLightColors['Residents']}
+            borderColor={Constants.backgroundDarkColors['Residents']}
+            colorInput={Constants.backgroundDarkColors['Residents']}
+          />
+          <InputBool
+            text="Possui classificados?"
+            value={condo_has_classifieds}
+            changed={() => setCondo_has_classifieds(prev => !prev)}
+            backgroundColor={Constants.backgroundLightColors['Residents']}
+            borderColor={Constants.backgroundDarkColors['Residents']}
+            colorInput={Constants.backgroundDarkColors['Residents']}
+          />
+          <InputBool
+            text="Possui ronda de vigilantes?"
+            value={condo_has_guard_routes}
+            changed={() => setCondo_has_guard_routes(prev => !prev)}
+            backgroundColor={Constants.backgroundLightColors['Residents']}
+            borderColor={Constants.backgroundDarkColors['Residents']}
+            colorInput={Constants.backgroundDarkColors['Residents']}
+          />
+          <InputBool
+            text="Possui notícias?"
+            value={condo_has_news}
+            changed={() => setCondo_has_news(prev => !prev)}
+            backgroundColor={Constants.backgroundLightColors['Residents']}
+            borderColor={Constants.backgroundDarkColors['Residents']}
+            colorInput={Constants.backgroundDarkColors['Residents']}
+          />
+          <InputBool
+            text="Possui reservas?"
+            value={condo_has_reservations}
+            changed={() => setCondo_has_reservations(prev => !prev)}
             backgroundColor={Constants.backgroundLightColors['Residents']}
             borderColor={Constants.backgroundDarkColors['Residents']}
             colorInput={Constants.backgroundDarkColors['Residents']}

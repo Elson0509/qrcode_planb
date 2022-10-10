@@ -91,9 +91,15 @@ const CondoList = props => {
           resident_can_thirds: condo.resident_can_thirds,
           resident_can_visitors: condo.resident_can_visitors,
           resident_has_dob: condo.resident_has_dob,
+          resident_has_owner_field: condo.resident_has_owner_field,
           resident_has_phone: condo.resident_has_phone,
           guard_see_dob: condo.guard_see_dob,
           guard_see_phone: condo.guard_see_phone,
+          condo_has_classifieds: condo.condo_has_classifieds,
+          condo_has_guard_routes: condo.condo_has_guard_routes,
+          condo_has_mail: condo.condo_has_mail,
+          condo_has_news: condo.condo_has_news,
+          condo_has_reservations: condo.condo_has_reservations,
           slots: condo.slots,
           state: condo.state,
         },
@@ -112,7 +118,6 @@ const CondoList = props => {
       <FlatList
         data={condos}
         keyExtractor={item => item.id}
-        style={{ marginBottom: 80, paddingRight: 10 }}
         refreshControl={
           <RefreshControl
             refreshing={refreshing}
@@ -154,6 +159,15 @@ const CondoList = props => {
                       <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Podem registrar ocorrências? </Text> {obj.item.resident_can_ocorrences ? ' Sim' : ' Não'}</Text>
                       <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Possuem telefone? </Text> {obj.item.resident_has_phone ? ' Sim' : ' Não'}</Text>
                       <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Possuem data de nascimento? </Text> {obj.item.resident_has_dob ? ' Sim' : ' Não'}</Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Possuem campo de alugado/dono? </Text> {obj.item.resident_has_owner_field ? ' Sim' : ' Não'}</Text>
+                    </View>
+                    <View>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 14, marginTop: 12, textAlign: 'center' }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Condomínio</Text></Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Possui controle de correspondência? </Text> {obj.item.condo_has_mail ? ' Sim' : ' Não'}</Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Possui classificados? </Text> {obj.item.condo_has_classifieds ? ' Sim' : ' Não'}</Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Possui ronda de vigilantes? </Text> {obj.item.condo_has_guard_routes ? ' Sim' : ' Não'}</Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Possui notícias? </Text> {obj.item.condo_has_news ? ' Sim' : ' Não'}</Text>
+                      <Text style={{ fontFamily: THEME.FONTS.r400, fontSize: 12, marginLeft: 7 }}><Text style={{ fontFamily: THEME.FONTS.r700 }}>Possui reservas? </Text> {obj.item.condo_has_reservations ? ' Sim' : ' Não'}</Text>
                     </View>
                   </View>
                 </View>
@@ -177,9 +191,10 @@ const CondoList = props => {
 
 const styles = StyleSheet.create({
   body: {
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingTop: 10,
     backgroundColor: Constants.backgroundColors['Residents'],
-    minHeight: '100%'
+    flex: 1,
   },
   menuItem: {
     borderWidth: 1,

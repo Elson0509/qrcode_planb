@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   View,
-  TouchableOpacity,
   Image,
   Text,
   StyleSheet,
@@ -9,44 +8,31 @@ import {
 import * as Constants from '../../services/constants'
 import * as Utils from '../../services/util'
 import THEME from '../../services/theme'
-import { useAuth } from '../../contexts/auth';
-
-const style = {
-  width: 69,
-  height: 92,
-  marginRight: 5
-}
+import { useAuth } from '../../contexts/auth'
+import FooterButtons from '../../components/FooterButtons';
 
 const MailDetails = props => {
   const { user } = useAuth()
 
   return (
     <View style={styles.menuItem}>
-      {/* <View>
-        <ActionButtons
-          flexDirection='row'
-          editIcon='reply'
-          action1={() => replyHandler(obj.item)}
-          action2={() => delOvernight(obj.item)}
-        />
-      </View> */}
       <View style={{ 
           flexDirection: 'column', 
           paddingBottom: 3, 
           marginBottom: 5, 
           borderColor: Constants.backgroundDarkColors["Cars"] 
           }}>
-        <View style={styles.image}>
+        <View style={styles.imageView}>
           {
             props.mail.photo_id ?
               <Image
-                style={style}
+                style={styles.image}
                 source={{ uri: Constants.PREFIX_IMG_GOOGLE_CLOUD + props.mail.photo_id }}
                 resizeMode='contain'
               />
               :
               <Image
-                style={style}
+                style={styles.image}
                 source={Constants.genericParcel}
                 resizeMode='contain'
               />
@@ -66,6 +52,23 @@ const MailDetails = props => {
             <Text style={styles.textDetail}><Text style={styles.textField}>Obs:</Text> Bloco {props.mail.Unit.Bloco.name} Unidade {props.mail.Unit.number}</Text>
           }
         </View>
+        {
+          (user.user_kind === Constants.USER_KIND['SUPERINTENDENT'] || user.user_kind === Constants.USER_KIND['GUARD']) &&
+          props.mail.status === Constants.MAIL_STATUS['Em espera'] && !props.noFooter &&
+          <View> 
+            <FooterButtons
+              title1='Dar Baixa'
+              title2='Excluir'
+              buttonPadding={12}
+              fontSize={15}
+              viewPadding={0}
+              marginButton={0}
+              borderRadius={10}
+              action1={() => props.classifyMailHandler(props.mail)}
+              action2={() => props.deleteMailHandler(props.mail)}
+            />
+          </View>
+        }
       </View>
     </View>
   );
@@ -88,8 +91,12 @@ const styles = StyleSheet.create({
   textField: {
     fontFamily: THEME.FONTS.r700,
   },
-  image:{
+  imageView:{
     alignItems: 'center',
+  },
+  image: {
+    width: 200,
+    height: 200
   }
 });
 

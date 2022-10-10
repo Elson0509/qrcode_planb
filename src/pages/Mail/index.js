@@ -15,7 +15,6 @@ import THEME from '../../services/theme';
 
 const menuOptions = [
   { menuName: "Receber", icon: 'folder-plus', key: 'mailadd', screen: 'MailAdd' },
-  { menuName: "Dar baixa", icon: 'folder-minus', key: 'mailDel', screen: 'MailDel' },
   { menuName: "Listar", icon: 'list', key: 'mailList', screen: 'MailList' },
 ]
 

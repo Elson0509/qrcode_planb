@@ -2,6 +2,7 @@ import Services from "../../pages/Services"
 import Mail from "../../pages/Mail"
 import MailAdd from "../../pages/MailAdd"
 import MailList from "../../pages/MailList"
+import MailEdit from "../../pages/MailEdit"
 
 const ServiceRoutes = [
   {
@@ -27,6 +28,12 @@ const ServiceRoutes = [
     component: MailList,
     backgroundDarkColor: 'Residents',
     headerTitle: 'Listar'
+  },
+  {
+    name: 'MailEdit',
+    component: MailEdit,
+    backgroundDarkColor: 'Residents',
+    headerTitle: 'Dar Baixa'
   },
 ]
 

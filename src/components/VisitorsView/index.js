@@ -4,9 +4,7 @@ import THEME from '../../services/theme'
 import * as Utils from '../../services/util'
 import PicUser from '../PicUser'
 import ModalPhoto from '../ModalPhoto'
-import ActionButtons from '../ActionButtons'
 import { useAuth } from '../../contexts/auth'
-import * as Constants from '../../services/constants'
 
 const VisitorsView = (props) => {
   const { user } = useAuth()

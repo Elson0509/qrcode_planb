@@ -303,6 +303,14 @@ export const condoHasMail = user => {
     return false
 }
 
+export const condoHasAnyService = user => {
+    if(!user || !user.condo)
+        return false
+    if(user.condo.condo_has_mail || user.condo.condo_has_classifieds || user.condo.condo_has_news || user.condo.condo_has_reservations)
+        return true
+    return false
+}
+
 export const canAddOcorrences = user => {
     if(!user || !user.condo)
         return false

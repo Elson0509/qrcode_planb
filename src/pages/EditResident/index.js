@@ -19,17 +19,19 @@ import PicUser from '../../components/PicUser'
 import TakePic from '../../components/TakePic'
 import { useAuth } from '../../contexts/auth'
 import DOBInputBox from '../../components/DOBInputBox'
+import SelectButton from '../../components/SelectButton'
 
 const EditResident = props => {
   const { user } = useAuth()
 
   const dob = props.route.params.resident.dob ? new Date(props.route.params.resident.dob) : null
   const [userEdit, setUserEdit] = useState({ name: props.route.params.resident.name, id: props.route.params.resident.id, identification: props.route.params.resident.identification ?? '', email: props.route.params.resident.email ?? '', photo_id: props.route.params.resident.photo_id ?? '', phone: props.route.params.resident.phone ?? '',   })
-  const [dobBeingAdded, setDobBeingAdded] = useState({ day: dob ? dob.getDate() : null, month: dob ? dob.getMonth() + 1 : null, year: dob ? dob.getFullYear() : null })
+  const [dobBeingAdded, setDobBeingAdded] = useState({ day: dob ? dob.getDate() : '', month: dob ? dob.getMonth() + 1 : '', year: dob ? dob.getFullYear() : '' })
   const [loading, setLoading] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
   const [pic, setPic] = useState(false)
   const [isTakingPic, setIsTakingPic] = useState(false)
+  const [is_owner, setIs_owner] = useState(props.route.params.resident.is_owner)
   const [editable] = useState(!!props.route.params.resident.email ? '0' : '1')
 
   useEffect(() => {
@@ -111,6 +113,7 @@ const EditResident = props => {
       email: userEdit.email,
       identification: userEdit.identification,
       phone: userEdit.phone,
+      is_owner,
       dob
     })
       .then(() => {
@@ -189,6 +192,15 @@ const EditResident = props => {
               backgroundColor={Constants.backgroundLightColors['Residents']}
               borderColor={Constants.backgroundDarkColors['Residents']}
               colorInput={Constants.backgroundDarkColors['Residents']}
+            />
+          }
+          {
+            user.condo.resident_has_owner_field &&
+            <SelectButton
+              label='Tipo:'
+              text={is_owner ? 'Proprietário' : 'Alugado'}
+              action={()=> setIs_owner(prev => !prev)}
+              backgroundColor={'Residents'}
             />
           }
           {

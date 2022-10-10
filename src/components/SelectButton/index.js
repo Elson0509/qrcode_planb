@@ -15,7 +15,7 @@ const SelectButton = (props) => {
         !!props.label &&
         <Text style={[styles.labelStyle, { color: props.colorLabel || 'black', fontFamily: THEME.FONTS.r700 }]}>{props.label}</Text>
       }
-      <View style={{ marginTop: 10 }}>
+      <View>
         <Text style={{
           textAlign: 'center',
           borderWidth: Constants.borderTextInputWidth,

@@ -8,11 +8,11 @@ const environmentOptions = ['development', 'production']
 
 const environment = environmentOptions[0]
 
-export const apiurlPrefix = environment === 'development' ? 'http://' :  'https://'
+export const apiurlPrefix = environment === 'development' ? 'http://' : 'https://'
 //export const apiurl = `qrcondoapp.herokuapp.com`
 //lt --port 3333
 
-export const apiurl = environment === 'development' ? 
+export const apiurl = environment === 'development' ?
     (typeof manifest.packagerOpts === `object`) && manifest.packagerOpts.dev ? manifest.debuggerHost.split(`:`).shift().concat(`:3333`) : `api.example.com` :
     `qrcondoapp.herokuapp.com`//*/
 
@@ -48,6 +48,12 @@ export const MAIL_STATUS = {
     'Recusado': 3
 }
 
+export const MAIL_STATUS_CODE = {
+    1: 'Em espera',
+    2: 'Entregue',
+    3: 'Recusado',
+}
+
 export const menuOptions = [
     { menuName: "Adicionar", icon: 'plus-square', key: 'plus', screen: 'Add' },
     { menuName: "Listar", icon: 'list-alt', key: 'list', screen: 'List' },
@@ -78,51 +84,52 @@ export const USER_KIND = {
 }
 
 export const backgroundColors = {
-    "Cars":'#00CCEE',
-    "Dashboard":'#00AAEE',
-    "Events":'#FF7AC5',
-    "Guards":'#CCCC00',
-    "Info":'#F699CD',
-    "MyQRCode":'#C1C1C1',
-    "Residents":'#80E0B0',
-    "Scan":'#FED8B1',
+    "Cars": '#00CCEE',
+    "Dashboard": '#00AAEE',
+    "Events": '#FF7AC5',
+    "Guards": '#CCCC00',
+    "Info": '#F699CD',
+    "MyQRCode": '#C1C1C1',
+    "Residents": '#80E0B0',
+    "Scan": '#FED8B1',
     "Slot": "#FFC55C",
     "Survey": '#5DBB63',
-    "Thirds":'#FF7F7F',
-    "Units":'#DEB887',
-    "Visitors":'#9E8EEA',
+    "Thirds": '#FF7F7F',
+    "Units": '#DEB887',
+    "Visitors": '#9E8EEA',
     "Access": '#8E7B6C',
 }
 
 export const backgroundLightColors = {
-    "Cars":'#8AFFFF',
-    "Events":'#FF9CE7',
-    "Guards":'#FFFF99',
-    "Info":'#FEC5E5',
-    "MyQRCode":'#EEEEEE',
-    "Residents":'#DDFFDD',
-    "Scan":'#FEE9C2',
+    "Cars": '#8AFFFF',
+    "Events": '#FF9CE7',
+    "Guards": '#FFFF99',
+    "Info": '#FEC5E5',
+    "MyQRCode": '#EEEEEE',
+    "Residents": '#DDFFDD',
+    "Scan": '#FEE9C2',
     "Slot": "#FFD68A",
     "Survey": '#99EDC3',
-    "Thirds":'#FFBFBF',
-    "Units":'#FFEBCD',
-    "Visitors":'#CFBFFF',
+    "Thirds": '#FFBFBF',
+    "Units": '#FFEBCD',
+    "Visitors": '#CFBFFF',
     "Access": '#DEBF8F',
+    "White": '#FFFFFF',
 }
 
 export const backgroundDarkColors = {
-    "Cars":'#00A2A2',
-    "Dashboard":'#0088CC',
-    "Events":'#DD58A3',
-    "Guards":'#999900',
-    "Info":'#FD5DA8',
-    "MyQRCode":'#AAAAAA',
-    "Residents":'#66CAB0',
-    "Scan":'#DEB690',
+    "Cars": '#00A2A2',
+    "Dashboard": '#0088CC',
+    "Events": '#DD58A3',
+    "Guards": '#999900',
+    "Info": '#FD5DA8',
+    "MyQRCode": '#AAAAAA',
+    "Residents": '#66CAB0',
+    "Scan": '#DEB690',
     "Slot": "#FFB52E",
     "Survey": '#028A0F',
-    "Thirds":'#CC5C5C',
-    "Units":'#CD853F',
-    "Visitors":'#7C6CC8',
+    "Thirds": '#CC5C5C',
+    "Units": '#CD853F',
+    "Visitors": '#7C6CC8',
     "Access": '#A85D4F',
 }

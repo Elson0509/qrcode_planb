@@ -58,6 +58,7 @@ const Dashboard = (props) => {
     menuOptionsCarGuard, 
     menuOptionsEventGuard, 
     menuOptionsSlot, 
+    Utils.condoHasAnyService(user) ? menuOptionsServices : null,
     menuOptionsInfo
   ]
 
@@ -73,8 +74,8 @@ const Dashboard = (props) => {
     menuOptionsEventSuperintendent, 
     menuOptionsSlot, 
     menuOptionsAccess, 
-    menuOptionsServices, 
-    menuOptionsInfo
+    Utils.condoHasAnyService(user) ? menuOptionsServices : null,
+    menuOptionsInfo,
   ]
 
   profiles[Constants.USER_KIND['ADM']] = [
@@ -86,7 +87,7 @@ const Dashboard = (props) => {
     <View style={styles.container}>
       <Greeting/>
       <FlatList
-        data={profiles[user.user_kind]}
+        data={profiles[user.user_kind].filter(el=>el)}
         numColumns={3}
         renderItem={(obj) => {
           if (!obj.item) return null

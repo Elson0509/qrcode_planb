@@ -11,7 +11,10 @@ import THEME from '../../services/theme';
 const InputBox = (props) => {
     return (
         <View style={[styles.box, {width: props.width || '100%'}]}>
-            <Text style={[styles.labelStyle, {color: props.colorLabel || 'black', fontFamily: THEME.FONTS.r700}]}>{props.text}</Text>
+            {
+              !!props.text &&
+              <Text style={[styles.labelStyle, {color: props.colorLabel || 'black', fontFamily: THEME.FONTS.r700}]}>{props.text}</Text>
+            }
             <TextInput
                 style={[
                   styles.txtInput, 
@@ -42,7 +45,7 @@ const InputBox = (props) => {
 
 const styles = StyleSheet.create({
     box:{
-      marginBottom: 7,
+      marginVertical: 5,
     },
     txtInput:{
       width:'100%',

@@ -35,7 +35,7 @@ const ResidentAdd = props => {
   const [residents, setResidents] = useState(props.route?.params?.residents ? props.route.params.residents.map(el=> {return {...el, dob: new Date(el.dob)}}) : [])
   const [vehicles, setVehicles] = useState(props.route?.params?.vehicles || [])
   const [vehicleBeingAdded, setVehicleBeingAdded] = useState({ id: "0", maker: '', model: '', color: '', plate: '' })
-  const [userBeingAdded, setUserBeingAdded] = useState(props.route?.params?.userBeingAdded || { id: "0", name: '', identification: '', email: '', pic: '', phone: '', dob: null })
+  const [userBeingAdded, setUserBeingAdded] = useState(props.route?.params?.userBeingAdded || { id: "0", name: '', identification: '', email: '', pic: '', phone: '', dob: null, is_owner: false })
   const [dobBeingAdded, setDobBeingAdded] = useState({ day: '', month: '', year: '' })
   const [screen, setScreen] = useState(props.route?.params?.screen || 'ResidentAdd')
   const [addingUser, setAddingUser] = useState(false)
@@ -120,13 +120,13 @@ const ResidentAdd = props => {
     }
     setResidents(prev => [...prev, { ...userBeingAdded, dob }])
     setErrorAddResidentMessage('')
-    setUserBeingAdded({ id: "0", name: '', identification: '', email: '', pic: '', phone: '', dob: null })
+    setUserBeingAdded({ id: "0", name: '', identification: '', email: '', pic: '', phone: '', dob: null, is_owner: false })
     setDobBeingAdded({ day: '', month: '', year: '' })
     return true
   }
 
   const cancelAddResidentHandler = _ => {
-    setUserBeingAdded({ id: '0', name: '', identification: '', email: '', pic: '', phone: '', dob: null })
+    setUserBeingAdded({ id: '0', name: '', identification: '', email: '', pic: '', phone: '', dob: null, is_owner: false })
     setErrorAddResidentMessage('')
   }
 

@@ -42,7 +42,7 @@ const ResidentsView = (props) => {
                 <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r500 }}>{res.name}</Text>
                 {!!res.identification && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Id: {res.identification}</Text>}
                 {
-                  user.user_kind===Constants.USER_KIND['SUPERINTENDENT'] &&
+                  user.user_kind === Constants.USER_KIND['SUPERINTENDENT'] &&
                   !!res.email && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Email: {res.email}</Text>
                 }
                 {!!res.company && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Empresa: {res.company}</Text>}
@@ -59,6 +59,10 @@ const ResidentsView = (props) => {
                     (user.user_kind === Constants.USER_KIND['GUARD'] && user.condo.guard_see_dob)) &&
                   !!res.dob &&
                   <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Nasc: {Utils.printDate(new Date(res.dob))}</Text>
+                }
+                {
+                  (props.type === 'Moradores' && user.condo.resident_has_owner_field) &&
+                  <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Tipo: {res.is_owner ? 'Proprietário' : 'Aluguel'}</Text>
                 }
                 {!!res.initial_date && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Início: {Utils.printDate(new Date(res.initial_date))}</Text>}
                 {!!res.final_date && <Text style={{ fontSize: 16, marginLeft: 7, fontFamily: THEME.FONTS.r400 }}>Fim: {Utils.printDate(new Date(res.final_date))}</Text>}

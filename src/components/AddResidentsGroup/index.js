@@ -14,6 +14,7 @@ import {
 import PicUser from '../PicUser';
 import { useAuth } from '../../contexts/auth'
 import DOBInputBox from '../DOBInputBox'
+import SelectButton from '../SelectButton'
 
 const AddResidentsGroup = (props) => {
   const { user } = useAuth()
@@ -35,26 +36,6 @@ const AddResidentsGroup = (props) => {
         <Icon name='user' size={40} />
         <Text>Adicionar Morador</Text>
       </TouchableOpacity>
-      {
-        props.residents.map(((el, ind) => (
-          <View key={el.name + el.id + el.identification + el.email} style={[styles.listItem]}>
-            <View style={{ flexDirection: 'row' }}>
-              <PicUser user={el} />
-              <View style={{ marginLeft: 5, marginRight: 5, maxWidth: 210 }}>
-                <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Nome:</Text> {el.name}</Text>
-                {!!el.email && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Email:</Text> {el.email}</Text>}
-                {!!el.identification && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Id:</Text> {el.identification}</Text>}
-                {!!el.phone && user.condo.resident_has_phone && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Tel:</Text> {el.phone}</Text>}
-                {!!el.dob && user.condo.resident_has_dob && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Nascimento:</Text> {Utils.printDate(el.dob)}</Text>}
-              </View>
-            </View>
-
-            <TouchableOpacity onPress={() => props.removeResident(ind)}>
-              <Icon name='window-close' size={30} />
-            </TouchableOpacity>
-          </View>
-        )))
-      }
       {
         props.addingUser &&
         <View style={{ marginTop: 15 }}>
@@ -87,6 +68,15 @@ const AddResidentsGroup = (props) => {
             borderColor={Constants.backgroundDarkColors['Residents']}
             colorInput={Constants.backgroundDarkColors['Residents']}
           />
+          {
+            user.condo.resident_has_owner_field &&
+            <SelectButton
+              label='Tipo:'
+              text={props.userBeingAdded.is_owner ? 'Proprietário' : 'Alugado'}
+              action={()=> props.setUserBeingAdded(prev => { return {...prev, is_owner: !prev.is_owner}})}
+              backgroundColor={'Residents'}
+            />
+          }
           {
             user.condo.resident_has_phone &&
             <InputBox
@@ -156,6 +146,28 @@ const AddResidentsGroup = (props) => {
           </View>
         </View>
       }
+      {
+        props.residents.map(((el, ind) => (
+          <View key={el.name + el.id + el.identification + el.email} style={[styles.listItem]}>
+            <View style={{ flexDirection: 'row' }}>
+              <PicUser user={el} />
+              <View style={{ marginLeft: 5, marginRight: 5, maxWidth: 210 }}>
+                <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Nome:</Text> {el.name}</Text>
+                {!!el.email && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Email:</Text> {el.email}</Text>}
+                {!!el.identification && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Id:</Text> {el.identification}</Text>}
+                {!!el.phone && user.condo.resident_has_phone && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Tel:</Text> {el.phone}</Text>}
+                {!!el.dob && user.condo.resident_has_dob && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Nascimento:</Text> {Utils.printDate(el.dob)}</Text>}
+                {user.condo.resident_has_owner_field && <Text style={styles.menuItemText}><Text style={styles.menuItemTextPrefix}>Tipo:</Text> {el.is_owner ? 'Proprietário' : 'Aluguel'}</Text>}
+              </View>
+            </View>
+
+            <TouchableOpacity onPress={() => props.removeResident(ind)}>
+              <Icon name='window-close' size={30} />
+            </TouchableOpacity>
+          </View>
+        )))
+      }
+      
     </View>
 
   );
