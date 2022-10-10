@@ -11,8 +11,11 @@ import PicUser from '../../components/PicUser';
 import ModalMessage from '../../components/ModalMessage';
 import ModalGeneric from '../../components/ModalGeneric'
 import THEME from '../../services/theme'
+import { useAuth } from '../../contexts/auth'
 
 const Scanned = (props) => {
+  const { user } = useAuth()
+
   const [dataFetched, setDataFetched] = useState(null)
   const [backgroundColorScreen, setbackgroundColorScreen] = useState('white')
   const [reading, setReading] = useState(null)
@@ -162,7 +165,12 @@ const Scanned = (props) => {
           <PicUser user={dataFetched} height={240} width={200} />
           <Text style={{ marginTop: 8, fontSize: 20, fontFamily: THEME.FONTS.r500 }}>{dataFetched.name}</Text>
           {!!dataFetched.Unit?.Bloco?.name && <Text style={{ marginTop: 4, fontSize: 18, fontFamily: THEME.FONTS.r400 }}>{`Bloco ${dataFetched.Unit.Bloco.name}`}</Text>}
-          {!!dataFetched.Unit?.number && <Text style={{ marginTop: 4, fontSize: 18, marginBottom: 20, fontFamily: THEME.FONTS.r400 }}>{`Unidade ${dataFetched.Unit.number}`}</Text>}
+          {!!dataFetched.Unit?.number && <Text style={{ marginTop: 4, fontSize: 18, fontFamily: THEME.FONTS.r400 }}>{`Unidade ${dataFetched.Unit.number}`}</Text>}
+          {
+            dataFetched.user_kind_id === Constants.USER_KIND['RESIDENT'] &&
+            user.condo.resident_has_owner_field &&
+            <Text style={{ fontSize: 18, fontFamily: THEME.FONTS.r400 }}>Tipo: {dataFetched.is_owner ? 'Proprietário' : 'Alugado'}</Text>
+          }
           {!dataFetched.Unit?.Vehicles.length && <Text style={{ fontSize: 15, fontFamily: THEME.FONTS.r300 }}>Não há veículos cadastrados.</Text>}
           {!!dataFetched.Unit?.Vehicles.length && <Text style={{ textAlign: 'center', fontSize: 22, marginBottom: 0, letterSpacing: 1, fontFamily: THEME.FONTS.r500i }}>Veículos cadastrados:</Text>}
           {!!dataFetched.Unit?.Vehicles.length &&
@@ -251,10 +259,11 @@ const Scanned = (props) => {
           <Text style={styles.errorMessage}>{errorMessage}</Text>
         </View>
         <FooterButtons
-          title1="Escanear"
-          title2="Cancelar"
-          action1={() => props.navigation.goBack()}
-          action2={() => props.navigation.navigate('Dashboard')}
+          title1="Painel Principal"
+          buttonPadding={15}
+          //title2="Cancelar"
+          action1={() => props.navigation.navigate('Dashboard')}
+          //action2={() => props.navigation.navigate('Dashboard')}
           backgroundColor={Constants.is_not_autorized_backgroundColor}
         />
       </ScrollView>
@@ -266,10 +275,11 @@ const Scanned = (props) => {
       <ScrollView style={{ flex: 1}}>
         {formatData()}
         <FooterButtons
-          title1="Escanear"
-          title2="Cancelar"
-          action1={() => props.navigation.goBack()}
-          action2={() => props.navigation.navigate('Dashboard')}
+          title1="Painel Principal"
+          buttonPadding={15}
+          //title2="Cancelar"
+          action1={() => props.navigation.navigate('Dashboard')}
+          //action2={() => props.navigation.navigate('Dashboard')}
           backgroundColor={backgroundColorScreen}
           marginButton={1}
         />
